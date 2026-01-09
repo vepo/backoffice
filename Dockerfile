@@ -21,7 +21,7 @@ FROM nginx:alpine
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copiar os arquivos de build do estágio anterior
-COPY --from=build /app/dist/backoffice /usr/share/nginx/html
+COPY --from=build /app/dist/backoffice/browser /usr/share/nginx/html
 
 # Expor porta 80
 EXPOSE 80
