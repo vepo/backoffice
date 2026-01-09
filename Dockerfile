@@ -1,5 +1,5 @@
 # Estágio de build
-FROM node:18-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 
 # Copiar package.json e instalar dependências
@@ -8,6 +8,8 @@ RUN npm ci --only=production
 
 # Copiar arquivos do projeto
 COPY . .
+
+RUN npm install
 
 # Build da aplicação Angular
 RUN npm run build -- --configuration=production
