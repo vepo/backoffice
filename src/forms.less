@@ -192,6 +192,7 @@ form {
             opacity: 0;
             transform: translateY(-10px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -515,4 +516,19 @@ form {
     margin: @espacamento-lg 0;
     text-align: center;
     animation: fadeIn 0.3s ease;
+}
+
+// Material
+form .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: transparent;
+}
+
+// Firerfox
+
+input:autofill {
+    background: #fff;
+}
+
+input {
+    filter: none;
 }
