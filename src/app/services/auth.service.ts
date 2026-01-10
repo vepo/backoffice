@@ -16,9 +16,9 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http.post<AuthResponse>(`${this.API_URL}/auth/login`, { email, password })
-                    .pipe(tap(res => {
-                                if (res.token) this.saveToken(res.token);
-                          }));
+      .pipe(tap(res => {
+        if (res.token) this.saveToken(res.token);
+      }));
   }
 
   saveToken(token: string) {
@@ -27,6 +27,16 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (!payload.id) {
+      return false;;
+    }
+    return true;
   }
 
   getAuthUserId(): number {
@@ -49,7 +59,7 @@ export class AuthService {
 
   hasRole(role: string): boolean {
     return this.getRoles()
-               .includes(role);
+      .includes(role);
   }
 
   logout() {

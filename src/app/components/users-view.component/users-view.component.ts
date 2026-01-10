@@ -6,7 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { emptyFilter, User, UserSearchFilter, UsersService } from '../../services/users.service';
 
 @Component({
-    selector: 'app-users-view.component',
+    selector: 'app-users-view',
     imports: [MatIcon, MatButton, FormsModule, RouterLink],
     templateUrl: './users-view.component.html'
 })
@@ -14,10 +14,10 @@ export class UsersViewComponent implements OnInit {
     private readonly activatedRoute = inject(ActivatedRoute);
     private readonly usersService = inject(UsersService);
 
-
     users: User[] = [];
     filter: UserSearchFilter = emptyFilter();
     lastSearch: UserSearchFilter = emptyFilter();
+
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ users }) => this.users = users);
     }
@@ -64,4 +64,71 @@ export class UsersViewComponent implements OnInit {
         }
         this.lastSearch = this.filter;
     }
+
+    // Add these missing method stubs for TypeScript compilation
+    getAdminCount(): number {
+        return this.users.filter(u => u.roles.includes('admin')).length;
+    }
+
+    getManagerCount(): number {
+        return this.users.filter(u => u.roles.includes('project-manager')).length;
+    }
+
+    getUserCount(): number {
+        return this.users.filter(u => u.roles.includes('user')).length;
+    }
+
+    formatDate(date: Date | string): string {
+        if (!date) return '';
+        const d = new Date(date);
+        return d.toLocaleDateString('pt-BR');
+    }
+
+    clearFilters(): void {
+        this.filter = emptyFilter();
+        this.updateSearch();
+    }
+
+    exportToCSV(): void {
+        // Implementation would go here
+        console.log('Export to CSV');
+    }
+
+    viewDetails(entry: User): void {
+        console.log('View details for:', entry);
+    }
+
+    confirmDelete(entry: User): void {
+        console.log('Confirm delete for:', entry);
+    }
+
+    previousPage(): void {
+        // Implementation would go here
+        console.log('Previous page');
+    }
+
+    nextPage(): void {
+        // Implementation would go here
+        console.log('Next page');
+    }
+
+    bulkAssignRoles(): void {
+        // Implementation would go here
+        console.log('Bulk assign roles');
+    }
+
+    exportReport(): void {
+        // Implementation would go here
+        console.log('Export report');
+    }
+
+    importUsers(): void {
+        // Implementation would go here
+        console.log('Import users');
+    }
+
+    // Add these properties for pagination
+    totalUsers: number = 0;
+    currentPage: number = 1;
+    totalPages: number = 1;
 }

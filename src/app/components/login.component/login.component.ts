@@ -10,7 +10,6 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.less'],
   imports: [FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule]
 })
 export class LoginComponent {
@@ -23,14 +22,19 @@ export class LoginComponent {
   hide = signal(true);
 
   login() {
+    if (!this.email || !this.password) {
+      this.error = 'Por favor, preencha todos os campos';
+      return;
+    }
+
     this.auth.login(this.email, this.password).subscribe({
       next: async () => await this.router.navigate(['/']),
       error: () => this.error = 'E-mail ou senha inválidos'
     });
   }
 
-  clickEvent(event: MouseEvent) {
+  toggleVisibility(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
-} 
+}

@@ -1,61 +1,245 @@
-<div class="centered">
-    <h1>Gestão de Usuários</h1>
+<div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <mat-icon fontIcon="groups" class="title-icon"></mat-icon>
+                Gestão de Usuários
+            </h1>
+            <p class="page-subtitle">Gerencie os usuários e suas permissões no sistema</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" matButton [routerLink]="['/', 'users', 'new']">
+                <mat-icon fontIcon="person_add"></mat-icon>
+                <span>Novo Usuário</span>
+            </button>
+        </div>
+    </div>
 
-    <div class="table">
-        <div class="header">
-            Usuários
-            <div class="actions">
-                <button class="btn" matButton [routerLink]="['/', 'users', 'new']">
-                    <mat-icon fontIcon="person"></mat-icon> Novo
-                </button>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon admin">
+                <mat-icon fontIcon="admin_panel_settings"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ getAdminCount() }}</h3>
+                <p class="stat-label">Administradores</p>
             </div>
         </div>
-        {{ filter.name }}
-        <div class="body">
-            <div class="sub-header">
-                <div>ID</div>
-                <div>Nome</div>
-                <div>Email</div>
-                <div>Roles</div>
-                <div>&nbsp;</div>
+        <div class="stat-card">
+            <div class="stat-icon manager">
+                <mat-icon fontIcon="engineering"></mat-icon>
             </div>
-            <div class="sub-header">
-                <div><i>Filtros</i></div>
-                <div><input type="text" placeholder="Filtre por nome.." [(ngModel)]="filter.name"
-                        (ngModelChange)="filterChanged('name')" /></div>
-                <div><input type="text" placeholder="Filtre por email.." [(ngModel)]="filter.email"
-                        (ngModelChange)="filterChanged('email')" /></div>
-                <div>
-                    <input type="checkbox" [checked]="filter.roles.indexOf('admin') != -1"
-                        (change)="toggleRole('admin')" /> Administrador
-                    <input type="checkbox" [checked]="filter.roles.indexOf('project-manager') != -1"
-                        (change)="toggleRole('project-manager')" /> Gerente de Projetos
-                    <input type="checkbox" [checked]="filter.roles.indexOf('user') != -1"
-                        (change)="toggleRole('user')" /> Usuário
-                </div>
-                <div>Actions</div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ getManagerCount() }}</h3>
+                <p class="stat-label">Gerentes</p>
             </div>
-            @for (entry of users; track entry.id) {
-            <div class="row {{ $even ? 'even' : 'odd' }}">
-                <div>{{ entry.id }}</div>
-                <div>{{ entry.name }}</div>
-                <div>{{ entry.email }}</div>
-                <div>
-                    <input type="checkbox" disabled [checked]="entry.roles.indexOf('admin') != -1" /> Administrador
-                    <input type="checkbox" disabled [checked]="entry.roles.indexOf('project-manager') != -1" /> Gerente
-                    de Projetos
-                    <input type="checkbox" disabled [checked]="entry.roles.indexOf('user') != -1" /> Usuário
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon user">
+                <mat-icon fontIcon="people"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ getUserCount() }}</h3>
+                <p class="stat-label">Usuários Comuns</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <mat-icon fontIcon="person"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ users.length }}</h3>
+                <p class="stat-label">Total de Usuários</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="filter-card">
+        <div class="filter-header">
+            <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+            <h3>Filtros</h3>
+        </div>
+        <div class="filter-grid">
+            <div class="form-field">
+                <input type="text" placeholder="Filtrar por nome..." [(ngModel)]="filter.name"
+                    (ngModelChange)="filterChanged('name')" class="filter-input">
+                <mat-icon fontIcon="person_search" class="input-icon"></mat-icon>
+            </div>
+
+            <div class="form-field">
+                <input type="text" placeholder="Filtrar por email..." [(ngModel)]="filter.email"
+                    (ngModelChange)="filterChanged('email')" class="filter-input">
+                <mat-icon fontIcon="email" class="input-icon"></mat-icon>
+            </div>
+
+            <div class="roles-filter">
+                <div class="filter-label">Permissões:</div>
+                <div class="roles-checkboxes">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" [checked]="filter.roles.indexOf('admin') != -1"
+                            (change)="toggleRole('admin')">
+                        <span class="role-badge admin">Admin</span>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" [checked]="filter.roles.indexOf('project-manager') != -1"
+                            (change)="toggleRole('project-manager')">
+                        <span class="role-badge manager">Gerente</span>
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" [checked]="filter.roles.indexOf('user') != -1"
+                            (change)="toggleRole('user')">
+                        <span class="role-badge user">Usuário</span>
+                    </label>
                 </div>
-                <div>
-                    <button class="btn" matButton [routerLink]="['/', 'users', entry.id]">
-                        <mat-icon fontIcon="person"></mat-icon> Editar
+            </div>
+
+            <button class="btn btn-outline btn-small" (click)="clearFilters()">
+                <mat-icon fontIcon="clear_all"></mat-icon>
+                Limpar Filtros
+            </button>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-card">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">
+                    <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+                    <h3>Lista de Usuários</h3>
+                    <span class="table-subtitle">{{ users.length }} usuário(s) encontrado(s)</span>
+                </div>
+                <div class="table-actions">
+                    <button class="btn btn-outline btn-small" (click)="exportToCSV()">
+                        <mat-icon fontIcon="download"></mat-icon>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+
+            <div class="responsive-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="column-id">ID</th>
+                            <th class="column-name">Nome</th>
+                            <th class="column-email">Email</th>
+                            <th class="column-roles">Permissões</th>
+                            <th class="column-status">Status</th>
+                            <th class="column-actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (entry of users; track entry.id) {
+                        <tr [class.row-even]="$even" [class.row-odd]="$odd">
+                            <td class="column-id">
+                                <span class="id-badge">#{{ entry.id }}</span>
+                            </td>
+                            <td class="column-name">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        <mat-icon fontIcon="person"></mat-icon>
+                                    </div>
+                                    <div class="user-details">
+                                        <strong>{{ entry.name }}</strong>
+                                        <span class="user-date">Criado em {{ formatDate(entry.createdAt) }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="column-email">
+                                <a href="mailto:{{ entry.email }}" class="email-link">
+                                    <mat-icon fontIcon="mail_outline"></mat-icon>
+                                    {{ entry.email }}
+                                </a>
+                            </td>
+                            <td class="column-roles">
+                                <div class="roles-container">
+                                    @if (entry.roles.indexOf('admin') != -1) {
+                                    <span class="role-badge admin">Admin</span>
+                                    }
+                                    @if (entry.roles.indexOf('project-manager') != -1) {
+                                    <span class="role-badge manager">Gerente</span>
+                                    }
+                                    @if (entry.roles.indexOf('user') != -1) {
+                                    <span class="role-badge user">Usuário</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="column-status">
+                                <span class="status-badge active">Ativo</span>
+                            </td>
+                            <td class="column-actions">
+                                <div class="action-buttons">
+                                    <button class="btn-icon" matButton [routerLink]="['/', 'users', entry.id]"
+                                        matTooltip="Editar usuário">
+                                        <mat-icon fontIcon="edit"></mat-icon>
+                                    </button>
+                                    <button class="btn-icon" matButton (click)="viewDetails(entry)"
+                                        matTooltip="Ver detalhes">
+                                        <mat-icon fontIcon="visibility"></mat-icon>
+                                    </button>
+                                    <button class="btn-icon btn-danger" matButton (click)="confirmDelete(entry)"
+                                        matTooltip="Excluir usuário">
+                                        <mat-icon fontIcon="delete"></mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (users.length == 0) {
+                <div class="empty-state">
+                    <mat-icon fontIcon="search_off" class="empty-icon"></mat-icon>
+                    <h3>Nenhum usuário encontrado</h3>
+                    <p>Tente ajustar os filtros ou criar um novo usuário.</p>
+                    <button class="btn" matButton [routerLink]="['/', 'users', 'new']">
+                        <mat-icon fontIcon="person_add"></mat-icon>
+                        Criar Novo Usuário
+                    </button>
+                </div>
+                }
+            </div>
+
+            @if (users.length > 0) {
+            <div class="table-footer">
+                <div class="table-info">
+                    Mostrando {{ users.length }} de {{ totalUsers }} usuários
+                </div>
+                <div class="pagination">
+                    <button class="btn-icon" [disabled]="currentPage === 1" (click)="previousPage()">
+                        <mat-icon fontIcon="chevron_left"></mat-icon>
+                    </button>
+                    <span class="page-info">Página {{ currentPage }} de {{ totalPages }}</span>
+                    <button class="btn-icon" [disabled]="currentPage === totalPages" (click)="nextPage()">
+                        <mat-icon fontIcon="chevron_right"></mat-icon>
                     </button>
                 </div>
             </div>
             }
         </div>
-        @if (users.length == 0 ){
-        <div class="table empty">Nenhuma usuario encontrado...</div>
-        }
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h3>Ações Rápidas</h3>
+        <div class="actions-grid">
+            <button class="btn btn-outline" (click)="bulkAssignRoles()">
+                <mat-icon fontIcon="assignment_ind"></mat-icon>
+                Atribuir Permissões em Massa
+            </button>
+            <button class="btn btn-outline" (click)="exportReport()">
+                <mat-icon fontIcon="assessment"></mat-icon>
+                Gerar Relatório
+            </button>
+            <button class="btn btn-outline" (click)="importUsers()">
+                <mat-icon fontIcon="upload_file"></mat-icon>
+                Importar Usuários
+            </button>
+        </div>
     </div>
 </div>

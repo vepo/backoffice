@@ -1,27 +1,45 @@
 <div class="main centered">
     <div class="form-header">
-        <h2>Passaport - Entrar</h2>
-        <p>Sistema de gerenciamento de acesso</p>
+        <h2>Backoffice</h2>
     </div>
     <form (ngSubmit)="login()">
-        <mat-form-field class="form-field" appearance="fill">
-            <mat-label>E-mail</mat-label>
-            <input matInput [(ngModel)]="email" name="email" required />
-        </mat-form-field>
-        <mat-form-field class="form-field" appearance="fill">
-            <mat-label>Password</mat-label>
-            <input matInput name="password" [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" required />
-            <mat-icon matSuffix (click)="clickEvent($event)">
-                {{hide() ? 'visibility_off' : 'visibility'}}
-            </mat-icon>
-        </mat-form-field>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>E-mail</mat-label>
+                <input matInput [(ngModel)]="email" name="email" type="email" required />
+                <mat-icon matPrefix fontIcon="mail_outline"></mat-icon>
+            </mat-form-field>
+        </div>
+
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Senha</mat-label>
+                <input matInput name="password" [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" required />
+                <mat-icon matPrefix fontIcon="lock"></mat-icon>
+                <button type="button" mat-icon-button matSuffix (click)="toggleVisibility($event)"
+                    [attr.aria-label]="hide() ? 'Mostrar senha' : 'Ocultar senha'">
+                    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+
         @if (error) {
-            <div class="error">{{error}}</div>
+        <div class="error">
+            <mat-icon fontIcon="error_outline"></mat-icon>
+            <span>{{error}}</span>
+        </div>
         }
-        <div>
-            <button class="btn" matButton type="submit">
-                <mat-icon fontIcon="login"></mat-icon><span>Entrar</span>
+
+        <div class="btn-group">
+            <button class="btn" type="submit" [disabled]="!email || !password">
+                <mat-icon fontIcon="login"></mat-icon>
+                <span>Entrar</span>
             </button>
+        </div>
+
+        <div class="form-links">
+            <a href="#">Esqueceu sua senha?</a>
+            <a href="#">Precisa de ajuda?</a>
         </div>
     </form>
 </div>
