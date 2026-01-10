@@ -18,7 +18,7 @@ RUN npm run build -- --configuration=production
 FROM nginx:alpine
 
 # Copiar configuração customizada do NGINX (opcional)
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copiar os arquivos de build do estágio anterior
 COPY --from=build /app/dist/backoffice/browser /usr/share/nginx/html

@@ -38,7 +38,7 @@ export function emptyFilter(): UserSearchFilter {
 export class UsersService {
   private readonly http = inject(HttpClient);
 
-  private readonly API_URL = '/api';
+  private readonly API_URL = '/passport/api';
 
   findById(userId: number): Observable<User> {
     return this.http.get<User>(`${this.API_URL}/users/${userId}`);

@@ -12,7 +12,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   private readonly tokenKey = 'jwt_token';
-  private readonly API_URL = '/api';
+  private readonly API_URL = '/passport/api';
 
   login(email: string, password: string) {
     return this.http.post<AuthResponse>(`${this.API_URL}/auth/login`, { email, password })
