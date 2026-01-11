@@ -14,7 +14,7 @@
     justify-content: center;
     min-height: 400px;
     width: 100%;
-    max-width: 480px;
+    max-width: 960px;
     margin: 0 auto;
     padding: @espacamento-xxl;
     background-color: @branco;
@@ -23,12 +23,14 @@
     border: 1px solid @cinza-medio;
 
     @media (max-width: 768px) {
+        max-width: 768px;
         padding: @espacamento-xl;
         max-width: 90%;
         margin: @espacamento-lg auto;
     }
 
     @media (max-width: 480px) {
+        max-width: 480px;
         padding: @espacamento-lg;
         box-shadow: none;
         border: none;
