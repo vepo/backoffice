@@ -3,6 +3,7 @@ import { LoginComponent } from './components/login.component/login.component';
 import { authGuard } from './services/auth.guard';
 import { usersResolver } from './resolvers/users.resolver';
 import { UsersViewComponent } from './components/users-view.component/users-view.component';
+import { UsersEditComponent } from './components/users-edit.component/users-edit.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -12,6 +13,11 @@ export const routes: Routes = [
         resolve: {
             users: usersResolver
         },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'users/new',
+        component: UsersEditComponent,
         canActivate: [authGuard],
     },
 ];
