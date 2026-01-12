@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { emptyFilter, User, UserSearchFilter, UsersService } from '../../services/users.service';
 import { ConfirmDeleteDialog } from '../confirm-delete.dialog/confirm-delete.dialog';
@@ -10,17 +11,25 @@ import { ConfirmEnableDialog } from '../confirm-enable.dialog/confirm-enable.dia
 
 @Component({
     selector: 'app-users-view',
-    imports: [MatIcon, MatButton, FormsModule, RouterLink],
+    imports: [MatIconModule, MatButtonModule, FormsModule, RouterLink, MatTooltipModule],
     templateUrl: './users-view.component.html'
 })
 export class UsersViewComponent implements OnInit {
-    private readonly activatedRoute = inject(ActivatedRoute);
-    private readonly usersService = inject(UsersService);
-    private readonly dialog = inject(MatDialog);
+    private readonly activatedRoute;
+    private readonly usersService;
+    private readonly dialog;
 
     users: User[] = [];
     filter: UserSearchFilter = emptyFilter();
     lastSearch: UserSearchFilter = emptyFilter();
+
+    constructor() {
+        // Move all injections to the constructor
+        this.activatedRoute = inject(ActivatedRoute);
+        this.usersService = inject(UsersService);
+        this.dialog = inject(MatDialog);
+    }
+
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ users }) => this.users = users);
@@ -98,7 +107,7 @@ export class UsersViewComponent implements OnInit {
         console.log('Export to CSV');
     }
 
-    viewDetails(entry: User): void {
+    resetPassword(entry: User): void {
         console.log('View details for:', entry);
     }
 
