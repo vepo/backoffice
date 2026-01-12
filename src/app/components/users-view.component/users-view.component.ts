@@ -1,9 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { emptyFilter, User, UserSearchFilter, UsersService } from '../../services/users.service';
+import { ConfirmDeleteDialog } from '../confirm-delete.dialog/confirm-delete.dialog';
+import { ConfirmEnableDialog } from '../confirm-enable.dialog/confirm-enable.dialog';
 
 @Component({
     selector: 'app-users-view',
@@ -13,6 +16,7 @@ import { emptyFilter, User, UserSearchFilter, UsersService } from '../../service
 export class UsersViewComponent implements OnInit {
     private readonly activatedRoute = inject(ActivatedRoute);
     private readonly usersService = inject(UsersService);
+    private readonly dialog = inject(MatDialog);
 
     users: User[] = [];
     filter: UserSearchFilter = emptyFilter();
@@ -98,8 +102,51 @@ export class UsersViewComponent implements OnInit {
         console.log('View details for:', entry);
     }
 
-    confirmDelete(entry: User): void {
-        console.log('Confirm delete for:', entry);
+    confirmDisable(entry: User): void {
+        const dialogData = {
+            data: {
+                id: entry.id,
+                username: entry.username,
+                email: entry.email,
+                name: entry.name,
+                roles: entry.roles
+            },
+        };
+        this.dialog
+            .open(ConfirmDeleteDialog, dialogData)
+            .afterClosed()
+            .subscribe(deleted => {
+                if (deleted) {
+                    this.usersService.disable(entry.id).subscribe(user => {
+                        let index = this.users.findIndex(u => u.id == user.id);
+                        this.users[index] = user;
+                    });
+                }
+            });
+    }
+
+
+    confirmEnable(entry: User): void {
+        const dialogData = {
+            data: {
+                id: entry.id,
+                username: entry.username,
+                email: entry.email,
+                name: entry.name,
+                roles: entry.roles
+            },
+        };
+        this.dialog
+            .open(ConfirmEnableDialog, dialogData)
+            .afterClosed()
+            .subscribe(deleted => {
+                if (deleted) {
+                    this.usersService.enable(entry.id).subscribe(user => {
+                        let index = this.users.findIndex(u => u.id == user.id);
+                        this.users[index] = user;
+                    });
+                }
+            });
     }
 
     previousPage(): void {

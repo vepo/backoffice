@@ -8,7 +8,9 @@ export interface User {
   name: string;
   email: string;
   roles: string[];
-  createdAt: any;
+  deleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface UserSearchFilter {
@@ -50,6 +52,14 @@ export class UsersService {
 
   update(userId: number, user: UpdateOrCreateUserRequest): Observable<User> {
     return this.http.post<User>(`${this.API_URL}/users/${userId}`, user);
+  }
+
+  disable(userId: number): Observable<User> {
+    return this.http.post<User>(`${this.API_URL}/users/${userId}/disable`, {});
+  }
+
+  enable(userId: number): Observable<User> {
+    return this.http.post<User>(`${this.API_URL}/users/${userId}/enable`, {});
   }
 
   search(filter?: UserSearchFilter): Observable<User[]> {

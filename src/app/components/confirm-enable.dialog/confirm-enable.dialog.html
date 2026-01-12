@@ -1,0 +1,62 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon fontIcon="person_add" class="title-icon"></mat-icon>
+    Reativar Usuário
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div class="confirmation-message">
+        <mat-icon fontIcon="check_circle" class="message-icon"></mat-icon>
+        <p>Esta operação restaura o acesso do usuário ao sistema.</p>
+    </div>
+
+    <div class="user-info">
+        <h3>Detalhes do Usuário</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <span class="info-label">Nome de Usuário</span>
+                <span class="info-value">{{ data.username }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">E-mail</span>
+                <span class="info-value">{{ data.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nome Completo</span>
+                <span class="info-value">{{ data.name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status Atual</span>
+                <span class="status-badge inactive">Desabilitado</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="permissions-note">
+        <mat-icon fontIcon="shield" class="permissions-icon"></mat-icon>
+        <div>
+            <p><strong>Permissões que serão restauradas:</strong></p>
+            <div class="roles-container">
+                @if (data.roles.indexOf('admin') != -1) {
+                <span class="role-badge admin">Admin</span>
+                }
+                @if (data.roles.indexOf('project-manager') != -1) {
+                <span class="role-badge manager">Gerente</span>
+                }
+                @if (data.roles.indexOf('user') != -1) {
+                <span class="role-badge user">Usuário</span>
+                }
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button class="btn btn-outline" mat-dialog-close>
+        <mat-icon fontIcon="close"></mat-icon>
+        <span>Cancelar</span>
+    </button>
+    <button class="btn btn-success" [mat-dialog-close]="true">
+        <mat-icon fontIcon="person_add"></mat-icon>
+        <span>Reativar Usuário</span>
+    </button>
+</mat-dialog-actions>

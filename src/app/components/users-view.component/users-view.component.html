@@ -181,10 +181,17 @@
                                         matTooltip="Ver detalhes">
                                         <mat-icon fontIcon="visibility"></mat-icon>
                                     </button>
-                                    <button class="btn-icon btn-danger" matButton (click)="confirmDelete(entry)"
+                                    @if(entry.deleted) {
+                                    <button class="btn-icon btn-ok" matButton (click)="confirmEnable(entry)"
                                         matTooltip="Excluir usuário">
-                                        <mat-icon fontIcon="delete"></mat-icon>
+                                        <mat-icon fontIcon="account_circle"></mat-icon>
                                     </button>
+                                    } @else {
+                                    <button class="btn-icon btn-danger" matButton (click)="confirmDisable(entry)"
+                                        matTooltip="Excluir usuário">
+                                        <mat-icon class="filled" fontIcon="no_accounts"></mat-icon>
+                                    </button>
+                                    }
                                 </div>
                             </td>
                         </tr>

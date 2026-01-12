@@ -1,0 +1,45 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon fontIcon="person_off" class="title-icon"></mat-icon>
+    Desabilitar Usuário
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div class="confirmation-message">
+        <mat-icon fontIcon="info" class="message-icon"></mat-icon>
+        <p>Atenção: Esta operação pode ser revertida posteriormente.</p>
+    </div>
+
+    <div class="user-info">
+        <h3>Detalhes do Usuário</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <span class="info-label">Nome de Usuário</span>
+                <span class="info-value">{{ data.username }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">E-mail</span>
+                <span class="info-value">{{ data.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Nome Completo</span>
+                <span class="info-value">{{ data.name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-note">
+        <mat-icon fontIcon="warning" class="warning-icon"></mat-icon>
+        <p>O usuário perderá acesso ao sistema até ser reativado.</p>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button class="btn btn-outline" mat-dialog-close>
+        <mat-icon fontIcon="close"></mat-icon>
+        <span>Cancelar</span>
+    </button>
+    <button class="btn btn-danger" [mat-dialog-close]="true">
+        <mat-icon fontIcon="person_off"></mat-icon>
+        <span>Desabilitar Usuário</span>
+    </button>
+</mat-dialog-actions>
