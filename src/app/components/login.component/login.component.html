@@ -1,6 +1,6 @@
 <div class="main centered">
     <div class="form-header">
-        <h2>Backoffice</h2>
+        <h2>Backoffice — Acessar</h2>
     </div>
     <form (ngSubmit)="login()">
         <div class="form-field">
@@ -36,9 +36,8 @@
                 <span>Entrar</span>
             </button>
         </div>
-
         <div class="form-links">
-            <a href="#">Esqueceu sua senha?</a>
+            <a [routerLink]="'/login/recovery'">Esqueceu sua senha?</a>
             <a href="#">Precisa de ajuda?</a>
         </div>
     </form>

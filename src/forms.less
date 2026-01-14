@@ -193,6 +193,15 @@ form {
     margin: @espacamento-sm 0;
     animation: fadeIn 0.3s ease;
 
+    >* {
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    span {
+        margin-left: 1rem;
+    }
+
     @keyframes fadeIn {
         from {
             opacity: 0;
