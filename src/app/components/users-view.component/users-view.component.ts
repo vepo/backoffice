@@ -8,6 +8,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { emptyFilter, User, UserSearchFilter, UsersService } from '../../services/users.service';
 import { ConfirmDeleteDialog } from '../confirm-delete.dialog/confirm-delete.dialog';
 import { ConfirmEnableDialog } from '../confirm-enable.dialog/confirm-enable.dialog';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-users-view',
@@ -17,6 +18,7 @@ import { ConfirmEnableDialog } from '../confirm-enable.dialog/confirm-enable.dia
 export class UsersViewComponent implements OnInit {
     private readonly activatedRoute;
     private readonly usersService;
+    private readonly authService;
     private readonly dialog;
 
     users: User[] = [];
@@ -27,6 +29,7 @@ export class UsersViewComponent implements OnInit {
         // Move all injections to the constructor
         this.activatedRoute = inject(ActivatedRoute);
         this.usersService = inject(UsersService);
+        this.authService = inject(AuthService);
         this.dialog = inject(MatDialog);
     }
 
@@ -107,8 +110,8 @@ export class UsersViewComponent implements OnInit {
         console.log('Export to CSV');
     }
 
-    resetPassword(entry: User): void {
-        console.log('View details for:', entry);
+    resetPassword(user: User): void {
+       this.authService.recovery(user.email).subscribe(resp => console.log(resp));
     }
 
     confirmDisable(entry: User): void {

@@ -10,7 +10,6 @@ export interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-
   private readonly tokenKey = 'jwt_token';
   private readonly API_URL = '/passport/api';
 
@@ -24,6 +23,11 @@ export class AuthService {
   recovery(email: string): Observable<any> {
     return this.http.post<AuthResponse>(`${this.API_URL}/auth/recovery`, { email });
   }
+
+  resetPassword(token: string, recoveryPassword: string, newPassword: string): Observable<any> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/auth/reset`, { token, recoveryPassword, newPassword });
+  }
+
 
   saveToken(token: string) {
     localStorage.setItem(this.tokenKey, token);

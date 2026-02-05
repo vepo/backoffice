@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -12,12 +12,13 @@ import { AuthService } from '../../services/auth.service';
     templateUrl: './password-reset.component.html',
     imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, RouterLink]
 })
-export class PasswordResetComponent {
+export class PasswordResetComponent implements OnInit {
     private readonly auth = inject(AuthService);
     private readonly router = inject(Router);
+    private readonly token: string = inject(ActivatedRoute).snapshot.params["token"];
 
     // Password requirements pattern
-    private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    private readonly passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&,_])[A-Za-z\d@$!%*?&,_]{8,}$/;
 
     passwordResetForm = new FormGroup({
         recoveryPassword: new FormControl('', [Validators.required]),
@@ -33,6 +34,12 @@ export class PasswordResetComponent {
     hideNewPassword = signal(true);
     hideConfirmNewPassword = signal(true);
 
+    ngOnInit(): void {
+        if (this.auth.isAuthenticated()) {
+            this.router.navigate(['/']);
+        }
+    }
+
     // Custom validator to check if passwords match
     passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
         const newPassword = form.get('newPassword')?.value;
@@ -42,7 +49,6 @@ export class PasswordResetComponent {
             form.get('confirmNewPassword')?.setErrors({ passwordMismatch: true });
             return { passwordMismatch: true };
         } else {
-            form.get('confirmNewPassword')?.setErrors(null);
             return null;
         }
     }
@@ -78,17 +84,19 @@ export class PasswordResetComponent {
     }
 
     recovery() {
+        if (!this.recoveryPassword?.value || !this.newPassword?.value) {
+            return;
+        }
+
         if (this.passwordResetForm.valid) {
-            // Call your auth service here
-            console.log('Form submitted:', this.passwordResetForm.value);
-            // Example:
-            // this.auth.resetPassword(
-            //     this.recoveryPassword?.value,
-            //     this.newPassword?.value
-            // ).subscribe({
-            //     next: () => this.router.navigate(['/login']),
-            //     error: (err) => console.error('Reset failed:', err)
-            // });
+            this.auth.resetPassword(
+                this.token,
+                this.recoveryPassword.value,
+                this.newPassword.value
+            ).subscribe({
+                next: () => this.router.navigate(['/login']),
+                error: (err) => console.error('Reset failed:', err)
+            });
         }
     }
 }
