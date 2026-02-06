@@ -4,28 +4,8 @@
       <a id="start-link" routerLink="/">Início</a>
     </nav>
   </div>
-  <!-- @if (isAuthenticated()) {
-  <div>
-    <input type="text" i18n-placeholder placeholder="Buscar tickets..." [(ngModel)]="searchTerm" (keydown)="onSearchKeydown($event)" class="search-input" />
-  </div>
-  <div>
-    <select [(ngModel)]="selectStatus" (ngModelChange)="onChange($event)">
-      @for(status of statuses; track status.name) {
-        <option [ngValue]="status">{{status.name | normalize }}</option>
-      }
-    </select>
-  </div>
-  <div>
-    <button class="btn" matButton (click)="openCreateTicketDialog()">
-      <mat-icon fontIcon="assignment"></mat-icon><span i18n>Novo</span>
-    </button>
-  </div>
-}-->
   <div class="grow-space"></div>
   @if (isAuthenticated()) {
-  <!--div class="user-menu">
-    <app-notification></app-notification>
-  </div-->
   <div class="user-menu">
     <button matButton [matMenuTriggerFor]="menu">
       <mat-icon fontIcon="menu"></mat-icon><span>Menu</span>
@@ -37,12 +17,9 @@
       <button mat-menu-item *role="'admin'" [routerLink]="'/users'">
         <mat-icon fontIcon="group"></mat-icon><span>Usuários</span>
       </button>
-      <div class="divider"  *role="'project-manager'"></div>
-      <button mat-menu-item *role="'project-manager'" [routerLink]="'/workflows'">
-        <mat-icon fontIcon="handyman"></mat-icon><span>Processos</span>
-      </button>
-      <button mat-menu-item *role="'project-manager'" [routerLink]="'/projects'">
-        <mat-icon fontIcon="work"></mat-icon><span>Projetos</span>
+      <div class="divider"  *role="'domain-manager'"></div>
+      <button mat-menu-item *role="'domain-manager'" [routerLink]="'/domains'">
+        <mat-icon fontIcon="globe"></mat-icon><span>Domínios</span>
       </button>
       <div class="divider"></div>
       <button mat-menu-item (click)="logout()">
