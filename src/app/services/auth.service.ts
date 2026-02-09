@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 
 export interface AuthResponse {
@@ -10,16 +10,24 @@ export interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-
   private readonly tokenKey = 'jwt_token';
   private readonly API_URL = '/passport/api';
 
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.API_URL}/auth/login`, { email, password })
       .pipe(tap(res => {
         if (res.token) this.saveToken(res.token);
       }));
   }
+
+  recovery(email: string): Observable<any> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/auth/recovery`, { email });
+  }
+
+  resetPassword(token: string, recoveryPassword: string, newPassword: string): Observable<any> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/auth/reset`, { token, recoveryPassword, newPassword });
+  }
+
 
   saveToken(token: string) {
     localStorage.setItem(this.tokenKey, token);

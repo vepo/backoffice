@@ -80,6 +80,11 @@ form {
 .form-field {
     width: 100%;
 
+
+    .mat-mdc-form-field-error-wrapper {
+        position: relative;
+    }
+
     // Sobrescrevendo estilos do Material
     ::ng-deep {
         .mat-form-field-wrapper {
@@ -192,6 +197,15 @@ form {
     font-weight: 500;
     margin: @espacamento-sm 0;
     animation: fadeIn 0.3s ease;
+
+    >* {
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    span {
+        margin-left: 1rem;
+    }
 
     @keyframes fadeIn {
         from {
