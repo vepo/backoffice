@@ -14,10 +14,10 @@
       <button mat-menu-item [routerLink]="'/account/settings'">
         <mat-icon fontIcon="person"></mat-icon><span>Conta</span>
       </button>
-      <button mat-menu-item *role="'admin'" [routerLink]="'/users'">
+      <button mat-menu-item *role="'passport.admin'" [routerLink]="'/users'">
         <mat-icon fontIcon="group"></mat-icon><span>Usuários</span>
       </button>
-      <div class="divider"  *role="'domain-manager'"></div>
+      <div class="divider"  *role="'domains.admin'"></div>
       <button mat-menu-item *role="'domain-manager'" [routerLink]="'/domains'">
         <mat-icon fontIcon="globe"></mat-icon><span>Domínios</span>
       </button>
