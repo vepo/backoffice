@@ -75,27 +75,53 @@
                 <mat-icon fontIcon="email" class="input-icon"></mat-icon>
             </div>
 
-            <div class="roles-filter">
-                <div class="filter-label">Permissões:</div>
-                <div class="roles-checkboxes">
+            <div class="form-field">
+                <input type="text" placeholder="Filtrar por username..." [(ngModel)]="filter.username"
+                    (ngModelChange)="filterChanged('username')" class="filter-input">
+                <mat-icon fontIcon="account_box" class="input-icon"></mat-icon>
+            </div>
+
+            <div class="form-field">
+                <div class="filter-label">Habilitado:</div>
+                <div class="profiles-checkboxes">
                     <label class="custom-checkbox">
-                        <input type="checkbox" [checked]="filter.roles.indexOf('admin') != -1"
-                            (change)="toggleRole('admin')">
-                        <span class="role-badge admin">Admin</span>
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" [checked]="filter.roles.indexOf('project-manager') != -1"
-                            (change)="toggleRole('project-manager')">
-                        <span class="role-badge manager">Gerente</span>
-                    </label>
-                    <label class="custom-checkbox">
-                        <input type="checkbox" [checked]="filter.roles.indexOf('user') != -1"
-                            (change)="toggleRole('user')">
-                        <span class="role-badge user">Usuário</span>
+                        <input type="checkbox" [checked]="!filter.disabled" (change)="toggleDisabled()">
                     </label>
                 </div>
             </div>
 
+            @if(availableProfiles.length > 0) {
+            <div class="profiles-filter">
+                <div class="filter-label">Perfis:</div>
+                <div class="profiles-checkboxes">
+                    @for(profile of availableProfiles; track profile.name) {
+                        <label class="custom-checkbox">
+                            <input type="checkbox" [checked]="filter.profiles.indexOf(profile.id) !== -1"
+                                (change)="toggleProfile(profile.id)">
+                            <span class="profile-badge" [class]="getProfileBadgeClass(profile.name)">
+                                {{ profile.name }}
+                            </span>
+                        </label>
+                    }
+                </div>
+            </div>
+            }
+            @if(availableRoles.length > 0) {
+            <div class="roles-filter">
+                <div class="filter-label">Funções:</div>
+                <div class="roles-checkboxes">
+                    @for(role of availableRoles; track role.name) {
+                        <label class="custom-checkbox">
+                            <input type="checkbox" [checked]="filter.roles.indexOf(role.id) !== -1"
+                                (change)="toggleRole(role.id)">
+                            <span class="role-badge" [class]="getProfileBadgeClass(role.name)">
+                                {{ role.name }}
+                            </span>
+                        </label>
+                    }
+                </div>
+            </div>
+            }
             <button class="btn btn-outline btn-small" (click)="clearFilters()">
                 <mat-icon fontIcon="clear_all"></mat-icon>
                 Limpar Filtros
@@ -127,7 +153,8 @@
                             <th class="column-id">ID</th>
                             <th class="column-name">Nome</th>
                             <th class="column-email">Email</th>
-                            <th class="column-roles">Permissões</th>
+                            <th class="column-profiles">Perfis</th> 
+                            <th class="column-profiles">Funções</th> 
                             <th class="column-status">Status</th>
                             <th class="column-actions">Ações</th>
                         </tr>
@@ -145,6 +172,7 @@
                                     </div>
                                     <div class="user-details">
                                         <strong>{{ entry.name }}</strong>
+                                        {{ entry.username }} <br/>
                                         <span class="user-date">Criado em {{ formatDate(entry.createdAt) }}</span>
                                     </div>
                                 </div>
@@ -155,21 +183,37 @@
                                     {{ entry.email }}
                                 </a>
                             </td>
-                            <td class="column-roles">
-                                <div class="roles-container">
-                                    @if (entry.roles.indexOf('admin') != -1) {
-                                    <span class="role-badge admin">Admin</span>
+                            <td class="column-profiles"> <!-- Changed from column-roles -->
+                                <div class="profiles-container"> <!-- Changed from roles-container -->
+                                    @for (profile of entry.profiles; track profile.id) {
+                                    <span class="profile-badge" [class]="getProfileBadgeClass(profile.name)">
+                                        {{ profile.name }}
+                                    </span>
                                     }
-                                    @if (entry.roles.indexOf('project-manager') != -1) {
-                                    <span class="role-badge manager">Gerente</span>
+                                    @if (entry.profiles.length == 0) {
+                                        <span class="no-badge">Nenhum perfil associado</span>
                                     }
-                                    @if (entry.roles.indexOf('user') != -1) {
-                                    <span class="role-badge user">Usuário</span>
+                                </div>
+                            </td>
+                            <td class="column-roles"> <!-- Changed from column-roles -->
+                                <div class="roles-container"> <!-- Changed from roles-container -->
+                                    @let roles = loadRoles(entry.profiles);
+                                    @for (role of roles; track role.id) {
+                                    <span class="role-badge" [class]="getProfileBadgeClass(role.name)">
+                                        {{ role.name }}
+                                    </span>
+                                    }
+                                    @if (roles.length == 0) {
+                                        <span class="no-badge">Nenhum perfil associado</span>
                                     }
                                 </div>
                             </td>
                             <td class="column-status">
+                                @if (entry.disabled) {
+                                <span class="status-badge inactive">Inativo</span>
+                                } @else {
                                 <span class="status-badge active">Ativo</span>
+                                }
                             </td>
                             <td class="column-actions">
                                 <div class="action-buttons">
@@ -181,14 +225,14 @@
                                         matTooltip="Resetar senha">
                                         <mat-icon fontIcon="password"></mat-icon>
                                     </button>
-                                    @if(entry.deleted) {
+                                    @if(entry.disabled) {
                                     <button class="btn-icon btn-ok" matButton (click)="confirmEnable(entry)"
                                         matTooltip="Reativar usuário">
                                         <mat-icon fontIcon="account_circle"></mat-icon>
                                     </button>
                                     } @else {
                                     <button class="btn-icon btn-danger" matButton (click)="confirmDisable(entry)"
-                                        matTooltip="Excluir usuário">
+                                        matTooltip="Desativar usuário"> <!-- Changed from Excluir to Desativar -->
                                         <mat-icon class="filled" fontIcon="no_accounts"></mat-icon>
                                     </button>
                                     }
@@ -237,7 +281,7 @@
         <div class="actions-grid">
             <button class="btn btn-outline" (click)="bulkAssignRoles()">
                 <mat-icon fontIcon="assignment_ind"></mat-icon>
-                Atribuir Permissões em Massa
+                Atribuir Perfis em Massa <!-- Changed from Permissões to Perfis -->
             </button>
             <button class="btn btn-outline" (click)="exportReport()">
                 <mat-icon fontIcon="assessment"></mat-icon>

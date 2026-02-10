@@ -97,29 +97,29 @@ export class UsersEditComponent implements OnInit {
         if (!name || !username || !email || !roles) return;
 
         if (this.editMode && this.userId) {
-            this.usersService.update(this.userId, { name, username, email, roles })
-                .subscribe({
-                    next: (user) => {
-                        console.log("User updated:", user);
-                        this.router.navigate(['/', 'users']);
-                    },
-                    error: (error) => {
-                        console.error("Error updating user:", error);
-                        // Handle error appropriately
-                    }
-                });
+            // this.usersService.update(this.userId, { name, username, email, roles })
+            //     .subscribe({
+            //         next: (user) => {
+            //             console.log("User updated:", user);
+            //             this.router.navigate(['/', 'users']);
+            //         },
+            //         error: (error) => {
+            //             console.error("Error updating user:", error);
+            //             // Handle error appropriately
+            //         }
+            //     });
         } else {
-            this.usersService.create({ name, username, email, roles })
-                .subscribe({
-                    next: (user) => {
-                        console.log("User created:", user);
-                        this.router.navigate(['/', 'users']);
-                    },
-                    error: (error) => {
-                        console.error("Error creating user:", error);
-                        // Handle error appropriately
-                    }
-                });
+            // this.usersService.create({ name, username, email, roles })
+            //     .subscribe({
+            //         next: (user) => {
+            //             console.log("User created:", user);
+            //             this.router.navigate(['/', 'users']);
+            //         },
+            //         error: (error) => {
+            //             console.error("Error creating user:", error);
+            //             // Handle error appropriately
+            //         }
+            //     });
         }
     }
 }

@@ -6,6 +6,8 @@ import { UsersEditComponent } from './components/users-edit.component/users-edit
 import { UsersViewComponent } from './components/users-view.component/users-view.component';
 import { userResolver, usersResolver } from './resolvers/users.resolver';
 import { authGuard } from './services/auth.guard';
+import { rolesResolver } from './resolvers/roles.resolver';
+import { profilesResolver } from './resolvers/profiles.resolver';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -15,7 +17,9 @@ export const routes: Routes = [
         path: 'users',
         component: UsersViewComponent,
         resolve: {
-            users: usersResolver
+            users: usersResolver,
+            availableRoles: rolesResolver,
+            availableProfiles: profilesResolver
         },
         canActivate: [authGuard],
     },

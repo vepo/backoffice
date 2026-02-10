@@ -8,14 +8,16 @@ import {
 } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Role } from "../../services/roles.service";
+import { Profile } from "../../services/profile.service";
 
 export interface UserEnableData {
     id: number;
     username: string;
     email: string;
     name: string;
-    roles: string[];
-    disabledAt?: Date;
+    roles: Role[];
+    profiles: Profile[];
 }
 
 @Component({
