@@ -5,10 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Profile, ProfileService } from '../../services/profile.service';
+import { Role, RoleService } from '../../services/roles.service';
 import { emptyFilter, User, UserSearchFilter, UsersService } from '../../services/users.service';
 import { ConfirmDeleteDialog } from '../confirm-delete.dialog/confirm-delete.dialog';
 import { ConfirmEnableDialog } from '../confirm-enable.dialog/confirm-enable.dialog';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
     selector: 'app-users-view',
@@ -16,41 +18,52 @@ import { AuthService } from '../../services/auth.service';
     templateUrl: './users-view.component.html'
 })
 export class UsersViewComponent implements OnInit {
-    private readonly activatedRoute;
-    private readonly usersService;
-    private readonly authService;
-    private readonly dialog;
+    private readonly activatedRoute = inject(ActivatedRoute);
+    private readonly usersService = inject(UsersService);
+    private readonly authService = inject(AuthService);
+    private readonly dialog = inject(MatDialog);
+    private readonly profileService = inject(ProfileService);
+    private readonly roleService = inject(RoleService);
 
     users: User[] = [];
     filter: UserSearchFilter = emptyFilter();
     lastSearch: UserSearchFilter = emptyFilter();
 
-    constructor() {
-        // Move all injections to the constructor
-        this.activatedRoute = inject(ActivatedRoute);
-        this.usersService = inject(UsersService);
-        this.authService = inject(AuthService);
-        this.dialog = inject(MatDialog);
-    }
+    // Add available profiles for filtering
+    availableProfiles: Profile[] = [];
+    availableRoles: Role[] = [];
 
+    constructor() { }
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe(({ users }) => this.users = users);
+        this.activatedRoute.data.subscribe(({ users, availableRoles, availableProfiles }) => {
+            this.availableProfiles = availableProfiles;
+            this.availableRoles = availableRoles
+            this.users = users;
+            // Load profiles for filtering
+        });
     }
 
-    toggleRole(role: string) {
-        console.debug("Toggle filter for role:", role)
-        let roleIndex = this.filter.roles.indexOf(role);
-        if (roleIndex == -1) {
-            this.filter.roles.push(role);
-            this.users = this.users.filter(u => u.roles.indexOf(role) != -1);
+    toggleProfile(profileId: number) {
+        const profileIndex = this.filter.profiles.indexOf(profileId);
+        if (profileIndex === -1) {
+            this.filter.profiles.push(profileId);
         } else {
-            console.debug("Removing role...", roleIndex, this.filter.roles);
-            this.filter.roles.splice(roleIndex, 1);
-            console.debug("Role removed!", this.filter.roles);
-            this.updateSearch();
+            this.filter.profiles.splice(profileIndex, 1);
         }
-        this.lastSearch = this.filter;
+        this.updateSearch();
+        this.lastSearch = { ...this.filter };
+    }
+
+    toggleRole(roleId: number) {
+        const roleIndex = this.filter.roles.indexOf(roleId);
+        if (roleIndex === -1) {
+            this.filter.roles.push(roleId);
+        } else {
+            this.filter.roles.splice(roleIndex, 1);
+        }
+        this.updateSearch();
+        this.lastSearch = { ...this.filter };
     }
 
     updateSearch() {
@@ -58,40 +71,82 @@ export class UsersViewComponent implements OnInit {
             .subscribe(resp => this.users = resp);
     }
 
-    filterChanged(value: string) {
-        switch (value) {
-            case 'name':
-                console.debug("Is new name substring of old name?", this.lastSearch.name, this.filter.name);
-                if (this.filter.name != '' && (this.lastSearch.name == '' || this.lastSearch.name.indexOf(this.filter.name))) {
-                    console.debug('filtering', this.filter);
-                    this.users = this.users.filter(u => u.name.indexOf(this.filter.name) != -1);
-                } else {
-                    console.debug('Searching again...', this.filter)
-                    this.updateSearch();
+    filterChanged(field: string) {
+        // Only trigger search if the field value has meaningfully changed
+        if (field === 'name' || field === 'email' || field === 'username') {
+            const currentValue = this.filter[field];
+            const lastValue = this.lastSearch[field];
+
+            // Type guard to ensure both values are strings
+            if (typeof currentValue === 'string' && typeof lastValue === 'string') {
+                // If the new value is a subset of the old value, filter locally
+                if (currentValue && lastValue && currentValue.includes(lastValue)) {
+                    if (field === 'name') {
+                        this.users = this.users.filter(u => u.name.toLowerCase().includes(currentValue.toLowerCase()));
+                    } else if (field === 'email') {
+                        this.users = this.users.filter(u => u.email.toLowerCase().includes(currentValue.toLowerCase()));
+                    } else if (field === 'username') {
+                        this.users = this.users.filter(u => u.username.toLowerCase().includes(currentValue.toLowerCase()));
+                    }
+                    this.lastSearch = { ...this.filter };
+                    return; // Skip the updateSearch call below
                 }
-                break;
-            case 'email':
-                if (this.filter.email != '' && (this.lastSearch.email == '' || this.lastSearch.email.indexOf(this.filter.email))) {
-                    this.users = this.users.filter(u => u.email.indexOf(this.filter.email) != -1);
-                } else {
-                    this.updateSearch();
-                }
-                break;
+            }
+            // Otherwise, do a full search
+            this.updateSearch();
         }
-        this.lastSearch = this.filter;
+        this.lastSearch = { ...this.filter };
     }
 
-    // Add these missing method stubs for TypeScript compilation
+    getProfileBadgeClass(profileName: string): string {
+        const name = profileName.toLowerCase();
+        if (name.includes('admin')) return 'admin';
+        if (name.includes('manager') || name.includes('gerente')) return 'manager';
+        if (name.includes('user') || name.includes('usuário')) return 'user';
+        return 'default';
+    }
+
+    // Helper method to check if user has a specific profile
+    userHasProfile(user: User, profileName: string): boolean {
+        return user.profiles.some(profile =>
+            profile.name.toLowerCase().includes(profileName.toLowerCase())
+        );
+    }
+
+    loadRoles(profiles: Profile[]): Role[] {
+        var profileRoles: Role[] = [];
+        this.availableProfiles.forEach(p => {
+            if (profiles.find(profile => profile.id == p.id)) {
+                p.roles.forEach(role => {
+                    if (!profileRoles.find(r => r.id == role.id)) {
+                        profileRoles.push(role);
+                    }
+                });
+            }
+        });
+        return profileRoles;
+    }
+
+    toggleDisabled() {
+        this.filter.disabled = !this.filter.disabled;
+        this.updateSearch();
+    }
+
     getAdminCount(): number {
-        return this.users.filter(u => u.roles.includes('admin')).length;
+        return this.users.filter(u => this.userHasProfile(u, 'admin')).length;
     }
 
     getManagerCount(): number {
-        return this.users.filter(u => u.roles.includes('project-manager')).length;
+        return this.users.filter(u => this.userHasProfile(u, 'manager') || this.userHasProfile(u, 'gerente')).length;
     }
 
     getUserCount(): number {
-        return this.users.filter(u => u.roles.includes('user')).length;
+        // Users without admin or manager profiles
+        return this.users.filter(u =>
+            !this.userHasProfile(u, 'admin') &&
+            !this.userHasProfile(u, 'manager') &&
+            !this.userHasProfile(u, 'gerente')
+        ).length;
     }
 
     formatDate(date: Date | string): string {
@@ -111,7 +166,7 @@ export class UsersViewComponent implements OnInit {
     }
 
     resetPassword(user: User): void {
-       this.authService.recovery(user.email).subscribe(resp => console.log(resp));
+        this.authService.recovery(user.email).subscribe(resp => console.log(resp));
     }
 
     confirmDisable(entry: User): void {
@@ -121,7 +176,8 @@ export class UsersViewComponent implements OnInit {
                 username: entry.username,
                 email: entry.email,
                 name: entry.name,
-                roles: entry.roles
+                roles: this.loadRoles(entry.profiles),
+                profiles: entry.profiles // Changed from roles to profiles
             },
         };
         this.dialog
@@ -137,7 +193,6 @@ export class UsersViewComponent implements OnInit {
             });
     }
 
-
     confirmEnable(entry: User): void {
         const dialogData = {
             data: {
@@ -145,7 +200,7 @@ export class UsersViewComponent implements OnInit {
                 username: entry.username,
                 email: entry.email,
                 name: entry.name,
-                roles: entry.roles
+                profiles: entry.profiles // Changed from roles to profiles
             },
         };
         this.dialog

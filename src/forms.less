@@ -741,7 +741,7 @@ input {
 
     .filter-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: @espacamento-md;
         align-items: end;
 
@@ -796,6 +796,7 @@ input {
             }
         }
 
+        .profiles-filter,
         .roles-filter {
             .filter-label {
                 font-size: @fonte-tamanho-pequeno;
@@ -804,6 +805,7 @@ input {
                 margin-bottom: @espacamento-sm;
             }
 
+            .profiles-checkboxes,
             .roles-checkboxes {
                 display: flex;
                 gap: @espacamento-md;
@@ -815,7 +817,8 @@ input {
                     gap: @espacamento-xs;
                     margin: 0;
                     cursor: pointer;
-
+                    
+                    .profile-badge,
                     .role-badge {
                         padding: @espacamento-xs @espacamento-md;
                         border-radius: @border-radius-sm;
@@ -1005,7 +1008,7 @@ input {
                         }
 
                         td {
-                            padding: @espacamento-md @espacamento-lg;
+                            padding: @espacamento-sm;
                             border-bottom: 1px solid @cinza-medio;
                             vertical-align: middle;
 
@@ -1080,11 +1083,14 @@ input {
                                 }
                             }
 
+                            .profiles-container,
                             .roles-container {
                                 display: flex;
                                 gap: @espacamento-xs;
                                 flex-wrap: wrap;
-
+                                
+                                .no-badge,
+                                .profile-badge,
                                 .role-badge {
                                     padding: @espacamento-xs @espacamento-md;
                                     border-radius: @border-radius-sm;
@@ -1107,6 +1113,10 @@ input {
                                         background-color: @branco;
                                         color: #7C3AED;
                                     }
+                                }
+                                .no-badge {
+                                    opacity: 0.7;
+                                    font-style: italic;
                                 }
                             }
 

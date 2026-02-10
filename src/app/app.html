@@ -14,8 +14,15 @@
       <button mat-menu-item [routerLink]="'/account/settings'">
         <mat-icon fontIcon="person"></mat-icon><span>Conta</span>
       </button>
+      <div *role="'passport.admin'" class="divider"></div>
       <button mat-menu-item *role="'passport.admin'" [routerLink]="'/users'">
         <mat-icon fontIcon="group"></mat-icon><span>Usuários</span>
+      </button>
+      <button mat-menu-item *role="'passport.admin'" [routerLink]="'/profiles'">
+        <mat-icon fontIcon="account_box"></mat-icon><span>Perfis</span>
+      </button>
+      <button mat-menu-item *role="'passport.admin'" [routerLink]="'/roles'">
+        <mat-icon fontIcon="how_to_reg"></mat-icon><span>Funções</span>
       </button>
       <div class="divider"  *role="'domains.admin'"></div>
       <button mat-menu-item *role="'domain-manager'" [routerLink]="'/domains'">
