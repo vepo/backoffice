@@ -34,4 +34,15 @@ export interface UserEnableData {
 })
 export class ConfirmEnableDialog {
     readonly data = inject<UserEnableData>(MAT_DIALOG_DATA);
+
+    getRoleBadgeClass(role: Role) {
+        const name = role.name.toLowerCase();
+        if (name.includes('admin') || name.includes('administrador')) return 'admin';
+        if (name.includes('manager') || name.includes('gerente') || name.includes('gestor') || name.includes('editor')) return 'manager';
+        if (name.includes('write') || name.includes('escrita')) return 'user';
+        if (name.includes('viewer') || name.includes('leitura')) return 'user';
+        if (name.includes('read') || name.includes('leitura')) return 'user';
+        if (name.includes('user') || name.includes('usuário')) return 'user';
+        return 'default';
+    }
 }

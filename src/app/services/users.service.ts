@@ -23,7 +23,7 @@ export interface UserSearchFilter {
   username: string;
   profiles: number[];  // Changed from string[] to number[] (profile IDs)
   roles: number[];     // Added for backend compatibility (role IDs)
-  disabled: boolean;
+  disabled: boolean| null;
 }
 
 export interface UpdateOrCreateUserRequest {
@@ -40,7 +40,7 @@ export function emptyFilter(): UserSearchFilter {
     username: '',
     profiles: [],
     roles: [],
-    disabled: false
+    disabled: null
   };
 }
 

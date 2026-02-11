@@ -37,18 +37,8 @@
             <p><strong>Permissões que serão restauradas:</strong></p>
             <div class="roles-container">
                 @for(role of data.roles; track role.name) {
-                    @if (role.name.toLowerCase().indexOf('admin') != -1) {
-                     <span class="role-badge admin">{{ role.name }}</span>
-                    }
+                    <span class="role-badge" [class]="getRoleBadgeClass(role)">{{ role.name }}</span>
                 }
-                <!--
-                }
-                @if (data.roles.indexOf('project-manager') != -1) {
-                <span class="role-badge manager">Gerente</span>
-                }
-                @if (data.roles.indexOf('user') != -1) {
-                <span class="role-badge user">Usuário</span>
-            }-->
             </div>
         </div>
     </div>

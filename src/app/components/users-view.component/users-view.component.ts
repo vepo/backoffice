@@ -98,6 +98,36 @@ export class UsersViewComponent implements OnInit {
         this.lastSearch = { ...this.filter };
     }
 
+    // Adicionar este método ao componente
+    getRoleBadgeClass(roleName: string): string {
+        const name = roleName.toLowerCase();
+        if (name.includes('admin') || name.includes('administrador')) return 'admin';
+        if (name.includes('manager') || name.includes('gerente') || name.includes('gestor')) return 'manager';
+        if (name.includes('write') || name.includes('escrita')) return 'user';
+        if (name.includes('read') || name.includes('leitura')) return 'user';
+        if (name.includes('user') || name.includes('usuário')) return 'user';
+        return 'default';
+    }
+
+    // Adicionar este método ao componente
+setStatusFilter(status: 'active' | 'inactive' | 'all'): void {
+    switch(status) {
+        case 'active':
+            this.filter.disabled = false;
+            break;
+        case 'inactive':
+            this.filter.disabled = true;
+            break;
+        case 'all':
+            this.filter.disabled = null;
+            break;
+    }
+    this.updateSearch();
+}
+
+// Remover o método toggleDisabled() antigo e substituir pelo novo
+
+    // Atualizar o método getProfileBadgeClass para ficar mais específico
     getProfileBadgeClass(profileName: string): string {
         const name = profileName.toLowerCase();
         if (name.includes('admin')) return 'admin';
@@ -200,7 +230,8 @@ export class UsersViewComponent implements OnInit {
                 username: entry.username,
                 email: entry.email,
                 name: entry.name,
-                profiles: entry.profiles // Changed from roles to profiles
+                profiles: entry.profiles,
+                roles: this.loadRoles(entry.profiles)
             },
         };
         this.dialog

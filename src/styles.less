@@ -319,3 +319,29 @@ button {
 .mb-3 {
     margin-bottom: @espacamento-lg;
 }
+
+// Em forms.less, na seção .action-buttons
+.action-buttons {
+    .btn-icon {
+        mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            
+            &.filled {
+                font-variation-settings: 'FILL' 1;
+            }
+        }
+    }
+}
+
+// Adicionar estilos para os ícones nos badges (se não existirem)
+.profile-badge,
+.role-badge,
+.status-badge {
+    mat-icon {
+        vertical-align: middle;
+        margin-right: @espacamento-xs;
+    }
+}

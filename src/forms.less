@@ -796,6 +796,7 @@ input {
             }
         }
 
+        .status-filter,
         .profiles-filter,
         .roles-filter {
             .filter-label {
@@ -817,7 +818,7 @@ input {
                     gap: @espacamento-xs;
                     margin: 0;
                     cursor: pointer;
-                    
+
                     .profile-badge,
                     .role-badge {
                         padding: @espacamento-xs @espacamento-md;
@@ -1088,7 +1089,7 @@ input {
                                 display: flex;
                                 gap: @espacamento-xs;
                                 flex-wrap: wrap;
-                                
+
                                 .no-badge,
                                 .profile-badge,
                                 .role-badge {
@@ -1114,6 +1115,7 @@ input {
                                         color: #7C3AED;
                                     }
                                 }
+
                                 .no-badge {
                                     opacity: 0.7;
                                     font-style: italic;
@@ -1353,6 +1355,232 @@ input {
                 width: 18px;
                 height: 18px;
                 color: @cinza-escuro;
+            }
+        }
+    }
+}
+
+// Adicionar esta seção após .profiles-filter e .roles-filter
+.status-filter {
+    .status-toggle {
+        display: flex;
+        gap: @espacamento-xs;
+        flex-wrap: wrap;
+
+        .status-toggle-item {
+            margin: 0;
+
+            input[type="radio"] {
+                display: none; // Esconder o input radio nativo
+
+                &:checked+.status-badge {
+                    border-width: 2px;
+                    font-weight: 600;
+
+                    &.active {
+                        background-color: fade(#059669, 20%);
+                        border-color: #059669;
+                    }
+
+                    &.inactive {
+                        background-color: fade(#DC2626, 20%);
+                        border-color: #DC2626;
+                    }
+
+                    &.all {
+                        background-color: fade(@azul-secundario, 20%);
+                        border-color: @azul-secundario;
+                    }
+                }
+            }
+
+            .status-badge {
+                display: flex;
+                align-items: center;
+                gap: @espacamento-xs;
+                padding: @espacamento-xs @espacamento-md;
+                border-radius: @border-radius-sm;
+                font-size: @fonte-tamanho-pequeno;
+                font-weight: 500;
+                white-space: nowrap;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border: 1px solid @cinza-medio;
+
+                &.active {
+                    background-color: fade(#059669, 10%);
+                    color: #059669;
+                    border-color: fade(#059669, 30%);
+
+                    &:hover {
+                        background-color: fade(#059669, 15%);
+                        border-color: #059669;
+                    }
+                }
+
+                &.inactive {
+                    background-color: fade(#DC2626, 10%);
+                    color: #DC2626;
+                    border-color: fade(#DC2626, 30%);
+
+                    &:hover {
+                        background-color: fade(#DC2626, 15%);
+                        border-color: #DC2626;
+                    }
+                }
+
+                &.all {
+                    background-color: fade(@azul-secundario, 10%);
+                    color: @azul-secundario;
+                    border-color: fade(@azul-secundario, 30%);
+
+                    &:hover {
+                        background-color: fade(@azul-secundario, 15%);
+                        border-color: @azul-secundario;
+                    }
+                }
+
+                .status-icon {
+                    font-size: 14px;
+                    width: 14px;
+                    height: 14px;
+                }
+            }
+        }
+    }
+}
+
+// Adicionar estilo para o container de ações dos filtros
+.filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: @espacamento-md;
+
+    @media (max-width: 480px) {
+        justify-content: center;
+    }
+}
+
+// Ajustar o layout do filter-grid para acomodar melhor os novos filtros
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: @espacamento-md;
+    align-items: start; // Mudar de 'end' para 'start'
+
+    .status-filter,
+    .profiles-filter,
+    .roles-filter {
+        grid-column: span 3;
+    }
+
+    .filter-actions {
+        grid-column: span 3;
+    }
+
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+
+        .status-filter,
+        .profiles-filter,
+        .roles-filter,
+        .filter-actions {
+            grid-column: span 2;
+        }
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+
+        .status-filter,
+        .profiles-filter,
+        .roles-filter,
+        .filter-actions {
+            grid-column: span 1;
+        }
+    }
+}
+
+// Ajustar os checkboxes dos perfis e funções para melhor organização
+.profiles-checkboxes,
+.roles-checkboxes {
+    display: flex;
+    gap: @espacamento-sm;
+    flex-wrap: wrap;
+
+    .custom-checkbox {
+        margin: 0;
+
+        input[type="checkbox"] {
+            display: none; // Esconder o checkbox nativo
+
+            &:checked+.profile-badge,
+            &:checked+.role-badge {
+                border-width: 2px;
+                font-weight: 600;
+
+                &.admin {
+                    background-color: fade(@azul-primario, 20%);
+                    border-color: @azul-primario;
+                }
+
+                &.manager {
+                    background-color: fade(#059669, 20%);
+                    border-color: #059669;
+                }
+
+                &.user {
+                    background-color: fade(#7C3AED, 20%);
+                    border-color: #7C3AED;
+                }
+            }
+        }
+
+        .profile-badge,
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: @espacamento-xs;
+            padding: @espacamento-xs @espacamento-md;
+            border-radius: @border-radius-sm;
+            font-size: @fonte-tamanho-pequeno;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid @cinza-medio;
+
+            &.admin {
+                background-color: fade(@azul-primario, 10%);
+                color: @azul-primario;
+                border-color: fade(@azul-primario, 30%);
+
+                &:hover {
+                    background-color: fade(@azul-primario, 15%);
+                    border-color: @azul-primario;
+                }
+            }
+
+            &.manager {
+                background-color: fade(#059669, 10%);
+                color: #059669;
+                border-color: fade(#059669, 30%);
+
+                &:hover {
+                    background-color: fade(#059669, 15%);
+                    border-color: #059669;
+                }
+            }
+
+            &.user {
+                background-color: fade(#7C3AED, 10%);
+                color: #7C3AED;
+                border-color: fade(#7C3AED, 30%);
+
+                &:hover {
+                    background-color: fade(#7C3AED, 15%);
+                    border-color: #7C3AED;
+                }
             }
         }
     }
