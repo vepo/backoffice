@@ -56,42 +56,48 @@
             </mat-form-field>
         </div>
 
-        <section class="roles-section">
-            <h3>Permissões</h3>
-            <p class="section-subtitle">Selecione as permissões do usuário</p>
+        <section class="profiles-section">
+            <h3>Perfis</h3>
+            <p class="section-subtitle">Selecione os perfis do usuário</p>
 
-            <div class="roles-checkboxes">
+            <div class="profiles-checkboxes">
+                @for (profile of availableProfiles; track profile.name) {
                 <label class="custom-checkbox role-checkbox">
-                    <input type="checkbox" [checked]="isRoleSelected('admin')" (change)="toggle('admin')" />
-                    <span class="role-badge admin">
-                        <mat-icon fontIcon="admin_panel_settings"></mat-icon>
-                        <span>Administrador</span>
+                    <input type="checkbox"  [checked]="isProfileSelected(profile)" (change)="toggle(profile)" />
+                    <span class="role-badge" [class]="getProfileBadgeClass(profile)">
+                        <mat-icon [fontIcon]="getProfileIcon(profile)"></mat-icon>
+                        <span>{{profile.name}}</span>
                     </span>
                 </label>
-
-                <label class="custom-checkbox role-checkbox">
-                    <input type="checkbox" [checked]="isRoleSelected('project-manager')"
-                        (change)="toggle('project-manager')" />
-                    <span class="role-badge manager">
-                        <mat-icon fontIcon="engineering"></mat-icon>
-                        <span>Gerente de Projeto</span>
-                    </span>
-                </label>
-
-                <label class="custom-checkbox role-checkbox">
-                    <input type="checkbox" [checked]="isRoleSelected('user')" (change)="toggle('user')" />
-                    <span class="role-badge user">
-                        <mat-icon fontIcon="people"></mat-icon>
-                        <span>Usuário</span>
-                    </span>
-                </label>
+                }
             </div>
 
-            @if (userForm.get('roles')?.invalid && userForm.get('roles')?.touched) {
+            @if (userForm.get('profileIds')?.invalid && userForm.get('profileIds')?.touched) {
             <div class="error">
                 <mat-icon fontIcon="error_outline"></mat-icon>
                 <span>Selecione pelo menos uma permissão</span>
             </div>
+            }
+        </section>
+        <section class="roles-section">
+            <h3>Funções</h3>
+            @let roles = loadRoles();
+            @if (roles.length > 0) { 
+                <p class="section-subtitle">Funções selecioadas</p>
+
+                <div class="profiles-checkboxes">
+                    @for (role of roles; track role.name) {
+                    <label class="custom-checkbox role-checkbox">
+                        <input type="checkbox" checked disabled />
+                        <span class="role-badge" [class]="getRoleBadgeClass(role)">
+                            <mat-icon [fontIcon]="getRoleIcon(role)"></mat-icon>
+                            <span>{{role.name}}</span>
+                        </span>
+                    </label>
+                    }
+                </div>
+            } @else {
+                <p class="section-subtitle">Nenhuma função selecionada...</p>
             }
         </section>
 

@@ -3,9 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Profile } from '../../services/profile.service';
+import { Role } from '../../services/roles.service';
 import { UsersService } from '../../services/users.service';
 
 @Component({
@@ -27,16 +29,20 @@ export class UsersEditComponent implements OnInit {
 
     editMode: boolean = false;
     userId: number | null = null;
+    availableProfiles: Profile[] = [];
+    availableRoles: Role[] = [];
     userForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(15)]),
         name: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.email, Validators.required]),
-        roles: new FormControl([] as string[], [Validators.required, Validators.minLength(1)])
+        profileIds: new FormControl([] as number[], [Validators.required, Validators.minLength(1)])
     });
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ user }) => {
+        this.activatedRoute.data.subscribe(({ user, availableRoles, availableProfiles }) => {
             console.debug("User data: ", user);
+            this.availableProfiles = availableProfiles;
+            this.availableRoles = availableRoles
             this.editMode = user != null;
             this.userId = user?.id || null;
 
@@ -45,7 +51,7 @@ export class UsersEditComponent implements OnInit {
                     username: user.username,
                     name: user.name,
                     email: user.email,
-                    roles: user.roles || []
+                    profileIds: (user.profiles as Profile[]).map(p => p.id) || []
                 });
             }
 
@@ -56,30 +62,78 @@ export class UsersEditComponent implements OnInit {
         });
     }
 
-    toggle(role: string): void {
-        const currentRoles = this.userForm.get('roles')?.value || [];
-        const roleIndex = currentRoles.indexOf(role);
+    toggle(profile: Profile): void {
+        const currentProfileIds = this.userForm.get('profileIds')?.value || [];
+        const profileIndex = currentProfileIds.indexOf(profile.id);
 
-        let newRoles: string[];
-        if (roleIndex === -1) {
-            newRoles = [...currentRoles, role];
+        let newProfileIds: number[];
+        if (profileIndex === -1) {
+            newProfileIds = [...currentProfileIds, profile.id];
         } else {
-            newRoles = [...currentRoles];
-            newRoles.splice(roleIndex, 1);
+            newProfileIds = [...currentProfileIds];
+            newProfileIds.splice(profileIndex, 1);
         }
 
-        console.debug("Roles", newRoles);
-        this.userForm.get('roles')?.setValue(newRoles);
-        this.userForm.get('roles')?.markAsTouched();
+        console.debug("Profiles", newProfileIds);
+        this.userForm.get('profileIds')?.setValue(newProfileIds);
+        this.userForm.get('profileIds')?.markAsTouched();
     }
 
     cancel(): void {
         this.router.navigate(['/', 'users']);
     }
 
-    isRoleSelected(role: string): boolean {
-        const currentRoles = this.userForm.get('roles')?.value || [];
-        return currentRoles.indexOf(role) !== -1;
+    getRoleBadgeClass(role: Role) {
+        return this.getBadge(role.name.toLowerCase());
+    }
+    
+    getProfileBadgeClass(profile: Profile) {
+        return this.getBadge(profile.name.toLowerCase());
+    }
+
+    getProfileIcon(profile: Profile) {
+        return this.getIcon(profile.name.toLowerCase());
+    }
+    
+    getRoleIcon(role: Role) {
+        return this.getIcon(role.name.toLowerCase());
+    }
+
+    getIcon(name: string) {
+        if (name.includes('admin') || name.includes('administrador')) return 'admin_panel_settings';
+        if (name.includes('manager') || name.includes('gerente') || name.includes('gestor') || name.includes('editor')) return 'assignment_turned_in';
+        if (name.includes('write') || name.includes('escrita') || name.includes('viewer')) return 'laptop_windows';
+        if (name.includes('read') || name.includes('leitura')) return 'laptop_windows';
+        if (name.includes('user') || name.includes('usuário')) return 'laptop_windows';
+        return 'person';
+    }
+
+    getBadge(name: string) {
+        if (name.includes('admin') || name.includes('administrador')) return 'admin';
+        if (name.includes('manager') || name.includes('gerente') || name.includes('gestor') || name.includes('editor')) return 'manager';
+        if (name.includes('write') || name.includes('escrita') || name.includes('viewer')) return 'user';
+        if (name.includes('read') || name.includes('leitura')) return 'user';
+        if (name.includes('user') || name.includes('usuário')) return 'user';
+        return 'default';
+    }
+
+    loadRoles(): Role[] {
+        var selectedRoles: Role[] = [];
+        if (this.userForm.value.profileIds) {
+            this.availableProfiles
+                .filter(p => this.userForm.value.profileIds?.indexOf(p.id)!= -1)
+                .forEach(p => p.roles.forEach(role => {
+                    if(selectedRoles.findIndex(r => r.id == role.id) == -1) {
+                        selectedRoles.push(role);
+                    }
+                }))
+        }
+        return selectedRoles;
+    }
+
+    isProfileSelected(profile: Profile): boolean {
+        const currentProfileIds = this.userForm.get('profileIds')?.value || [];
+        return currentProfileIds.indexOf(profile.id) !== -1;
     }
 
     save(): void {
@@ -93,33 +147,33 @@ export class UsersEditComponent implements OnInit {
             return;
         }
 
-        const { name, username, email, roles } = this.userForm.value;
-        if (!name || !username || !email || !roles) return;
+        const { name, username, email, profileIds } = this.userForm.value;
+        if (!name || !username || !email || !profileIds) return;
 
         if (this.editMode && this.userId) {
-            // this.usersService.update(this.userId, { name, username, email, roles })
-            //     .subscribe({
-            //         next: (user) => {
-            //             console.log("User updated:", user);
-            //             this.router.navigate(['/', 'users']);
-            //         },
-            //         error: (error) => {
-            //             console.error("Error updating user:", error);
-            //             // Handle error appropriately
-            //         }
-            //     });
+            this.usersService.update(this.userId, { name, username, email, profileIds })
+                .subscribe({
+                    next: (user) => {
+                        console.log("User updated:", user);
+                        this.router.navigate(['/', 'users']);
+                    },
+                    error: (error) => {
+                        console.error("Error updating user:", error);
+                        // Handle error appropriately
+                    }
+                });
         } else {
-            // this.usersService.create({ name, username, email, roles })
-            //     .subscribe({
-            //         next: (user) => {
-            //             console.log("User created:", user);
-            //             this.router.navigate(['/', 'users']);
-            //         },
-            //         error: (error) => {
-            //             console.error("Error creating user:", error);
-            //             // Handle error appropriately
-            //         }
-            //     });
+            this.usersService.create({ name, username, email, profileIds })
+                .subscribe({
+                    next: (user) => {
+                        console.log("User created:", user);
+                        this.router.navigate(['/', 'users']);
+                    },
+                    error: (error) => {
+                        console.error("Error creating user:", error);
+                        // Handle error appropriately
+                    }
+                });
         }
     }
 }

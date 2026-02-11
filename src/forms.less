@@ -1513,11 +1513,18 @@ input {
 
         input[type="checkbox"] {
             display: none; // Esconder o checkbox nativo
-
+            &:not(:checked)+.profile-badge,
+            &:not(:checked)+.role-badge {
+                opacity: 0.6;
+            }
             &:checked+.profile-badge,
             &:checked+.role-badge {
                 border-width: 2px;
                 font-weight: 600;
+                opacity: 1;
+
+                background-color: fade(@badge-primario, 20%);
+                border-color: @badge-primario;
 
                 &.admin {
                     background-color: fade(@azul-primario, 20%);

@@ -26,14 +26,20 @@ export const routes: Routes = [
     {
         path: 'users/new',
         component: UsersEditComponent,
-        canActivate: [authGuard],
+        resolve: {
+            availableRoles: rolesResolver,
+            availableProfiles: profilesResolver
+        },
+        canActivate: [authGuard]
     },
     {
         path: 'users/:userId',
         component: UsersEditComponent,
         resolve: {
-            user: userResolver
+            user: userResolver,
+            availableRoles: rolesResolver,
+            availableProfiles: profilesResolver
         },
-        canActivate: [authGuard],
+        canActivate: [authGuard]
     },
 ];
