@@ -32,7 +32,7 @@
 }
 
 // Dialog Content
-.dialog-content {
+.dialog-content {    
     padding: @espacamento-xl;
     color: @preto;
     font-size: @fonte-tamanho-base;
@@ -64,6 +64,10 @@
     }
 
     .user-info {
+        &:first-child {
+            margin-top: 1rem;
+        }
+
         margin-bottom: @espacamento-lg;
 
         h3 {

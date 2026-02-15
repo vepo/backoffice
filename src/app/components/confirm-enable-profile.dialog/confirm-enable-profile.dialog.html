@@ -1,13 +1,9 @@
 <h2 mat-dialog-title class="dialog-title">
     <mat-icon fontIcon="delete_forever" class="title-icon"></mat-icon>
-    Desativar Perfil
+    Reativar Perfil
 </h2>
 
-<mat-dialog-content class="dialog-content">
-    <div class="confirmation-message">
-        <mat-icon fontIcon="info" class="message-icon"></mat-icon>
-        <p>Atenção: Esta operação pode ser revertida posteriormente.</p>
-    </div>
+<mat-dialog-content class="dialog-content">    
     <div class="user-info">
         <h3>Detalhes do Perfil</h3>
         <div class="info-grid">
@@ -28,9 +24,9 @@
         </div>
     </div>
 
-    <div class="warning-note">
+    <div class="permissions-note">
         <mat-icon fontIcon="error_outline" class="warning-icon"></mat-icon>
-        <p>Este perfil será marcado como desabilitado. Usuários com este perfil perderão os acessos associados.</p>
+        <p>Este perfil será reativado. Usuários com este perfil ganharão os acessos associados.</p>
     </div>
 </mat-dialog-content>
 
@@ -39,8 +35,8 @@
         <mat-icon fontIcon="close"></mat-icon>
         <span>Cancelar</span>
     </button>
-    <button class="btn btn-danger" [mat-dialog-close]="true">
-        <mat-icon fontIcon="delete"></mat-icon>
-        <span>Desabilitar Perfil</span>
+    <button class="btn btn-success" [mat-dialog-close]="true">
+        <mat-icon fontIcon="person_add"></mat-icon>
+        <span>Reativar Perfil</span>
     </button>
 </mat-dialog-actions>

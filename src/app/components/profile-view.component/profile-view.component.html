@@ -22,28 +22,16 @@
             <div class="stat-icon admin">
                 <mat-icon fontIcon="admin_panel_settings"></mat-icon>
             </div>
-            <!--div class="stat-content">
-                <h3 class="stat-value">{{ profiles.filter(p => p.name.toLowerCase().includes('admin')).length }}</h3>
-                <p class="stat-label">Perfis Admin</p>
-            </div-->
         </div>
         <div class="stat-card">
             <div class="stat-icon manager">
                 <mat-icon fontIcon="engineering"></mat-icon>
             </div>
-            <!--div class="stat-content">
-                <h3 class="stat-value">{{ profiles.filter(p => p.name.toLowerCase().includes('manager') || p.name.toLowerCase().includes('gerente')).length }}</h3>
-                <p class="stat-label">Perfis Gerenciais</p>
-            </div-->
         </div>
         <div class="stat-card">
             <div class="stat-icon user">
                 <mat-icon fontIcon="people"></mat-icon>
             </div>
-            <!--div class="stat-content">
-                <h3 class="stat-value">{{ profiles.filter(p => !p.name.toLowerCase().includes('admin') && !p.name.toLowerCase().includes('manager') && !p.name.toLowerCase().includes('gerente')).length }}</h3>
-                <p class="stat-label">Perfis Operacionais</p>
-            </div-->
         </div>
         <div class="stat-card">
             <div class="stat-icon total">
@@ -113,6 +101,7 @@
                             <th class="column-id">ID</th>
                             <th class="column-name">Perfil</th>
                             <th class="column-roles">Funções</th>
+                            <th class="column-status">Status</th>
                             <th class="column-actions">Ações</th>
                         </tr>
                     </thead>
@@ -147,16 +136,30 @@
                                     }
                                 </div>
                             </td>
+                            <td class="column-status">
+                                @if (profile.disabled) {
+                                <span class="status-badge inactive">Inativo</span>
+                                } @else {
+                                <span class="status-badge active">Ativo</span>
+                                }
+                            </td>
                             <td class="column-actions">
                                 <div class="action-buttons">
                                     <button class="btn-icon" matButton [routerLink]="['/', 'profiles', profile.id]"
                                         matTooltip="Editar perfil">
                                         <mat-icon fontIcon="edit"></mat-icon>
+                                    </button>                                    
+                                     @if(profile.disabled) {
+                                    <button class="btn-icon btn-ok" matButton (click)="confirmEnable(profile)"
+                                        matTooltip="Reativar perfil">
+                                        <mat-icon fontIcon="check_circle"></mat-icon>
                                     </button>
-                                    <button class="btn-icon btn-danger" matButton (click)="confirmDelete(profile)"
-                                        matTooltip="Excluir perfil">
-                                        <mat-icon fontIcon="delete"></mat-icon>
+                                    } @else {
+                                    <button class="btn-icon btn-danger" matButton (click)="confirmDisable(profile)"
+                                        matTooltip="Desativar perfil">
+                                        <mat-icon fontIcon="block"></mat-icon>
                                     </button>
+                                    }
                                 </div>
                             </td>
                         </tr>

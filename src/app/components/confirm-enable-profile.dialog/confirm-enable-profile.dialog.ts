@@ -10,7 +10,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { Role } from "../../services/roles.service";
 
-export interface ProfileDeleteData {
+export interface ProfileEnableData {
   id: number;
   name: string;
   description: string;
@@ -18,8 +18,8 @@ export interface ProfileDeleteData {
 }
 
 @Component({
-  selector: 'app-confirm-delete-profile-dialog',
-  templateUrl: './confirm-delete-profile.dialog.html',
+  selector: 'app-confirmd-enable-profile-dialog',
+  templateUrl: './confirm-enable-profile.dialog.html',
   imports: [
     MatDialogTitle,
     MatDialogContent,
@@ -29,6 +29,6 @@ export interface ProfileDeleteData {
     MatIconModule
   ]
 })
-export class ConfirmDeleteProfileDialog {
-  readonly data = inject<ProfileDeleteData>(MAT_DIALOG_DATA);
+export class ConfirmEnableProfileDialog {
+  readonly data = inject<ProfileEnableData>(MAT_DIALOG_DATA);
 }

@@ -7,6 +7,7 @@ export interface Profile {
   id: number;
   name: string;
   roles: Role[];
+  disabled: boolean;
 }
 
 export interface CreateOrUpdateProfile {
@@ -42,8 +43,12 @@ export class ProfileService {
   search(filter: { name: string; roleId: number | null; }): Observable<Profile[]> {
     throw new Error('Method not implemented.');
   }
-  
-  delete(id: number): Observable<any> {
-    throw new Error('Method not implemented.');
+
+  disable(profileId: number): Observable<Profile> {
+    return this.http.post<Profile>(`${this.API_URL}/profiles/${profileId}/disable`, {});
+  }
+
+  enable(profileId: number): Observable<Profile> {
+    return this.http.post<Profile>(`${this.API_URL}/profiles/${profileId}/enable`, {});
   }
 }

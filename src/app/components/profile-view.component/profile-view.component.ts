@@ -8,6 +8,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Profile, ProfileService } from '../../services/profile.service';
 import { Role, RoleService } from '../../services/roles.service';
 import { ConfirmDeleteProfileDialog } from '../confirm-delete-profile.dialog/confirm-delete-profile.dialog';
+import { ConfirmEnableProfileDialog } from '../confirm-enable-profile.dialog/confirm-enable-profile.dialog';
 
 
 @Component({
@@ -23,12 +24,12 @@ export class ProfileViewComponent implements OnInit {
 
     profiles: Profile[] = [];
     availableRoles: Role[] = [];
-    
+
     filter = {
         name: '',
         roleId: null as number | null
     };
-    
+
     lastFilter = {
         name: '',
         roleId: null as number | null
@@ -62,7 +63,7 @@ export class ProfileViewComponent implements OnInit {
 
         if (typeof currentValue === 'string' && typeof lastValue === 'string') {
             if (currentValue && lastValue && currentValue.includes(lastValue)) {
-                this.profiles = this.profiles.filter(p => 
+                this.profiles = this.profiles.filter(p =>
                     p.name.toLowerCase().includes(currentValue.toLowerCase())
                 );
                 this.lastFilter = { ...this.filter };
@@ -107,7 +108,7 @@ export class ProfileViewComponent implements OnInit {
         this.updateSearch();
     }
 
-    confirmDelete(profile: Profile): void {
+    confirmDisable(profile: Profile): void {
         const dialogData = {
             data: {
                 id: profile.id,
@@ -115,14 +116,35 @@ export class ProfileViewComponent implements OnInit {
                 roles: profile.roles
             },
         };
-        
+
         this.dialog
             .open(ConfirmDeleteProfileDialog, dialogData)
             .afterClosed()
             .subscribe(deleted => {
                 if (deleted) {
-                    this.profileService.delete(profile.id).subscribe(() => {
-                        this.profiles = this.profiles.filter(p => p.id !== profile.id);
+                    this.profileService.disable(profile.id).subscribe(disabledProfile => {
+                        this.profiles[this.profiles.findIndex(p => p.id == profile.id)] = disabledProfile;
+                    });
+                }
+            });
+    }
+
+    confirmEnable(profile: Profile): void {
+        const dialogData = {
+            data: {
+                id: profile.id,
+                name: profile.name,
+                roles: profile.roles
+            },
+        };
+
+        this.dialog
+            .open(ConfirmEnableProfileDialog, dialogData)
+            .afterClosed()
+            .subscribe(enabled => {
+                if (enabled) {
+                    this.profileService.enable(profile.id).subscribe(enabledProfile => {
+                        this.profiles[this.profiles.findIndex(p => p.id == profile.id)] = enabledProfile;
                     });
                 }
             });
