@@ -7,7 +7,9 @@ import { UsersViewComponent } from './components/users-view.component/users-view
 import { userResolver, usersResolver } from './resolvers/users.resolver';
 import { authGuard } from './services/auth.guard';
 import { rolesResolver } from './resolvers/roles.resolver';
-import { profilesResolver } from './resolvers/profiles.resolver';
+import { profileResolver, profilesResolver } from './resolvers/profiles.resolver';
+import { ProfileViewComponent } from './components/profile-view.component/profile-view.component';
+import { ProfileEditComponent } from './components/profile-edit.component/profile-edit.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -42,4 +44,30 @@ export const routes: Routes = [
         },
         canActivate: [authGuard]
     },
+    {
+        path: 'profiles',
+        component: ProfileViewComponent,
+        resolve: {
+            availableRoles: rolesResolver,
+            profiles: profilesResolver
+        },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'profiles/new',
+        component: ProfileEditComponent,
+        resolve: {
+            availableRoles: rolesResolver
+        },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'profiles/:profileId',
+        component: ProfileEditComponent,
+        resolve: {
+            availableRoles: rolesResolver,
+            profile: profileResolver
+        },
+        canActivate: [authGuard],
+    }
 ];

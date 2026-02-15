@@ -1,0 +1,71 @@
+<div class="main centered">
+    <div class="form-header">
+        <mat-icon fontIcon="assignment" class="title-icon"></mat-icon>
+        @if (editMode) {
+        <h2>Editar Perfil</h2>
+        } @else {
+        <h2>Novo Perfil</h2>
+        }
+        @if (editMode) {
+        <p>Edite as informações do perfil</p>
+        } @else {
+        <p>Crie um novo perfil de acesso no sistema</p>
+        }        
+    </div>
+
+    <form class="edit" [formGroup]="profileForm" (ngSubmit)="save()">
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Nome do Perfil</mat-label>
+                <input matInput formControlName="name" required placeholder="Ex: Administrador, Gerente, Usuário" />
+                <mat-icon matPrefix fontIcon="badge"></mat-icon>
+                @if (profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+                    @if (profileForm.get('name')?.errors?.['required']) {
+                    <mat-error>Nome do perfil é obrigatório</mat-error>
+                    }
+                    @if (profileForm.get('name')?.errors?.['minlength']) {
+                    <mat-error>Mínimo 3 caracteres</mat-error>
+                    }
+                    @if (profileForm.get('name')?.errors?.['maxlength']) {
+                    <mat-error>Máximo 50 caracteres</mat-error>
+                    }
+                }
+            </mat-form-field>
+        </div>
+
+        <section class="roles-section">
+            <h3>Funções</h3>
+            <p class="section-subtitle">Selecione as funções que compõem este perfil</p>
+
+            <div class="roles-checkboxes">
+                @for (role of availableRoles; track role.name) {
+                <label class="custom-checkbox role-checkbox">
+                    <input type="checkbox" [checked]="isRoleSelected(role)" (change)="toggle(role)" />
+                    <span class="role-badge" [class]="getRoleBadgeClass(role)">
+                        <mat-icon [fontIcon]="getRoleIcon(role)"></mat-icon>
+                        <span>{{role.name}}</span>
+                    </span>
+                </label>
+                }
+            </div>
+
+            @if (profileForm.get('roleIds')?.invalid && profileForm.get('roleIds')?.touched) {
+            <div class="error">
+                <mat-icon fontIcon="error_outline"></mat-icon>
+                <span>Selecione pelo menos uma função</span>
+            </div>
+            }
+        </section>
+
+        <div class="btn-group">
+            <button class="btn btn-outline" type="button" (click)="cancel()">
+                <mat-icon fontIcon="close"></mat-icon>
+                <span>Cancelar</span>
+            </button>
+            <button class="btn" type="submit" [disabled]="profileForm.invalid">
+                <mat-icon fontIcon="save"></mat-icon>
+                <span>@if (editMode) {Salvar Alterações} @else {Criar Perfil}</span>
+            </button>
+        </div>
+    </form>
+</div>

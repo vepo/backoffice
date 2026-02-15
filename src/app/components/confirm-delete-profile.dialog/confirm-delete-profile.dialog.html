@@ -1,0 +1,47 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon fontIcon="delete_forever" class="title-icon"></mat-icon>
+    Excluir Perfil
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div class="confirmation-message">
+        <mat-icon fontIcon="warning" class="message-icon"></mat-icon>
+        <p>Atenção: Esta operação não pode ser desfeita!</p>
+    </div>
+
+    <div class="user-info">
+        <h3>Detalhes do Perfil</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <span class="info-label">Nome do Perfil</span>
+                <span class="info-value">{{ data.name }}</span>
+            </div>
+            @if (data.description) {
+            <div class="info-row">
+                <span class="info-label">Descrição</span>
+                <span class="info-value">{{ data.description }}</span>
+            </div>
+            }
+            <div class="info-row">
+                <span class="info-label">Funções Associadas</span>
+                <span class="info-value">{{ data.roles.length }} função(ões)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-note">
+        <mat-icon fontIcon="error_outline" class="warning-icon"></mat-icon>
+        <p>Este perfil será removido permanentemente. Usuários com este perfil perderão os acessos associados.</p>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button class="btn btn-outline" mat-dialog-close>
+        <mat-icon fontIcon="close"></mat-icon>
+        <span>Cancelar</span>
+    </button>
+    <button class="btn btn-danger" [mat-dialog-close]="true">
+        <mat-icon fontIcon="delete"></mat-icon>
+        <span>Excluir Perfil</span>
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,181 @@
+<div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <mat-icon fontIcon="assignment_ind" class="title-icon"></mat-icon>
+                Gestão de Perfis
+            </h1>
+            <p class="page-subtitle">Gerencie os perfis de acesso e suas funções associadas</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" matButton [routerLink]="['/', 'profiles', 'new']">
+                <mat-icon fontIcon="add"></mat-icon>
+                <span>Novo Perfil</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon admin">
+                <mat-icon fontIcon="admin_panel_settings"></mat-icon>
+            </div>
+            <!--div class="stat-content">
+                <h3 class="stat-value">{{ profiles.filter(p => p.name.toLowerCase().includes('admin')).length }}</h3>
+                <p class="stat-label">Perfis Admin</p>
+            </div-->
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon manager">
+                <mat-icon fontIcon="engineering"></mat-icon>
+            </div>
+            <!--div class="stat-content">
+                <h3 class="stat-value">{{ profiles.filter(p => p.name.toLowerCase().includes('manager') || p.name.toLowerCase().includes('gerente')).length }}</h3>
+                <p class="stat-label">Perfis Gerenciais</p>
+            </div-->
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon user">
+                <mat-icon fontIcon="people"></mat-icon>
+            </div>
+            <!--div class="stat-content">
+                <h3 class="stat-value">{{ profiles.filter(p => !p.name.toLowerCase().includes('admin') && !p.name.toLowerCase().includes('manager') && !p.name.toLowerCase().includes('gerente')).length }}</h3>
+                <p class="stat-label">Perfis Operacionais</p>
+            </div-->
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <mat-icon fontIcon="assignment"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ profiles.length }}</h3>
+                <p class="stat-label">Total de Perfis</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="filter-card">
+        <div class="filter-header">
+            <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+            <h3>Filtros</h3>
+        </div>
+        <div class="filter-grid">
+            <div class="form-field">
+                <input type="text" placeholder="Filtrar por nome do perfil..." [(ngModel)]="filter.name"
+                    (ngModelChange)="filterChanged()" class="filter-input">
+                <mat-icon fontIcon="search" class="input-icon"></mat-icon>
+            </div>
+
+            @if(availableRoles.length > 0) {
+            <div class="roles-filter">
+                <div class="filter-label">Filtrar por função:</div>
+                <div class="roles-checkboxes">
+                    @for(role of availableRoles; track role.name) {
+                    <label class="custom-checkbox">
+                        <input type="checkbox" [checked]="filter.roleId === role.id"
+                            (change)="toggleRoleFilter(role.id)">
+                        <span class="role-badge" [class]="getRoleBadgeClass(role.name)">
+                            {{ role.name }}
+                        </span>
+                    </label>
+                    }
+                </div>
+            </div>
+            }
+
+            <div class="filter-actions">
+                <button class="btn btn-outline btn-small" (click)="clearFilters()">
+                    <mat-icon fontIcon="clear_all"></mat-icon>
+                    Limpar Filtros
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profiles Table -->
+    <div class="table-card">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">
+                    <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+                    <h3>Lista de Perfis</h3>
+                    <span class="table-subtitle">{{ profiles.length }} perfil(is) encontrado(s)</span>
+                </div>
+            </div>
+
+            <div class="responsive-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="column-id">ID</th>
+                            <th class="column-name">Perfil</th>
+                            <th class="column-roles">Funções</th>
+                            <th class="column-actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (profile of profiles; track profile.id) {
+                        <tr [class.row-even]="$even" [class.row-odd]="$odd">
+                            <td class="column-id">
+                                <span class="id-badge">#{{ profile.id }}</span>
+                            </td>
+                            <td class="column-name">
+                                <div class="profile-info">
+                                    <div class="profile-avatar" [class]="getProfileBadgeClass(profile.name)">
+                                        <mat-icon [fontIcon]="getProfileIcon(profile.name)"></mat-icon>
+                                        <span class="profile-name">
+                                            {{ profile.name }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="column-roles">
+                                <div class="roles-container">
+                                    @for (role of profile.roles.slice(0, 3); track role.id) {
+                                    <span class="role-badge small" [class]="getRoleBadgeClass(role.name)">
+                                        {{ role.name }}
+                                    </span>
+                                    }
+                                    @if (profile.roles.length > 3) {
+                                    <span class="role-badge more">+{{ profile.roles.length - 3 }}</span>
+                                    }
+                                    @if (profile.roles.length == 0) {
+                                    <span class="no-badge">Nenhuma função</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="column-actions">
+                                <div class="action-buttons">
+                                    <button class="btn-icon" matButton [routerLink]="['/', 'profiles', profile.id]"
+                                        matTooltip="Editar perfil">
+                                        <mat-icon fontIcon="edit"></mat-icon>
+                                    </button>
+                                    <button class="btn-icon btn-danger" matButton (click)="confirmDelete(profile)"
+                                        matTooltip="Excluir perfil">
+                                        <mat-icon fontIcon="delete"></mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (profiles.length == 0) {
+                <div class="empty-state">
+                    <mat-icon fontIcon="assignment" class="empty-icon"></mat-icon>
+                    <h3>Nenhum perfil encontrado</h3>
+                    <p>Tente ajustar os filtros ou criar um novo perfil.</p>
+                    <button class="btn" matButton [routerLink]="['/', 'profiles', 'new']">
+                        <mat-icon fontIcon="add"></mat-icon>
+                        Criar Novo Perfil
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
