@@ -1,0 +1,121 @@
+<div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <mat-icon fontIcon="assignment" class="title-icon"></mat-icon>
+                Gestão de Funções
+            </h1>
+            <p class="page-subtitle">Gerencie as funções (roles) disponíveis no sistema</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" matButton [routerLink]="['/', 'roles', 'new']">
+                <mat-icon fontIcon="add"></mat-icon>
+                <span>Nova Função</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon admin">
+                <mat-icon fontIcon="admin_panel_settings"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ roles.length }}</h3>
+                <p class="stat-label">Total de Funções</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="filter-card">
+        <div class="filter-header">
+            <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+            <h3>Filtros</h3>
+        </div>
+        <div class="filter-grid">
+            <div class="form-field">
+                <input type="text" placeholder="Filtrar por nome da função..." [(ngModel)]="filter.name"
+                    (ngModelChange)="filterChanged()" class="filter-input">
+                <mat-icon fontIcon="search" class="input-icon"></mat-icon>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn btn-outline btn-small" (click)="clearFilters()">
+                    <mat-icon fontIcon="clear_all"></mat-icon>
+                    Limpar Filtros
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Roles Table -->
+    <div class="table-card">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">
+                    <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+                    <h3>Lista de Funções</h3>
+                    <span class="table-subtitle">{{ roles.length }} função(ões) encontrada(s)</span>
+                </div>
+            </div>
+
+            <div class="responsive-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="column-id">ID</th>
+                            <th class="column-name">Nome da Função</th>
+                            <th class="column-actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (role of roles; track role.id) {
+                        <tr [class.row-even]="$even" [class.row-odd]="$odd">
+                            <td class="column-id">
+                                <span class="id-badge">#{{ role.id }}</span>
+                            </td>
+                            <td class="column-name">
+                                <div class="role-info">
+                                    <div class="role-avatar" [class]="getRoleBadgeClass(role)">
+                                        <mat-icon [fontIcon]="getRoleIcon(role)"></mat-icon>
+                                        <span class="role-name">
+                                            {{ role.name }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="column-actions">
+                                <div class="action-buttons">
+                                    <button class="btn-icon" matButton [routerLink]="['/', 'roles', role.id]"
+                                        matTooltip="Editar função">
+                                        <mat-icon fontIcon="edit"></mat-icon>
+                                    </button>
+                                    <button class="btn-icon btn-danger" matButton (click)="confirmDelete(role)"
+                                        matTooltip="Excluir função">
+                                        <mat-icon fontIcon="delete"></mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (roles.length == 0) {
+                <div class="empty-state">
+                    <mat-icon fontIcon="assignment" class="empty-icon"></mat-icon>
+                    <h3>Nenhuma função encontrada</h3>
+                    <p>Tente ajustar os filtros ou criar uma nova função.</p>
+                    <button class="btn" matButton [routerLink]="['/', 'roles', 'new']">
+                        <mat-icon fontIcon="add"></mat-icon>
+                        Criar Nova Função
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

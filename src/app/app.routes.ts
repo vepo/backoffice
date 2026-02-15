@@ -6,10 +6,12 @@ import { UsersEditComponent } from './components/users-edit.component/users-edit
 import { UsersViewComponent } from './components/users-view.component/users-view.component';
 import { userResolver, usersResolver } from './resolvers/users.resolver';
 import { authGuard } from './services/auth.guard';
-import { rolesResolver } from './resolvers/roles.resolver';
+import { roleResolver, rolesResolver } from './resolvers/roles.resolver';
 import { profileResolver, profilesResolver } from './resolvers/profiles.resolver';
 import { ProfileViewComponent } from './components/profile-view.component/profile-view.component';
 import { ProfileEditComponent } from './components/profile-edit.component/profile-edit.component';
+import { RolesViewComponent } from './components/roles-view/roles-view.component';
+import { RolesEditComponent } from './components/roles-edit/roles-edit.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -67,6 +69,27 @@ export const routes: Routes = [
         resolve: {
             availableRoles: rolesResolver,
             profile: profileResolver
+        },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'roles',
+        component: RolesViewComponent,
+        resolve: {
+            roles: rolesResolver
+        },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'roles/new',
+        component: RolesEditComponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'roles/:roleId',
+        component: ProfileEditComponent,
+        resolve: {
+            role: roleResolver
         },
         canActivate: [authGuard],
     }

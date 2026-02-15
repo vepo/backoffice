@@ -1,0 +1,52 @@
+<div class="main centered">
+    <div class="form-header">
+        <mat-icon fontIcon="assignment" class="title-icon"></mat-icon>
+        @if (editMode) {
+        <h2>Editar Função</h2>
+        } @else {
+        <h2>Nova Função</h2>
+        }
+        @if (editMode) {
+        <p>Edite as informações da função</p>
+        } @else {
+        <p>Crie uma nova função no sistema</p>
+        }
+    </div>
+
+    <form class="edit" [formGroup]="roleForm" (ngSubmit)="save()">
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Nome da Função</mat-label>
+                <input matInput formControlName="name" required 
+                       placeholder="Ex: Administrador, Gerente, Usuário, Leitura" />
+                <mat-icon matPrefix fontIcon="badge"></mat-icon>
+                @if (roleForm.get('name')?.invalid && roleForm.get('name')?.touched) {
+                    @if (roleForm.get('name')?.errors?.['required']) {
+                    <mat-error>Nome da função é obrigatório</mat-error>
+                    }
+                    @if (roleForm.get('name')?.errors?.['minlength']) {
+                    <mat-error>Mínimo 3 caracteres</mat-error>
+                    }
+                    @if (roleForm.get('name')?.errors?.['maxlength']) {
+                    <mat-error>Máximo 50 caracteres</mat-error>
+                    }
+                    @if (roleForm.get('name')?.errors?.['pattern']) {
+                    <mat-error>Apenas letras e os caracteres [.-_] são permitidos</mat-error>
+                    }
+                }
+                <mat-hint align="start">Use um nome descritivo para a função</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-outline" type="button" (click)="cancel()">
+                <mat-icon fontIcon="close"></mat-icon>
+                <span>Cancelar</span>
+            </button>
+            <button class="btn" type="submit" [disabled]="roleForm.invalid">
+                <mat-icon fontIcon="save"></mat-icon>
+                <span>@if (editMode) {Salvar Alterações} @else {Criar Função}</span>
+            </button>
+        </div>
+    </form>
+</div>
