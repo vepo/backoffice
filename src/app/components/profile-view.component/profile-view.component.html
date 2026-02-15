@@ -53,17 +53,47 @@
         <div class="filter-grid">
             <div class="form-field">
                 <input type="text" placeholder="Filtrar por nome do perfil..." [(ngModel)]="filter.name"
-                    (ngModelChange)="filterChanged()" class="filter-input">
+                    (ngModelChange)="filterChanged('name')" class="filter-input">
                 <mat-icon fontIcon="search" class="input-icon"></mat-icon>
+            </div>
+             <!-- Filtro de Status Ativo/Inativo - COM FORMATAÇÃO -->
+            <div class="form-field status-filter">
+                <div class="filter-label">Status:</div>
+                <div class="status-toggle">
+                    <label class="custom-checkbox status-toggle-item">
+                        <input type="radio" name="status" [checked]="filter.disabled === false"
+                            (change)="setStatusFilter('active')">
+                        <span class="status-badge active">
+                            <mat-icon fontIcon="check_circle" class="status-icon"></mat-icon>
+                            Ativos
+                        </span>
+                    </label>
+                    <label class="custom-checkbox status-toggle-item">
+                        <input type="radio" name="status" [checked]="filter.disabled === true"
+                            (change)="setStatusFilter('inactive')">
+                        <span class="status-badge inactive">
+                            <mat-icon fontIcon="block" class="status-icon"></mat-icon>
+                            Inativos
+                        </span>
+                    </label>
+                    <label class="custom-checkbox status-toggle-item">
+                        <input type="radio" name="status" [checked]="filter.disabled === null"
+                            (change)="setStatusFilter('all')">
+                        <span class="status-badge all">
+                            <mat-icon fontIcon="all_inclusive" class="status-icon"></mat-icon>
+                            Todos
+                        </span>
+                    </label>
+                </div>
             </div>
 
             @if(availableRoles.length > 0) {
             <div class="roles-filter">
-                <div class="filter-label">Filtrar por função:</div>
+                <div class="filter-label">Funções:</div>
                 <div class="roles-checkboxes">
                     @for(role of availableRoles; track role.name) {
                     <label class="custom-checkbox">
-                        <input type="checkbox" [checked]="filter.roleId === role.id"
+                        <input type="checkbox" [checked]="filter.roles.indexOf(role.id) != -1"
                             (change)="toggleRoleFilter(role.id)">
                         <span class="role-badge" [class]="getRoleBadgeClass(role.name)">
                             {{ role.name }}

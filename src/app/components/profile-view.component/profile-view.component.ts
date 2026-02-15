@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Profile, ProfileService } from '../../services/profile.service';
+import { emptyFilter, Profile, ProfileSearchFilter, ProfileService } from '../../services/profile.service';
 import { Role, RoleService } from '../../services/roles.service';
 import { ConfirmDeleteProfileDialog } from '../confirm-delete-profile.dialog/confirm-delete-profile.dialog';
 import { ConfirmEnableProfileDialog } from '../confirm-enable-profile.dialog/confirm-enable-profile.dialog';
@@ -20,20 +20,11 @@ export class ProfileViewComponent implements OnInit {
     private readonly activatedRoute = inject(ActivatedRoute);
     private readonly profileService = inject(ProfileService);
     private readonly dialog = inject(MatDialog);
-    private readonly roleService = inject(RoleService);
 
     profiles: Profile[] = [];
     availableRoles: Role[] = [];
-
-    filter = {
-        name: '',
-        roleId: null as number | null
-    };
-
-    lastFilter = {
-        name: '',
-        roleId: null as number | null
-    };
+    filter: ProfileSearchFilter = emptyFilter();
+    lastSearch: ProfileSearchFilter = emptyFilter();
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ profiles, availableRoles }) => {
@@ -43,13 +34,14 @@ export class ProfileViewComponent implements OnInit {
     }
 
     toggleRoleFilter(roleId: number) {
-        if (this.filter.roleId === roleId) {
-            this.filter.roleId = null;
+        const roleIndex = this.filter.roles.indexOf(roleId);
+        if (roleIndex === -1) {
+            this.filter.roles.push(roleId);
         } else {
-            this.filter.roleId = roleId;
+            this.filter.roles.splice(roleIndex, 1);
         }
         this.updateSearch();
-        this.lastFilter = { ...this.filter };
+        this.lastSearch = { ...this.filter };
     }
 
     updateSearch() {
@@ -57,21 +49,42 @@ export class ProfileViewComponent implements OnInit {
             .subscribe(resp => this.profiles = resp);
     }
 
-    filterChanged() {
-        const currentValue = this.filter.name;
-        const lastValue = this.lastFilter.name;
+    filterChanged(field: string) {
+        // Only trigger search if the field value has meaningfully changed
+        if (field === 'name') {
+            const currentValue = this.filter[field];
+            const lastValue = this.lastSearch[field];
 
-        if (typeof currentValue === 'string' && typeof lastValue === 'string') {
-            if (currentValue && lastValue && currentValue.includes(lastValue)) {
-                this.profiles = this.profiles.filter(p =>
-                    p.name.toLowerCase().includes(currentValue.toLowerCase())
-                );
-                this.lastFilter = { ...this.filter };
-                return;
+            // Type guard to ensure both values are strings
+            if (typeof currentValue === 'string' && typeof lastValue === 'string') {
+                // If the new value is a subset of the old value, filter locally
+                if (currentValue && lastValue && currentValue.includes(lastValue)) {
+                    if (field === 'name') {
+                        this.profiles = this.profiles.filter(u => u.name.toLowerCase().includes(currentValue.toLowerCase()));
+                    }
+                    this.lastSearch = { ...this.filter };
+                    return; // Skip the updateSearch call below
+                }
             }
+            // Otherwise, do a full search
+            this.updateSearch();
+        }
+        this.lastSearch = { ...this.filter };
+    }
+
+    setStatusFilter(status: 'active' | 'inactive' | 'all'): void {
+        switch (status) {
+            case 'active':
+                this.filter.disabled = false;
+                break;
+            case 'inactive':
+                this.filter.disabled = true;
+                break;
+            case 'all':
+                this.filter.disabled = null;
+                break;
         }
         this.updateSearch();
-        this.lastFilter = { ...this.filter };
     }
 
     getRoleBadgeClass(roleName: string): string {
@@ -101,10 +114,7 @@ export class ProfileViewComponent implements OnInit {
     }
 
     clearFilters(): void {
-        this.filter = {
-            name: '',
-            roleId: null
-        };
+        this.filter = emptyFilter();
         this.updateSearch();
     }
 

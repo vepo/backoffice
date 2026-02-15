@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { Profile, ProfileService } from '../../services/profile.service';
-import { Role, RoleService } from '../../services/roles.service';
+import { Profile } from '../../services/profile.service';
+import { Role } from '../../services/roles.service';
 import { emptyFilter, User, UserSearchFilter, UsersService } from '../../services/users.service';
 import { ConfirmDeleteDialog } from '../confirm-delete.dialog/confirm-delete.dialog';
 import { ConfirmEnableDialog } from '../confirm-enable.dialog/confirm-enable.dialog';
@@ -22,8 +22,6 @@ export class UsersViewComponent implements OnInit {
     private readonly usersService = inject(UsersService);
     private readonly authService = inject(AuthService);
     private readonly dialog = inject(MatDialog);
-    private readonly profileService = inject(ProfileService);
-    private readonly roleService = inject(RoleService);
 
     users: User[] = [];
     filter: UserSearchFilter = emptyFilter();
@@ -110,22 +108,22 @@ export class UsersViewComponent implements OnInit {
     }
 
     // Adicionar este método ao componente
-setStatusFilter(status: 'active' | 'inactive' | 'all'): void {
-    switch(status) {
-        case 'active':
-            this.filter.disabled = false;
-            break;
-        case 'inactive':
-            this.filter.disabled = true;
-            break;
-        case 'all':
-            this.filter.disabled = null;
-            break;
+    setStatusFilter(status: 'active' | 'inactive' | 'all'): void {
+        switch (status) {
+            case 'active':
+                this.filter.disabled = false;
+                break;
+            case 'inactive':
+                this.filter.disabled = true;
+                break;
+            case 'all':
+                this.filter.disabled = null;
+                break;
+        }
+        this.updateSearch();
     }
-    this.updateSearch();
-}
 
-// Remover o método toggleDisabled() antigo e substituir pelo novo
+    // Remover o método toggleDisabled() antigo e substituir pelo novo
 
     // Atualizar o método getProfileBadgeClass para ficar mais específico
     getProfileBadgeClass(profileName: string): string {

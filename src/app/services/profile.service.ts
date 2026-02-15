@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Role } from './roles.service';
@@ -10,9 +10,23 @@ export interface Profile {
   disabled: boolean;
 }
 
+export interface ProfileSearchFilter {
+  name: string;
+  roles: number[];
+  disabled: boolean | null;
+}
+
 export interface CreateOrUpdateProfile {
   name: string;
   roleIds: number[];
+}
+
+export function emptyFilter(): ProfileSearchFilter {
+  return {
+    name: "",
+    roles: [],
+    disabled: false
+  }
 }
 
 @Injectable({
@@ -40,8 +54,29 @@ export class ProfileService {
     return this.http.put<Profile>(`${this.API_URL}/profiles/${profileId}`, req);
   }
 
-  search(filter: { name: string; roleId: number | null; }): Observable<Profile[]> {
-    throw new Error('Method not implemented.');
+  search(filter: ProfileSearchFilter): Observable<Profile[]> {
+    let params = new HttpParams();
+
+    if (filter) {
+      Object.keys(filter).forEach(key => {
+        const value = filter[key as keyof ProfileSearchFilter];
+
+        // Skip null, undefined, empty string, or empty array
+        if (value !== null && value !== undefined && value !== '' &&
+          !(Array.isArray(value) && value.length === 0)) {
+
+          // Handle array values by joining them or adding multiple params
+          if (Array.isArray(value)) {
+            console.debug("Appending query array", value);
+            value.forEach(item => params = params.append(key, item.toString()));
+          } else {
+            params = params.append(key, value.toString());
+          }
+        }
+      });
+    }
+
+    return this.http.get<Profile[]>(`${this.API_URL}/profiles/search`, { params: params });
   }
 
   disable(profileId: number): Observable<Profile> {

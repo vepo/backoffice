@@ -40,7 +40,7 @@ export function emptyFilter(): UserSearchFilter {
     username: '',
     profiles: [],
     roles: [],
-    disabled: null
+    disabled: false
   };
 }
 
