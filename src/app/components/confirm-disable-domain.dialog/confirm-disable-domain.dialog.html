@@ -1,0 +1,41 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon fontIcon="block" class="title-icon"></mat-icon>
+    Desativar Domínio
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div class="confirmation-message">
+        <mat-icon fontIcon="info" class="message-icon"></mat-icon>
+        <p>Atenção: Esta operação pode ser revertida posteriormente.</p>
+    </div>
+
+    <div class="domain-info">
+        <h3>Detalhes do Domínio</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <span class="info-label">ID</span>
+                <span class="info-value">#{{ data.id }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Hostname</span>
+                <span class="info-value">{{ data.hostname }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-note">
+        <mat-icon fontIcon="warning" class="warning-icon"></mat-icon>
+        <p>O domínio perderá a autorização para acessar o sistema até ser reativado.</p>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button class="btn btn-outline" mat-dialog-close>
+        <mat-icon fontIcon="close"></mat-icon>
+        <span>Cancelar</span>
+    </button>
+    <button class="btn btn-danger" [mat-dialog-close]="true">
+        <mat-icon fontIcon="block"></mat-icon>
+        <span>Desativar Domínio</span>
+    </button>
+</mat-dialog-actions>

@@ -12,6 +12,9 @@ import { ProfileViewComponent } from './components/profile-view.component/profil
 import { ProfileEditComponent } from './components/profile-edit.component/profile-edit.component';
 import { RolesViewComponent } from './components/roles-view/roles-view.component';
 import { RolesEditComponent } from './components/roles-edit/roles-edit.component';
+import { DomainsViewComponent } from './components/domains-view/domains-view.component';
+import { domainResolver, domainsResolver } from './resolvers/domains.resolver';
+import { DomainsEditComponent } from './components/domains-edit/domains-edit.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -90,6 +93,27 @@ export const routes: Routes = [
         component: ProfileEditComponent,
         resolve: {
             role: roleResolver
+        },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'domains',
+        component: DomainsViewComponent,
+        resolve: {
+            domains: domainsResolver
+        },
+        canActivate: [authGuard],
+    },
+    {
+        path: 'domains/new',
+        component: DomainsEditComponent,
+        canActivate: [authGuard],
+    },
+    {
+        path: 'domains/:domainId',
+        component: DomainsEditComponent,
+        resolve: {
+            domain: domainResolver
         },
         canActivate: [authGuard],
     }

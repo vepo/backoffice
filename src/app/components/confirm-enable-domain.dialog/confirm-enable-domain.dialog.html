@@ -1,0 +1,45 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon fontIcon="check_circle" class="title-icon"></mat-icon>
+    Reativar Domínio
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div class="confirmation-message">
+        <mat-icon fontIcon="check_circle" class="message-icon"></mat-icon>
+        <p>Esta operação restaura a autorização do domínio.</p>
+    </div>
+
+    <div class="domain-info">
+        <h3>Detalhes do Domínio</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <span class="info-label">ID</span>
+                <span class="info-value">#{{ data.id }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Hostname</span>
+                <span class="info-value">{{ data.hostname }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Status Atual</span>
+                <span class="status-badge inactive">Inativo</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-note">
+        <mat-icon fontIcon="info" class="info-icon"></mat-icon>
+        <p>O token atual permanecerá válido após a reativação.</p>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button class="btn btn-outline" mat-dialog-close>
+        <mat-icon fontIcon="close"></mat-icon>
+        <span>Cancelar</span>
+    </button>
+    <button class="btn btn-success" [mat-dialog-close]="true">
+        <mat-icon fontIcon="check_circle"></mat-icon>
+        <span>Reativar Domínio</span>
+    </button>
+</mat-dialog-actions>

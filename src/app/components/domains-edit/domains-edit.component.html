@@ -1,0 +1,57 @@
+<div class="main centered">
+    <div class="form-header">
+        <mat-icon fontIcon="dns" class="title-icon"></mat-icon>
+        @if (editMode) {
+        <h2>Editar Domínio</h2>
+        } @else {
+        <h2>Novo Domínio</h2>
+        }
+        @if (editMode) {
+        <p>Edite as informações do domínio</p>
+        } @else {
+        <p>Registre um novo domínio no sistema</p>
+        }
+    </div>
+
+    <form class="edit" [formGroup]="domainForm" (ngSubmit)="save()">
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Hostname</mat-label>
+                <input matInput formControlName="hostname" required 
+                       placeholder="Ex: exemplo.com.br" />
+                <mat-icon matPrefix fontIcon="language"></mat-icon>
+                @if (domainForm.get('hostname')?.invalid && domainForm.get('hostname')?.touched) {
+                <mat-error>{{ getHostnameErrorMessage() }}</mat-error>
+                }
+                <mat-hint align="start">Digite o domínio completo (ex: api.exemplo.com.br)</mat-hint>
+            </mat-form-field>
+        </div>
+
+        @if (editMode) {
+        <div class="info-card">
+            <div class="info-header">
+                <mat-icon fontIcon="info"></mat-icon>
+                <h3>Informações do Token</h3>
+            </div>
+            <div class="info-content">
+                <p>O token é gerado automaticamente pelo sistema e pode ser regenerado a qualquer momento.</p>
+                <p class="warning-text">
+                    <mat-icon fontIcon="warning" class="warning-icon"></mat-icon>
+                    Ao regenerar o token, o token anterior será invalidado imediatamente.
+                </p>
+            </div>
+        </div>
+        }
+
+        <div class="btn-group">
+            <button class="btn btn-outline" type="button" (click)="cancel()">
+                <mat-icon fontIcon="close"></mat-icon>
+                <span>Cancelar</span>
+            </button>
+            <button class="btn" type="submit" [disabled]="domainForm.invalid">
+                <mat-icon fontIcon="save"></mat-icon>
+                <span>@if (editMode) {Salvar Alterações} @else {Criar Domínio}</span>
+            </button>
+        </div>
+    </form>
+</div>

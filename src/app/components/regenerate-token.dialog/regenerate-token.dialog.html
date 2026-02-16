@@ -1,0 +1,48 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon fontIcon="vpn_key" class="title-icon"></mat-icon>
+    Regenerar Token
+</h2>
+
+<mat-dialog-content class="dialog-content">
+    <div class="confirmation-message">
+        <mat-icon fontIcon="warning" class="message-icon warning"></mat-icon>
+        <p><strong>Atenção:</strong> Esta ação tem consequências importantes!</p>
+    </div>
+
+    <div class="domain-info">
+        <h3>Detalhes do Domínio</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <span class="info-label">Hostname</span>
+                <span class="info-value">{{ data.hostname }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Token Atual</span>
+                <span class="info-value token-value">{{ maskToken(data.currentToken) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-note">
+        <mat-icon fontIcon="error_outline" class="warning-icon"></mat-icon>
+        <div>
+            <p><strong>Ao regenerar o token:</strong></p>
+            <ul>
+                <li>O token atual será invalidado imediatamente</li>
+                <li>O domínio precisará ser configurado com o novo token</li>
+                <li>Sistemas que utilizam este domínio perderão acesso até serem atualizados</li>
+            </ul>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button class="btn btn-outline" mat-dialog-close>
+        <mat-icon fontIcon="close"></mat-icon>
+        <span>Cancelar</span>
+    </button>
+    <button class="btn btn-warning" [mat-dialog-close]="true">
+        <mat-icon fontIcon="vpn_key"></mat-icon>
+        <span>Regenerar Token</span>
+    </button>
+</mat-dialog-actions>

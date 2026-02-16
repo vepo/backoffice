@@ -1,0 +1,202 @@
+<div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <mat-icon fontIcon="dns" class="title-icon"></mat-icon>
+                Gestão de Domínios
+            </h1>
+            <p class="page-subtitle">Gerencie os domínios autorizados a acessar o sistema</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn" matButton [routerLink]="['/', 'domains', 'new']">
+                <mat-icon fontIcon="add"></mat-icon>
+                <span>Novo Domínio</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon active">
+                <mat-icon fontIcon="check_circle"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ getActiveCount() }}</h3>
+                <p class="stat-label">Domínios Ativos</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon inactive">
+                <mat-icon fontIcon="block"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ getInactiveCount() }}</h3>
+                <p class="stat-label">Domínios Inativos</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <mat-icon fontIcon="dns"></mat-icon>
+            </div>
+            <div class="stat-content">
+                <h3 class="stat-value">{{ domains.length }}</h3>
+                <p class="stat-label">Total de Domínios</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="filter-card">
+        <div class="filter-header">
+            <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+            <h3>Filtros</h3>
+        </div>
+        <div class="filter-grid">
+            <div class="form-field">
+                <input type="text" placeholder="Filtrar por hostname..." [(ngModel)]="filter.hostname"
+                    (ngModelChange)="filterChanged()" class="filter-input">
+                <mat-icon fontIcon="search" class="input-icon"></mat-icon>
+            </div>
+
+            <!-- Filtro de Status Ativo/Inativo -->
+            <div class="form-field status-filter">
+                <div class="filter-label">Status:</div>
+                <div class="status-toggle">
+                    <label class="custom-checkbox status-toggle-item">
+                        <input type="radio" name="status" [checked]="filter.disabled === false"
+                            (change)="setStatusFilter('active')">
+                        <span class="status-badge active">
+                            <mat-icon fontIcon="check_circle" class="status-icon"></mat-icon>
+                            Ativos
+                        </span>
+                    </label>
+                    <label class="custom-checkbox status-toggle-item">
+                        <input type="radio" name="status" [checked]="filter.disabled === true"
+                            (change)="setStatusFilter('inactive')">
+                        <span class="status-badge inactive">
+                            <mat-icon fontIcon="block" class="status-icon"></mat-icon>
+                            Inativos
+                        </span>
+                    </label>
+                    <label class="custom-checkbox status-toggle-item">
+                        <input type="radio" name="status" [checked]="filter.disabled === null"
+                            (change)="setStatusFilter('all')">
+                        <span class="status-badge all">
+                            <mat-icon fontIcon="all_inclusive" class="status-icon"></mat-icon>
+                            Todos
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn btn-outline btn-small" (click)="clearFilters()">
+                    <mat-icon fontIcon="clear_all"></mat-icon>
+                    Limpar Filtros
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Domains Table -->
+    <div class="table-card">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">
+                    <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+                    <h3>Lista de Domínios</h3>
+                    <span class="table-subtitle">{{ domains.length }} domínio(s) encontrado(s)</span>
+                </div>
+            </div>
+
+            <div class="responsive-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="column-id">ID</th>
+                            <th class="column-hostname">Hostname</th>
+                            <th class="column-token">Token</th>
+                            <th class="column-date">Criado em</th>
+                            <th class="column-status">Status</th>
+                            <th class="column-actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (domain of domains; track domain.id) {
+                        <tr [class.row-even]="$even" [class.row-odd]="$odd" [class.row-inactive]="domain.disabled">
+                            <td class="column-id">
+                                <span class="id-badge">#{{ domain.id }}</span>
+                            </td>
+                            <td class="column-hostname">
+                                <div class="hostname-info">
+                                    <mat-icon fontIcon="language" class="hostname-icon"></mat-icon>
+                                    <span class="hostname-value">{{ domain.hostname }}</span>
+                                </div>
+                            </td>
+                            <td class="column-token">
+                                <div class="token-container">
+                                    <span class="token-value" [class.token-masked]="true">
+                                        {{ maskToken(domain.token) }}
+                                    </span>
+                                    <button class="btn-icon btn-small" 
+                                            (click)="copyToClipboard(domain.token)"
+                                            matTooltip="Copiar token">
+                                        <mat-icon fontIcon="content_copy"></mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="column-date">
+                                <span class="date-info">{{ formatDate(domain.createdAt) }}</span>
+                            </td>
+                            <td class="column-status">
+                                @if (domain.disabled) {
+                                <span class="status-badge inactive">Inativo</span>
+                                } @else {
+                                <span class="status-badge active">Ativo</span>
+                                }
+                            </td>
+                            <td class="column-actions">
+                                <div class="action-buttons">
+                                    <button class="btn-icon" matButton [routerLink]="['/', 'domains', domain.id]"
+                                        matTooltip="Editar domínio">
+                                        <mat-icon fontIcon="edit"></mat-icon>
+                                    </button>
+                                    <button class="btn-icon" matButton (click)="regenerateToken(domain)"
+                                        matTooltip="Regenerar token">
+                                        <mat-icon fontIcon="vpn_key"></mat-icon>
+                                    </button>
+                                    @if(domain.disabled) {
+                                    <button class="btn-icon btn-ok" matButton (click)="confirmEnable(domain)"
+                                        matTooltip="Reativar domínio">
+                                        <mat-icon fontIcon="check_circle"></mat-icon>
+                                    </button>
+                                    } @else {
+                                    <button class="btn-icon btn-danger" matButton (click)="confirmDisable(domain)"
+                                        matTooltip="Desativar domínio">
+                                        <mat-icon fontIcon="block"></mat-icon>
+                                    </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @if (domains.length == 0) {
+                <div class="empty-state">
+                    <mat-icon fontIcon="dns" class="empty-icon"></mat-icon>
+                    <h3>Nenhum domínio encontrado</h3>
+                    <p>Tente ajustar os filtros ou criar um novo domínio.</p>
+                    <button class="btn" matButton [routerLink]="['/', 'domains', 'new']">
+                        <mat-icon fontIcon="add"></mat-icon>
+                        Criar Novo Domínio
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
