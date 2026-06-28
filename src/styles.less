@@ -1,5 +1,5 @@
 // ============================================
-// GUIA DE ESTILO PROFISSIONAL - PASSPORT APP
+// GUIA DE ESTILO PROFISSIONAL - BACKOFFICE
 // Paleta Corporativa em Tons de Azul
 // ============================================
 
@@ -33,17 +33,21 @@
 @espacamento-xxl: 32px;
 
 // BORDAS E SOMBRAS
-@border-radius: 4px;
-@border-radius-sm: 2px;
-@shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-@shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1);
+@border-radius: 8px;
+@border-radius-sm: 4px;
+@border-radius-lg: 12px;
+@shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+@shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+@shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1);
 
 // LAYOUT
-@container-max-width: 1200px;
+@container-max-width: 1280px;
 @container-padding: @espacamento-xl;
 
+@import 'layout.less';
 @import 'forms.less';
 @import 'dialogs.less';
+@import 'status.less';
 
 // RESET E ESTILOS GLOBAIS
 * {
@@ -60,14 +64,18 @@ body {
     line-height: 1.5;
     color: @preto;
     background-color: @cinza-claro;
-}
-
-// LAYOUT PRINCIPAL
-body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-image:
+        radial-gradient(circle at 100% 0%, fade(@azul-claro, 55%) 0%, transparent 42%),
+        radial-gradient(circle at 0% 100%, fade(@azul-claro, 35%) 0%, transparent 38%);
+    background-attachment: fixed;
 }
+
+// LAYOUT PRINCIPAL
 
 // HEADER
 .main-header {
@@ -83,15 +91,75 @@ body {
     z-index: 1000;
     box-shadow: @shadow-sm;
 
-    nav {
+    .header-brand {
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: @espacamento-md;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            border-radius: @border-radius;
+            background: linear-gradient(135deg, @azul-primario, @azul-secundario);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            mat-icon {
+                color: @branco;
+                font-size: 22px;
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: @preto;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-tagline {
+            font-size: @fonte-tamanho-pequeno;
+            color: @cinza-escuro;
+            font-weight: 400;
+        }
+    }
+
+    .main-nav {
+        display: flex;
+        align-items: center;
+        gap: @espacamento-xs;
+        margin-left: @espacamento-xl;
+
         a {
+            display: flex;
+            align-items: center;
+            gap: @espacamento-xs;
             color: @cinza-escuro;
             text-decoration: none;
             font-weight: 500;
             padding: @espacamento-sm @espacamento-md;
-            border-radius: @border-radius-sm;
-            transition: background-color 0.2s ease;
-            font-size: @fonte-tamanho-base;
+            border-radius: @border-radius;
+            transition: all 0.2s ease;
+            font-size: @fonte-tamanho-pequeno;
+
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+            }
 
             &:hover {
                 background-color: @cinza-claro;
@@ -99,15 +167,16 @@ body {
             }
 
             &.active {
-                background-color: @azul-secundario;
-                color: @branco;
+                background-color: @azul-claro;
+                color: @azul-primario;
+                font-weight: 600;
             }
         }
     }
 
     .user-menu {
-
-        button {
+        .menu-trigger,
+        .login-btn {
             display: flex;
             align-items: center;
             gap: @espacamento-sm;
@@ -133,8 +202,68 @@ body {
                 color: @cinza-escuro;
             }
 
-            span {
-                font-size: @fonte-tamanho-base;
+            .chevron {
+                color: @cinza-escuro;
+            }
+        }
+
+        .login-btn {
+            background-color: @azul-secundario;
+            color: @branco;
+            border-color: @azul-secundario;
+
+            mat-icon {
+                color: @branco;
+            }
+
+            &:hover {
+                background-color: @azul-hover;
+                border-color: @azul-hover;
+            }
+        }
+    }
+
+    .header-notifications {
+        margin-right: @espacamento-md;
+
+        .notification-bell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: @border-radius;
+            border: 1px solid @cinza-medio;
+            color: @cinza-escuro;
+            text-decoration: none;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background-color: @cinza-claro;
+                color: @preto;
+            }
+
+            mat-icon {
+                font-size: 22px;
+                width: 22px;
+                height: 22px;
+            }
+
+            .notification-badge {
+                position: absolute;
+                top: -6px;
+                right: -6px;
+                min-width: 18px;
+                height: 18px;
+                padding: 0 4px;
+                border-radius: 999px;
+                background-color: #DC2626;
+                color: @branco;
+                font-size: 11px;
+                font-weight: 700;
+                line-height: 18px;
+                text-align: center;
             }
         }
     }
@@ -186,6 +315,31 @@ body {
                 text-decoration: underline;
             }
         }
+    }
+
+    .footer-brand {
+        font-weight: 500;
+        color: @preto;
+        gap: @espacamento-sm;
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            color: @azul-secundario;
+        }
+    }
+
+    .footer-links {
+        gap: @espacamento-sm;
+
+        .separator {
+            color: @cinza-medio;
+        }
+    }
+
+    .footer-credit {
+        gap: @espacamento-xs;
     }
 
     .grow-space {
@@ -262,6 +416,16 @@ button {
 }
 
 // Responsividade
+@media (max-width: 1024px) {
+    .main-header .main-nav {
+        display: none;
+    }
+
+    .main-header .brand-tagline {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: @espacamento-lg @espacamento-md;
@@ -271,8 +435,9 @@ button {
     .main-header {
         padding: @espacamento-md;
 
-        .user-menu button span {
-            display: none; // Esconde texto, mantém ícone
+        .user-menu .menu-trigger span,
+        .user-menu .login-btn span {
+            display: none;
         }
     }
 }
@@ -289,6 +454,10 @@ button {
 }
 
 // Utilitários
+.grow-space {
+    flex-grow: 1;
+}
+
 .text-center {
     text-align: center;
 }

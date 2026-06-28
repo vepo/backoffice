@@ -7,6 +7,14 @@ export interface AuthResponse {
   token: string;
 }
 
+export interface CurrentUser {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  roles: string[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -20,8 +28,8 @@ export class AuthService {
       }));
   }
 
-  recovery(email: string): Observable<any> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/auth/recovery`, { email });
+  recovery(email: string): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/auth/request-reset-password`, { email });
   }
 
   resetPassword(token: string, recoveryPassword: string, newPassword: string): Observable<any> {
@@ -68,6 +76,21 @@ export class AuthService {
   hasRole(role: string): boolean {
     return this.getRoles()
       .includes(role);
+  }
+
+  hasAnyRole(roles: string[]): boolean {
+    return roles.some(role => this.hasRole(role));
+  }
+
+  getCurrentUser(): Observable<CurrentUser> {
+    return this.http.get<CurrentUser>(`${this.API_URL}/auth/me`);
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/auth/change-password`, {
+      currentPassword,
+      newPassword
+    });
   }
 
   logout() {

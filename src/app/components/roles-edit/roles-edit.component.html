@@ -1,6 +1,11 @@
-<div class="main centered">
+<div class="form-page">
+    <a class="back-link" routerLink="/roles">
+        <mat-icon fontIcon="arrow_back"></mat-icon>
+        <span>Voltar para Funções</span>
+    </a>
+    <div class="form-card">
     <div class="form-header">
-        <mat-icon fontIcon="assignment" class="title-icon"></mat-icon>
+        <mat-icon fontIcon="how_to_reg" class="title-icon"></mat-icon>
         @if (editMode) {
         <h2>Editar Função</h2>
         } @else {
@@ -49,4 +54,5 @@
             </button>
         </div>
     </form>
+    </div>
 </div>

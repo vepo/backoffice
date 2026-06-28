@@ -7,6 +7,7 @@ export interface Domain {
     hostname: string;
     token: string;
     disabled?: boolean;
+    ignoredPathPatterns?: string[];
     createdAt?: Date;
     updatedAt?: Date;
 }

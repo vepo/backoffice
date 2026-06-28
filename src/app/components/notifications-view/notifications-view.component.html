@@ -1,0 +1,156 @@
+<div class="page">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon fontIcon="notifications" class="title-icon"></mat-icon>
+        Notificações
+      </h1>
+      <p class="page-subtitle">Relatórios de sincronização e eventos dos canais que você segue</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" matButton (click)="refresh()" [disabled]="loading">
+        <mat-icon fontIcon="refresh"></mat-icon>
+        <span>Atualizar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon fontIcon="notifications"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ notifications.length }}</h3>
+        <p class="stat-label">Total na lista</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon inactive">
+        <mat-icon fontIcon="mark_email_unread"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ getUnreadCount() }}</h3>
+        <p class="stat-label">Não lidas</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-card">
+    <div class="filter-header">
+      <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+      <h3>Filtros</h3>
+    </div>
+    <div class="filter-grid">
+      <div class="form-field status-filter">
+        <div class="filter-label">Leitura:</div>
+        <div class="status-toggle">
+          <label class="custom-checkbox status-toggle-item">
+            <input type="radio" name="readFilter" [checked]="readFilter === 'all'"
+              (change)="setReadFilter('all')">
+            <span class="status-badge all">
+              <mat-icon fontIcon="all_inclusive" class="status-icon"></mat-icon>
+              Todas
+            </span>
+          </label>
+          <label class="custom-checkbox status-toggle-item">
+            <input type="radio" name="readFilter" [checked]="readFilter === 'unread'"
+              (change)="setReadFilter('unread')">
+            <span class="status-badge inactive">
+              <mat-icon fontIcon="mark_email_unread" class="status-icon"></mat-icon>
+              Não lidas
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+          <h3>Caixa de entrada</h3>
+          <span class="table-subtitle">{{ notifications.length }} notificação(ões)</span>
+        </div>
+      </div>
+
+      <div class="responsive-table">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="column-status">Status</th>
+              <th class="column-title">Título</th>
+              <th class="column-type">Tipo</th>
+              <th class="column-date">Recebida em</th>
+              <th class="column-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (notification of notifications; track notification.id) {
+            <tr [class.row-even]="$even" [class.row-odd]="$odd" [class.row-inactive]="notification.read"
+              class="notification-row">
+              <td class="column-status">
+                @if (notification.read) {
+                <span class="status-badge active">Lida</span>
+                } @else {
+                <span class="status-badge inactive">Não lida</span>
+                }
+              </td>
+              <td class="column-title">
+                <a class="notification-link" [routerLink]="['/', 'notifications', notification.id]">
+                  <strong>{{ notification.title }}</strong>
+                  <span class="notification-description">{{ notification.description }}</span>
+                </a>
+              </td>
+              <td class="column-type">
+                <span class="id-badge">{{ sourceLabel(notification) }}</span>
+                @if (notification.itemCount > 0) {
+                <span class="table-subtitle">{{ notification.itemCount }} item(ns)</span>
+                }
+              </td>
+              <td class="column-date">
+                <span class="date-info">{{ formatDate(notification.createdAt) }}</span>
+              </td>
+              <td class="column-actions">
+                <div class="action-buttons">
+                  <button class="btn-icon" matButton [routerLink]="['/', 'notifications', notification.id]"
+                    matTooltip="Abrir notificação">
+                    <mat-icon fontIcon="open_in_new"></mat-icon>
+                  </button>
+                  @if (notification.read) {
+                  <button class="btn-icon" matButton (click)="markUnread(notification, $event)"
+                    matTooltip="Marcar como não lida">
+                    <mat-icon fontIcon="mark_email_unread"></mat-icon>
+                  </button>
+                  } @else {
+                  <button class="btn-icon btn-ok" matButton (click)="markRead(notification, $event)"
+                    matTooltip="Marcar como lida">
+                    <mat-icon fontIcon="drafts"></mat-icon>
+                  </button>
+                  }
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        @if (notifications.length === 0) {
+        <div class="empty-state">
+          <mat-icon fontIcon="notifications_none" class="empty-icon"></mat-icon>
+          <h3>Nenhuma notificação encontrada</h3>
+          <p>
+            @if (readFilter === 'unread') {
+            Você não tem notificações não lidas.
+            } @else {
+            Siga canais no Engage para receber relatórios de sincronização aqui.
+            }
+          </p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

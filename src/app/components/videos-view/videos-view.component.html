@@ -1,0 +1,112 @@
+<div class="page">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon fontIcon="video_library" class="title-icon"></mat-icon>
+        Vídeos Sincronizados
+      </h1>
+      <p class="page-subtitle">Vídeos importados dos canais conectados no Engage</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon fontIcon="play_circle"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ videos.length }}</h3>
+        <p class="stat-label">Vídeos sincronizados</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-card">
+    <div class="filter-header">
+      <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+      <h3>Filtros</h3>
+    </div>
+    <div class="filter-grid">
+      <div class="form-field">
+        <input type="text" placeholder="Filtrar por título ou YouTube ID..." [(ngModel)]="titleFilter"
+          (ngModelChange)="applyFilters()" class="filter-input">
+        <mat-icon fontIcon="search" class="input-icon"></mat-icon>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-outline btn-small" (click)="clearFilters()">
+          <mat-icon fontIcon="clear_all"></mat-icon>
+          Limpar Filtros
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+          <h3>Lista de Vídeos</h3>
+          <span class="table-subtitle">{{ filteredVideos.length }} vídeo(s)</span>
+        </div>
+      </div>
+
+      <div class="responsive-table">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="column-name">Vídeo</th>
+              <th>YouTube ID</th>
+              <th>Publicado em</th>
+              <th class="column-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (video of filteredVideos; track video.id) {
+            <tr>
+              <td class="column-name">
+                <div class="user-info">
+                  @if (video.thumbnail) {
+                  <img [src]="video.thumbnail" [alt]="video.title" class="video-thumb" />
+                  }
+                  <div class="user-details">
+                    <strong>{{ video.title || 'Sem título' }}</strong>
+                  </div>
+                </div>
+              </td>
+              <td>{{ video.youtubeId }}</td>
+              <td>
+                @if (video.publishedAt) {
+                {{ video.publishedAt | date:'dd/MM/yyyy' }}
+                } @else {
+                —
+                }
+              </td>
+              <td class="column-actions">
+                <div class="action-buttons">
+                  <button class="btn-icon" matButton [routerLink]="['/', 'engage', 'videos', video.id, 'comments']"
+                    matTooltip="Ver comentários">
+                    <mat-icon fontIcon="comment"></mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        @if (filteredVideos.length === 0) {
+        <div class="empty-state">
+          <mat-icon fontIcon="video_library" class="empty-icon"></mat-icon>
+          <h3>Nenhum vídeo sincronizado</h3>
+          <p>Conecte um canal com API key válida e aguarde a sincronização do Engage.</p>
+          <button class="btn" matButton [routerLink]="['/', 'engage', 'channels']">
+            <mat-icon fontIcon="subscriptions"></mat-icon>
+            Gerenciar Canais
+          </button>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

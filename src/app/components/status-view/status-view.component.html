@@ -1,0 +1,290 @@
+<div class="page status-page">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon fontIcon="dashboard" class="title-icon"></mat-icon>
+        Início
+      </h1>
+      <p class="page-subtitle">Resumo do ecossistema, analytics Visita e saúde dos serviços</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" matButton (click)="refresh()" [disabled]="loading || statsLoading">
+        <mat-icon fontIcon="refresh"></mat-icon>
+        <span>Atualizar</span>
+      </button>
+    </div>
+  </div>
+
+  @if (canViewStats()) {
+  <section class="stats-summary-section">
+    <div class="section-heading">
+      <h3>Visita Analytics</h3>
+      <span class="section-hint">Últimos 30 dias</span>
+    </div>
+
+    @if (statsLoading && !stats) {
+    <div class="stats-loading">
+      <mat-spinner diameter="28"></mat-spinner>
+      <span>Carregando estatísticas...</span>
+    </div>
+    } @else if (statsError) {
+    <div class="service-error">
+      <mat-icon fontIcon="info"></mat-icon>
+      <span>Não foi possível carregar as estatísticas do Visita.</span>
+    </div>
+    } @else if (stats) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <mat-icon fontIcon="visibility"></mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ stats.totalViews }}</h3>
+          <p class="stat-label">Total de visitas</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon admin">
+          <mat-icon fontIcon="calendar_month"></mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ stats.daysInRange }}</h3>
+          <p class="stat-label">Dias no período</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon manager">
+          <mat-icon fontIcon="web"></mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ stats.monitoredPages }}</h3>
+          <p class="stat-label">Páginas monitoradas</p>
+        </div>
+      </div>
+    </div>
+
+  <div class="stats-lists">
+    <div class="filter-card">
+      <div class="filter-header">
+        <mat-icon fontIcon="public" class="filter-icon"></mat-icon>
+        <h3>Top domínios</h3>
+      </div>
+      @if (stats.topDomains.length === 0) {
+      <p class="section-hint">Nenhuma visita no período.</p>
+      } @else {
+      <ul class="stats-ranking">
+        @for (entry of stats.topDomains; track entry.hostname) {
+        <li>
+          <span>{{ entry.hostname }}</span>
+          <strong>{{ entry.views }}</strong>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+
+    <div class="filter-card">
+      <div class="filter-header">
+        <mat-icon fontIcon="article" class="filter-icon"></mat-icon>
+        <h3>Top páginas (7 dias)</h3>
+      </div>
+      @if (stats.topPagesLastWeek.length === 0) {
+      <p class="section-hint">Nenhuma visita na última semana.</p>
+      } @else {
+      <ul class="stats-ranking">
+        @for (entry of stats.topPagesLastWeek; track entry.path) {
+        <li>
+          <span>{{ entry.path }}</span>
+          <strong>{{ entry.views }}</strong>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+  </div>
+
+    <div class="header-actions stats-actions">
+      <button class="btn" matButton type="button" (click)="openFullDashboard()">
+        <mat-icon fontIcon="open_in_new"></mat-icon>
+        <span>Ver analytics completo</span>
+      </button>
+    </div>
+    }
+  </section>
+  }
+
+  <section class="platform-banner" [class]="platformStatus.toLowerCase()">
+    <div class="banner-icon">
+      @if (loading) {
+      <mat-spinner diameter="32"></mat-spinner>
+      } @else {
+      <mat-icon [fontIcon]="platformStatusIcon()"></mat-icon>
+      }
+    </div>
+    <div class="banner-content">
+      <h2>{{ platformStatusLabel() }}</h2>
+      <p>
+        @if (lastRefresh) {
+        Última verificação: {{ lastRefresh | date:'dd/MM/yyyy HH:mm:ss' }}
+        · {{ operationalCount() }}/{{ services.length }} serviços operacionais
+        } @else {
+        Coletando métricas de saúde dos serviços...
+        }
+      </p>
+    </div>
+  </section>
+
+  <section class="services-section">
+    <div class="section-heading">
+      <h3>Microsserviços</h3>
+      <span class="section-hint">Health checks via SmallRye Health (Quarkus)</span>
+    </div>
+
+    <div class="services-grid">
+      @for (entry of services; track entry.service.id) {
+      <article class="service-card" [class]="entry.status.toLowerCase()">
+        <header class="service-header">
+          <div class="service-identity">
+            <div class="service-icon">
+              <mat-icon [fontIcon]="entry.service.icon"></mat-icon>
+            </div>
+            <div>
+              <h4>
+                {{ entry.service.name }}
+                @if (entry.service.planned) {
+                <span class="planned-badge">Planejado</span>
+                }
+              </h4>
+              <p>{{ entry.service.description }}</p>
+            </div>
+          </div>
+          <span class="status-pill" [class]="entry.status.toLowerCase()">
+            {{ serviceStatusLabel(entry.status) }}
+          </span>
+        </header>
+
+        <dl class="service-meta">
+          <div>
+            <dt>Porta (dev)</dt>
+            <dd>{{ entry.service.devPort }}</dd>
+          </div>
+          <div>
+            <dt>Latência</dt>
+            <dd>
+              @if (entry.latencyMs !== undefined) {
+              {{ entry.latencyMs }} ms
+              } @else {
+              —
+              }
+            </dd>
+          </div>
+          <div>
+            <dt>Verificado em</dt>
+            <dd>
+              @if (entry.lastChecked) {
+              {{ entry.lastChecked | date:'HH:mm:ss' }}
+              } @else {
+              —
+              }
+            </dd>
+          </div>
+        </dl>
+
+        @if (entry.errorMessage) {
+        <div class="service-error">
+          <mat-icon fontIcon="info"></mat-icon>
+          <span>{{ entry.errorMessage }}</span>
+        </div>
+        }
+
+        @if (entry.checks.length > 0) {
+        <div class="health-checks">
+          <span class="checks-title">Verificações</span>
+          <ul>
+            @for (check of entry.checks; track check.name) {
+            <li [class]="check.status.toLowerCase()">
+              <mat-icon [fontIcon]="check.status === 'UP' ? 'check' : 'close'"></mat-icon>
+              <span>{{ check.name }}</span>
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      </article>
+      }
+    </div>
+  </section>
+
+  <section class="quick-access-section">
+    <div class="section-heading">
+      <h3>Acesso rápido</h3>
+      <span class="section-hint">Módulos administrativos conforme seu perfil</span>
+    </div>
+
+    <div class="quick-access-grid">
+      <a class="quick-card" *role="'passport.admin'" routerLink="/users">
+        <mat-icon fontIcon="group"></mat-icon>
+        <div>
+          <strong>Usuários</strong>
+          <span>Gestão de contas e acessos</span>
+        </div>
+        <mat-icon fontIcon="arrow_forward" class="arrow"></mat-icon>
+      </a>
+
+      <a class="quick-card" *role="'passport.admin'" routerLink="/profiles">
+        <mat-icon fontIcon="account_box"></mat-icon>
+        <div>
+          <strong>Perfis</strong>
+          <span>Perfis e permissões agregadas</span>
+        </div>
+        <mat-icon fontIcon="arrow_forward" class="arrow"></mat-icon>
+      </a>
+
+      <a class="quick-card" *role="'passport.admin'" routerLink="/roles">
+        <mat-icon fontIcon="how_to_reg"></mat-icon>
+        <div>
+          <strong>Funções</strong>
+          <span>Roles do ecossistema</span>
+        </div>
+        <mat-icon fontIcon="arrow_forward" class="arrow"></mat-icon>
+      </a>
+
+      <a class="quick-card" *role="'domains.admin'" routerLink="/domains">
+        <mat-icon fontIcon="public"></mat-icon>
+        <div>
+          <strong>Domínios</strong>
+          <span>Hostnames e tokens de rastreamento</span>
+        </div>
+        <mat-icon fontIcon="arrow_forward" class="arrow"></mat-icon>
+      </a>
+
+      <a class="quick-card" *role="'engage.admin'" routerLink="/engage/channels">
+        <mat-icon fontIcon="subscriptions"></mat-icon>
+        <div>
+          <strong>Canais YouTube</strong>
+          <span>Cadastro, API key e conexão</span>
+        </div>
+        <mat-icon fontIcon="arrow_forward" class="arrow"></mat-icon>
+      </a>
+
+      <a class="quick-card" *role="'engage.admin'" routerLink="/engage/statistics">
+        <mat-icon fontIcon="insights"></mat-icon>
+        <div>
+          <strong>Estatísticas YouTube</strong>
+          <span>Métricas de canais e vídeos</span>
+        </div>
+        <mat-icon fontIcon="arrow_forward" class="arrow"></mat-icon>
+      </a>
+
+      @if (!hasRole('passport.admin') && !hasRole('domains.admin') && !hasRole('engage.admin') && !canViewStats()) {
+      <div class="quick-card empty">
+        <mat-icon fontIcon="lock"></mat-icon>
+        <div>
+          <strong>Sem módulos administrativos</strong>
+          <span>Seu perfil não possui permissões de administração.</span>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+</div>

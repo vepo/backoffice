@@ -1,0 +1,46 @@
+---
+description: Local dev — proxy, backend services, seed users
+alwaysApply: true
+---
+
+# Development experience
+
+Backoffice requires backend APIs running behind the dev proxy.
+
+## Start stack
+
+```bash
+# Passport (8080)
+cd ../passport && ./mvnw quarkus:dev
+
+# Visita — domains UI (8081)
+cd ../visita && ./mvnw quarkus:dev
+
+# Backoffice (4200)
+npm install
+ng serve --proxy-config src/proxy.conf.json
+```
+
+Open [http://localhost:4200](http://localhost:4200).
+
+## Dev login
+
+- **User:** `cto-boss` (email `cto@passport.vepo.dev`) or use email on login form
+- **Password:** `qwas1234` (Passport dev seed)
+
+`cto-boss` has `passport.admin` and `domains.admin` via seeded profiles.
+
+## When adding a feature
+
+Before marking done, click through the new UI with the right role:
+
+| Feature area | Login as |
+|--------------|----------|
+| Users / profiles / roles | `passport.admin` (e.g. cto-boss) |
+| Domains | `domains.admin` (cto-boss has both) |
+| No elevated menu | `junior` |
+
+## Never
+
+- Ship a screen that only works with manual API calls (no navigation path).
+- Document features without verifying proxy + backend are up.

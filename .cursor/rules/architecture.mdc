@@ -1,0 +1,25 @@
+---
+description: Always read ARCHITECTURE.md before coding; update it when structure changes
+alwaysApply: true
+---
+
+# Architecture document — read and maintain
+
+[`ARCHITECTURE.md`](../../ARCHITECTURE.md) is the canonical map of Backoffice.
+
+## Before starting work
+
+1. **Read** `ARCHITECTURE.md` and [`docs/domain-specification.md`](../../docs/domain-specification.md).
+2. Skim sibling components/services for patterns.
+3. For template/UI work, read [`docs/ui/README.md`](../../docs/ui/README.md) ([backoffice-ui-patterns.mdc](backoffice-ui-patterns.mdc)).
+
+## Before marking a task done
+
+Update `ARCHITECTURE.md` when routes, services, proxies, or roles change.  
+Update `docs/domain-specification.md` for new UI labels or shell concepts ([domain-model.mdc](domain-model.mdc)).  
+Update `docs/ui/` when UI patterns or screens change ([backoffice-ui-patterns.mdc](backoffice-ui-patterns.mdc)).
+
+## Never
+
+- Add routes or services without checking ARCHITECTURE.md.
+- Leave docs stale after structural changes.

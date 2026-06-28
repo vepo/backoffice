@@ -1,4 +1,9 @@
-<div class="main centered">
+<div class="form-page">
+    <a class="back-link" routerLink="/domains">
+        <mat-icon fontIcon="arrow_back"></mat-icon>
+        <span>Voltar para Domínios</span>
+    </a>
+    <div class="form-card">
     <div class="form-header">
         <mat-icon fontIcon="dns" class="title-icon"></mat-icon>
         @if (editMode) {
@@ -24,6 +29,16 @@
                 <mat-error>{{ getHostnameErrorMessage() }}</mat-error>
                 }
                 <mat-hint align="start">Digite o domínio completo (ex: api.exemplo.com.br)</mat-hint>
+            </mat-form-field>
+        </div>
+
+        <div class="form-field">
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Caminhos ignorados</mat-label>
+                <textarea matInput formControlName="ignoredPathPatterns" rows="4"
+                          placeholder="/admin/.*&#10;/health"></textarea>
+                <mat-icon matPrefix fontIcon="block"></mat-icon>
+                <mat-hint align="start">Um padrão regex por linha, aplicado ao caminho da URL (ex: /admin/.*, /health)</mat-hint>
             </mat-form-field>
         </div>
 
@@ -54,4 +69,5 @@
             </button>
         </div>
     </form>
+    </div>
 </div>

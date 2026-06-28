@@ -1,0 +1,39 @@
+---
+description: Angular component and service conventions
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+# Angular conventions
+
+## Components
+
+- Standalone components; `inject()` for DI (match existing files).
+- View components list + filter; edit components use reactive forms.
+- Destructive actions → dedicated `confirm-*.dialog` component.
+
+## Services
+
+- `@Injectable({ providedIn: 'root' })`.
+- Export TypeScript interfaces matching backend JSON (`User`, `Domain`, `Profile`).
+- API URL constants at top of service (`/passport/api`, `/visita/api/domains`).
+
+## Routing
+
+- Register in `app.routes.ts` with `canActivate: [authGuard]`.
+- Use resolvers for list/detail prefetch — avoid duplicate HTTP in `ngOnInit` when resolver exists.
+
+## Roles
+
+- Template: `*role="'passport.admin'"` — exact JWT group name.
+- Menu entries in `app.html` must match [docs/domain-specification.md](../../docs/domain-specification.md).
+
+## Styling
+
+- Shared Less: `styles.less`, `forms.less`, `dialogs.less`.
+- Component styles in co-located `.less` or inline `styleUrl` if already used.
+- **UI patterns:** [docs/ui/README.md](../../docs/ui/README.md) — mandatory for template work ([backoffice-ui-patterns.mdc](backoffice-ui-patterns.mdc)).
+
+## Domain naming
+
+[domain-model.mdc](domain-model.mdc) — interfaces and labels align with Passport/Visita domain terms.

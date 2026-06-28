@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Domain, DomainService } from '../../services/domain.service';
 
 @Component({
@@ -17,7 +17,8 @@ import { Domain, DomainService } from '../../services/domain.service';
         MatInputModule,
         MatButtonModule,
         MatIconModule,
-        MatTooltipModule
+        MatTooltipModule,
+        RouterLink
     ]
 })
 export class DomainsEditComponent implements OnInit {
@@ -34,7 +35,8 @@ export class DomainsEditComponent implements OnInit {
             Validators.minLength(4),
             Validators.maxLength(255),
             Validators.pattern(/^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/)
-        ])
+        ]),
+        ignoredPathPatterns: new FormControl('')
     });
 
     ngOnInit(): void {
@@ -45,7 +47,8 @@ export class DomainsEditComponent implements OnInit {
 
             if (domain) {
                 this.domainForm.patchValue({
-                    hostname: domain.hostname
+                    hostname: domain.hostname,
+                    ignoredPathPatterns: (domain.ignoredPathPatterns ?? []).join('\n')
                 });
             }
 
@@ -69,11 +72,16 @@ export class DomainsEditComponent implements OnInit {
             return;
         }
 
-        const { hostname } = this.domainForm.value;
+        const { hostname, ignoredPathPatterns } = this.domainForm.value;
         if (!hostname) return;
 
+        const payload = {
+            hostname,
+            ignoredPathPatterns: this.parseIgnoredPathPatterns(ignoredPathPatterns)
+        };
+
         if (this.editMode && this.domainId) {
-            this.domainService.update(this.domainId, { hostname })
+            this.domainService.update(this.domainId, payload)
                 .subscribe({
                     next: (domain) => {
                         console.log("Domain updated:", domain);
@@ -84,7 +92,7 @@ export class DomainsEditComponent implements OnInit {
                     }
                 });
         } else {
-            this.domainService.create({ hostname })
+            this.domainService.create(payload)
                 .subscribe({
                     next: (domain) => {
                         console.log("Domain created:", domain);
@@ -112,5 +120,15 @@ export class DomainsEditComponent implements OnInit {
             return 'Hostname inválido. Exemplo: exemplo.com.br';
         }
         return '';
+    }
+
+    private parseIgnoredPathPatterns(value: string | null | undefined): string[] {
+        if (!value) {
+            return [];
+        }
+        return value
+            .split('\n')
+            .map((line) => line.trim())
+            .filter((line) => line.length > 0);
     }
 }

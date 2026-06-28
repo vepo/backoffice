@@ -1,44 +1,69 @@
-<div class="main centered">
-    <div class="form-header">
-        <h2>Backoffice — Acessar</h2>
+<div class="auth-layout">
+  <aside class="auth-brand">
+    <div class="brand-mark">
+      <mat-icon fontIcon="dashboard"></mat-icon>
     </div>
-    <form (ngSubmit)="login()">
+    <h1>Backoffice</h1>
+    <p>Painel administrativo unificado para identidade, domínios e serviços da plataforma.</p>
+    <div class="auth-features">
+      <div class="feature">
+        <mat-icon fontIcon="verified_user"></mat-icon>
+        <span>Acesso seguro com JWT</span>
+      </div>
+      <div class="feature">
+        <mat-icon fontIcon="hub"></mat-icon>
+        <span>Arquitetura de microsserviços</span>
+      </div>
+      <div class="feature">
+        <mat-icon fontIcon="admin_panel_settings"></mat-icon>
+        <span>Gestão centralizada de permissões</span>
+      </div>
+    </div>
+  </aside>
+  <section class="auth-panel">
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Acessar</h2>
+        <p>Entre com suas credenciais para continuar</p>
+      </div>
+      <form (ngSubmit)="login()">
         <div class="form-field">
-            <mat-form-field appearance="fill">
-                <mat-label>E-mail</mat-label>
-                <input matInput [(ngModel)]="email" name="email" type="email" required />
-                <mat-icon matPrefix fontIcon="mail_outline"></mat-icon>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>E-mail</mat-label>
+            <input matInput [(ngModel)]="email" name="email" type="email" required />
+            <mat-icon matPrefix fontIcon="mail_outline"></mat-icon>
+          </mat-form-field>
         </div>
 
         <div class="form-field">
-            <mat-form-field appearance="fill">
-                <mat-label>Senha</mat-label>
-                <input matInput name="password" [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" required />
-                <mat-icon matPrefix fontIcon="lock"></mat-icon>
-                <button type="button" mat-icon-button matSuffix (click)="toggleVisibility($event)"
-                    [attr.aria-label]="hide() ? 'Mostrar senha' : 'Ocultar senha'">
-                    <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input matInput name="password" [(ngModel)]="password" [type]="hide() ? 'password' : 'text'" required />
+            <mat-icon matPrefix fontIcon="lock"></mat-icon>
+            <button type="button" mat-icon-button matSuffix (click)="toggleVisibility($event)"
+              [attr.aria-label]="hide() ? 'Mostrar senha' : 'Ocultar senha'">
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
         </div>
 
         @if (error) {
         <div class="error">
-            <mat-icon fontIcon="error_outline"></mat-icon>
-            <span>{{error}}</span>
+          <mat-icon fontIcon="error_outline"></mat-icon>
+          <span>{{error}}</span>
         </div>
         }
 
         <div class="btn-group">
-            <button class="btn" type="submit" [disabled]="!email || !password">
-                <mat-icon fontIcon="login"></mat-icon>
-                <span>Entrar</span>
-            </button>
+          <button class="btn" type="submit" [disabled]="!email || !password">
+            <mat-icon fontIcon="login"></mat-icon>
+            <span>Entrar</span>
+          </button>
         </div>
         <div class="form-links">
-            <a [routerLink]="'/login/recovery'">Esqueceu sua senha?</a>
-            <a href="#">Precisa de ajuda?</a>
+          <a [routerLink]="'/login/recovery'">Esqueceu sua senha?</a>
         </div>
-    </form>
+      </form>
+    </div>
+  </section>
 </div>

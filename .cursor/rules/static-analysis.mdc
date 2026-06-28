@@ -1,0 +1,32 @@
+---
+description: Run local static analysis and fix new issues before finishing a task
+alwaysApply: true
+---
+
+# Static analysis — finish checklist
+
+## When to run
+
+After TypeScript, HTML, or style changes. Skip docs-only / `.mdc`-only edits.
+
+## Required commands (match CI)
+
+```bash
+npm ci
+npm test -- --watch=false --browsers=ChromeHeadless
+npm run build -- --configuration=production
+```
+
+## IDE diagnostics
+
+`ReadLints` on changed files; fix new TypeScript and template errors.
+
+## Do not finish while
+
+- `npm run build` fails.
+- Tests fail on your branch.
+- New linter errors in touched files.
+
+## Report to the user
+
+Briefly note: build (pass/fail), tests (pass/fail), linter (clean/fixed).

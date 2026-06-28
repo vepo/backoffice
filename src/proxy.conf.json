@@ -7,12 +7,60 @@
       "^/passport": ""
     }
   },
+  "/passport/q/**": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/passport": ""
+    }
+  },
   "/visita/api/**": {
     "target": "http://localhost:8081",
     "secure": false,
     "logLevel": "debug",
     "pathRewrite": {
       "^/visita": ""
+    }
+  },
+  "/visita/dashboard": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/visita": ""
+    }
+  },
+  "/visita/dashboard/**": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/visita": ""
+    }
+  },
+  "/visita/q/**": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/visita": ""
+    }
+  },
+  "/engage/api/**": {
+    "target": "http://localhost:8082",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/engage": ""
+    }
+  },
+  "/engage/q/**": {
+    "target": "http://localhost:8082",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/engage": ""
     }
   }
 }

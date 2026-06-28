@@ -1,4 +1,4 @@
-<div class="container">
+<div class="page">
     <!-- Header Section -->
     <div class="page-header">
         <div class="header-content">
@@ -89,10 +89,6 @@
                             </td>
                             <td class="column-actions">
                                 <div class="action-buttons">
-                                    <button class="btn-icon" matButton [routerLink]="['/', 'roles', role.id]"
-                                        matTooltip="Editar função">
-                                        <mat-icon fontIcon="edit"></mat-icon>
-                                    </button>
                                     <button class="btn-icon btn-danger" matButton (click)="confirmDelete(role)"
                                         matTooltip="Excluir função">
                                         <mat-icon fontIcon="delete"></mat-icon>

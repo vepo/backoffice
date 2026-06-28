@@ -1,0 +1,113 @@
+<div class="form-page">
+  <a class="back-link" routerLink="/engage/channels">
+    <mat-icon fontIcon="arrow_back"></mat-icon>
+    <span>Voltar para Canais</span>
+  </a>
+  <div class="form-card">
+    <div class="form-header">
+      <mat-icon fontIcon="subscriptions" class="title-icon"></mat-icon>
+      @if (editMode) {
+      <h2>Editar Canal</h2>
+      <p>Atualize o YouTube ID, a API key ou o status de conexão</p>
+      } @else {
+      <h2>Novo Canal</h2>
+      <p>Cadastre um canal do YouTube para monitoramento pelo Engage</p>
+      }
+    </div>
+
+    @if (saveError) {
+    <div class="error">
+      <mat-icon fontIcon="error_outline"></mat-icon>
+      <span>{{ saveError }}</span>
+    </div>
+    }
+
+    <form class="edit" [formGroup]="channelForm" (ngSubmit)="save()">
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label>YouTube Channel ID</mat-label>
+          <input matInput formControlName="youtubeId" required placeholder="UCxxxxxxxxxxxxxxxxxxxxxx" />
+          <mat-icon matPrefix fontIcon="smart_display"></mat-icon>
+          @if (channelForm.get('youtubeId')?.invalid && channelForm.get('youtubeId')?.touched) {
+          <mat-error>{{ getYoutubeIdErrorMessage() }}</mat-error>
+          }
+          <mat-hint align="start">ID do canal no YouTube (começa com UC)</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-form-field appearance="fill">
+          <mat-label>YouTube API Key</mat-label>
+          <input matInput formControlName="youtubeApiKey" type="password"
+            [placeholder]="editMode && apiKeyConfigured ? 'Deixe em branco para manter a chave atual' : 'AIza...'" />
+          <mat-icon matPrefix fontIcon="vpn_key"></mat-icon>
+          @if (channelForm.get('youtubeApiKey')?.invalid && channelForm.get('youtubeApiKey')?.touched) {
+          <mat-error>{{ getApiKeyErrorMessage() }}</mat-error>
+          }
+          <mat-hint align="start">
+            @if (editMode && apiKeyConfigured) {
+            Chave já configurada. Informe uma nova apenas se quiser substituí-la.
+            } @else {
+            Chave da YouTube Data API v3 para este canal.
+            }
+          </mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="form-field">
+        <mat-checkbox formControlName="connected">
+          Canal conectado (sincronizar vídeos, comentários e estatísticas)
+        </mat-checkbox>
+      </div>
+
+      @if (editMode) {
+      <div class="info-card">
+        <div class="info-header">
+          <mat-icon fontIcon="notifications"></mat-icon>
+          <h3>Notificações</h3>
+        </div>
+        <div class="info-content">
+          <div class="form-field">
+            <mat-checkbox [checked]="receiveNotifications" [disabled]="followLoading"
+              (change)="onReceiveNotificationsChange($event.checked)">
+              Receber notificações deste canal na caixa de entrada
+            </mat-checkbox>
+            @if (followError) {
+            <p class="warning-text">
+              <mat-icon fontIcon="warning" class="warning-icon"></mat-icon>
+              {{ followError }}
+            </p>
+            }
+          </div>
+          <p>Você também pode seguir ou deixar de seguir canais diretamente na lista de canais.</p>
+        </div>
+      </div>
+      }
+
+      <div class="info-card">
+        <div class="info-header">
+          <mat-icon fontIcon="info"></mat-icon>
+          <h3>Sobre a API key</h3>
+        </div>
+        <div class="info-content">
+          <p>Cada canal usa sua própria chave. A chave nunca é exibida novamente após salvar.</p>
+          <p class="warning-text">
+            <mat-icon fontIcon="warning" class="warning-icon"></mat-icon>
+            Canais conectados sem API key válida não sincronizam dados.
+          </p>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-outline" type="button" (click)="cancel()">
+          <mat-icon fontIcon="close"></mat-icon>
+          <span>Cancelar</span>
+        </button>
+        <button class="btn" type="submit" [disabled]="channelForm.invalid">
+          <mat-icon fontIcon="save"></mat-icon>
+          <span>@if (editMode) { Salvar Alterações } @else { Criar Canal }</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

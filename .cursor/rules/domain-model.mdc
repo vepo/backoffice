@@ -1,0 +1,47 @@
+---
+description: Domain Model Conventions - Ensure domain model usage in code and tests, with continuous alignment to the domain specification.
+globs:
+  - 'src/**/*.ts'
+  - 'src/**/*.html'
+  - 'src/**/*.less'
+alwaysApply: true
+---
+
+# Ensure Domain Model Usage on Code
+
+## Domain Specification Location
+
+The domain specification MUST reside in [`docs/domain-specification.md`](../../docs/domain-specification.md).  
+It MUST contain **"Ubiquitous Language"**. Also follow [ARCHITECTURE.md](../../ARCHITECTURE.md).
+
+Backend domain terms live in Passport and Visita `docs/domain-specification.md` — Backoffice UI must mirror those names.
+
+## Pre-Change Checklist (Before Any Code Change)
+
+1. **Read** the Backoffice domain specification (especially Ubiquitous Language).
+2. **Question the change** — new screens, labels, service methods, or roles?
+3. Update the specification **first** if shell or UI domain language changes.
+
+**Do NOT write components or services until answered.**
+
+## Coding Rules
+
+TypeScript interfaces, service methods, component names, and template labels MUST use domain terms: **User**, **Profile**, **Role**, **Domain** — not `UserData`, `ItemList`, generic `Entity`.
+
+Route paths and `*role` values must match [ARCHITECTURE.md](../../ARCHITECTURE.md) and Passport JWT groups.
+
+## UI Elements Must Be Defined in Domain Terms
+
+Button captions and menu labels (pt-BR) must appear in the Ubiquitous Language table or be added there in the same change.
+
+## Testing Rules
+
+Spec files should describe domain scenarios (`shouldHideDomainsMenuWithoutDomainsAdminRole`).
+
+## Post-Change Update Rule
+
+Update `docs/domain-specification.md` and [ARCHITECTURE.md](../../ARCHITECTURE.md) when routes, labels, or integrated APIs change.
+
+## Violation Handling
+
+Refactor technical names to domain terms when touching violating code.

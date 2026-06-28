@@ -5,7 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Profile, ProfileService } from '../../services/profile.service';
 import { Role } from '../../services/roles.service';
 
@@ -18,7 +18,8 @@ import { Role } from '../../services/roles.service';
         MatInputModule,
         MatCheckboxModule,
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
+        RouterLink
     ]
 })
 export class ProfileEditComponent implements OnInit {

@@ -1,0 +1,40 @@
+---
+description: Core Backoffice conventions (Angular admin shell, proxies, JWT)
+alwaysApply: true
+---
+
+# Backoffice — core rules
+
+Follow [ARCHITECTURE.md](../../ARCHITECTURE.md) and [`docs/domain-specification.md`](../../docs/domain-specification.md).
+
+## Stack
+
+- Angular 20 standalone components, Angular Material, Less.
+- HTTP via `HttpClient`; dev proxy in [`src/proxy.conf.json`](../../src/proxy.conf.json).
+- Auth: `@auth0/angular-jwt` patterns via `AuthService` + `auth.interceptor.ts`.
+
+## API prefixes
+
+| Prefix | Backend |
+|--------|---------|
+| `/passport/api` | Passport (users, profiles, roles, auth) |
+| `/visita/api` | Visita (domains) |
+
+Never call `localhost:8080` / `8081` directly from the browser — use proxied paths.
+
+## Structure
+
+- **Services** — HTTP + typed interfaces; one service per backend aggregate.
+- **Resolvers** — prefetch route data before component init.
+- **Components** — view/edit pairs; confirm dialogs for destructive actions.
+- **Directives** — `*role` for JWT group checks.
+
+## Never
+
+- Store passwords in code or commit secrets.
+- Bypass `authGuard` on admin routes.
+- Use role strings that diverge from Passport JWT `groups` (`passport.admin`, `domains.admin`).
+
+## When adding a feature
+
+ARCHITECTURE.md §10 — route → guard → resolver → service → component → dialog (if destructive) → domain spec → **ARCHITECTURE.md**.

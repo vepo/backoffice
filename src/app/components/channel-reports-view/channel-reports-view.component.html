@@ -1,0 +1,118 @@
+@if (channel) {
+<div class="page">
+  <div class="page-header">
+    <div class="header-content">
+      <a class="back-link inline-back" routerLink="/engage/channels">
+        <mat-icon fontIcon="arrow_back"></mat-icon>
+        <span>Voltar para Canais</span>
+      </a>
+      <h1 class="page-title">
+        <mat-icon fontIcon="summarize" class="title-icon"></mat-icon>
+        Relatórios do canal
+      </h1>
+      <p class="page-subtitle">
+        Histórico de sincronização para {{ channel.youtubeId }} (#{{ channel.id }})
+      </p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" matButton (click)="refresh()" [disabled]="loading">
+        <mat-icon fontIcon="refresh"></mat-icon>
+        <span>Atualizar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon fontIcon="summarize"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ reports.length }}</h3>
+        <p class="stat-label">Relatórios registrados</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-card">
+    <div class="filter-header">
+      <mat-icon fontIcon="filter_alt" class="filter-icon"></mat-icon>
+      <h3>Filtros</h3>
+    </div>
+    <div class="filter-grid">
+      <div class="form-field">
+        <input type="text" placeholder="Filtrar por título ou tipo..." [(ngModel)]="textFilter"
+          (ngModelChange)="applyFilters()" class="filter-input">
+        <mat-icon fontIcon="search" class="input-icon"></mat-icon>
+      </div>
+      <div class="filter-actions">
+        <button class="btn btn-outline btn-small" (click)="clearFilters()">
+          <mat-icon fontIcon="clear_all"></mat-icon>
+          Limpar Filtros
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+          <h3>Relatórios de sincronização</h3>
+          <span class="table-subtitle">{{ filteredReports.length }} relatório(s)</span>
+        </div>
+      </div>
+
+      <div class="responsive-table">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="column-date">Data</th>
+              <th class="column-title">Título</th>
+              <th class="column-type">Tipo</th>
+              <th class="column-items">Itens</th>
+              <th class="column-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (report of filteredReports; track report.id) {
+            <tr [class.row-even]="$even" [class.row-odd]="$odd">
+              <td class="column-date">
+                {{ report.createdAt | date:'dd/MM/yyyy HH:mm' }}
+              </td>
+              <td class="column-title">
+                <strong>{{ report.title }}</strong>
+                <span class="notification-description">{{ report.description }}</span>
+              </td>
+              <td class="column-type">
+                <span class="id-badge">{{ sourceLabel(report) }}</span>
+              </td>
+              <td class="column-items">
+                {{ report.itemCount }}
+              </td>
+              <td class="column-actions">
+                <div class="action-buttons">
+                  <button class="btn-icon" matButton [routerLink]="['/', 'notifications', report.id]"
+                    matTooltip="Abrir relatório">
+                    <mat-icon fontIcon="open_in_new"></mat-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        @if (filteredReports.length === 0) {
+        <div class="empty-state">
+          <mat-icon fontIcon="summarize" class="empty-icon"></mat-icon>
+          <h3>Nenhum relatório encontrado</h3>
+          <p>Os relatórios aparecem aqui após cada execução de sincronização do Engage.</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+}

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="page">
     <!-- Header Section -->
     <div class="page-header">
         <div class="header-content">
@@ -162,12 +162,6 @@
                     <h3>Lista de Usuários</h3>
                     <span class="table-subtitle">{{ users.length }} usuário(s) encontrado(s)</span>
                 </div>
-                <div class="table-actions">
-                    <button class="btn btn-outline btn-small" (click)="exportToCSV()">
-                        <mat-icon fontIcon="download"></mat-icon>
-                        Exportar
-                    </button>
-                </div>
             </div>
 
             <div class="responsive-table">
@@ -281,42 +275,6 @@
                 </div>
                 }
             </div>
-
-            @if (users.length > 0) {
-            <div class="table-footer">
-                <div class="table-info">
-                    Mostrando {{ users.length }} de {{ totalUsers }} usuários
-                </div>
-                <div class="pagination">
-                    <button class="btn-icon" [disabled]="currentPage === 1" (click)="previousPage()">
-                        <mat-icon fontIcon="chevron_left"></mat-icon>
-                    </button>
-                    <span class="page-info">Página {{ currentPage }} de {{ totalPages }}</span>
-                    <button class="btn-icon" [disabled]="currentPage === totalPages" (click)="nextPage()">
-                        <mat-icon fontIcon="chevron_right"></mat-icon>
-                    </button>
-                </div>
-            </div>
-            }
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-        <h3>Ações Rápidas</h3>
-        <div class="actions-grid">
-            <button class="btn btn-outline" (click)="bulkAssignRoles()">
-                <mat-icon fontIcon="assignment_ind"></mat-icon>
-                Atribuir Perfis em Massa <!-- Changed from Permissões to Perfis -->
-            </button>
-            <button class="btn btn-outline" (click)="exportReport()">
-                <mat-icon fontIcon="assessment"></mat-icon>
-                Gerar Relatório
-            </button>
-            <button class="btn btn-outline" (click)="importUsers()">
-                <mat-icon fontIcon="upload_file"></mat-icon>
-                Importar Usuários
-            </button>
         </div>
     </div>
 </div>

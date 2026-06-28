@@ -1,0 +1,228 @@
+// ============================================
+// LAYOUT — páginas, auth e formulários
+// ============================================
+
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: @espacamento-xl;
+    animation: pageEnter 0.35s ease;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Auth — login, recuperação, reset
+.auth-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 420px) 1fr;
+    min-height: calc(100vh - 128px);
+    width: 100%;
+    border-radius: @border-radius-lg;
+    overflow: hidden;
+    border: 1px solid @cinza-medio;
+    box-shadow: @shadow-lg;
+    background: @branco;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+}
+
+.auth-brand {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: @espacamento-lg;
+    padding: @espacamento-xxl;
+    background: linear-gradient(160deg, @azul-primario 0%, darken(@azul-secundario, 8%) 100%);
+    color: @branco;
+
+    @media (max-width: 900px) {
+        padding: @espacamento-xl;
+    }
+
+    .brand-mark {
+        width: 56px;
+        height: 56px;
+        border-radius: @border-radius;
+        background: fade(@branco, 15%);
+        border: 1px solid fade(@branco, 25%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+            color: @branco;
+        }
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    p {
+        font-size: @fonte-tamanho-grande;
+        line-height: 1.6;
+        color: fade(@branco, 88%);
+        margin: 0;
+        max-width: 32ch;
+    }
+
+    .auth-features {
+        display: flex;
+        flex-direction: column;
+        gap: @espacamento-md;
+        margin-top: @espacamento-md;
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: @espacamento-sm;
+            font-size: @fonte-tamanho-pequeno;
+            color: fade(@branco, 92%);
+
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+                opacity: 0.9;
+            }
+        }
+    }
+}
+
+.auth-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: @espacamento-xxl;
+    background: @cinza-claro;
+
+    @media (max-width: 900px) {
+        padding: @espacamento-xl @espacamento-lg;
+    }
+
+    @media (max-width: 480px) {
+        padding: @espacamento-lg @espacamento-md;
+        background: @branco;
+    }
+}
+
+// Formulários de criação/edição
+.form-page {
+    display: flex;
+    flex-direction: column;
+    gap: @espacamento-lg;
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
+    animation: pageEnter 0.35s ease;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: @espacamento-xs;
+    color: @cinza-escuro;
+    text-decoration: none;
+    font-size: @fonte-tamanho-pequeno;
+    font-weight: 500;
+    width: fit-content;
+    padding: @espacamento-xs @espacamento-sm;
+    border-radius: @border-radius;
+    transition: all 0.2s ease;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+
+    &:hover {
+        color: @azul-secundario;
+        background: @azul-claro;
+        text-decoration: none;
+    }
+}
+
+// Card de formulário (auth + edit)
+.form-card,
+.main.centered {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: @espacamento-xxl;
+    background-color: @branco;
+    border-radius: @border-radius-lg;
+    box-shadow: @shadow-md;
+    border: 1px solid @cinza-medio;
+
+    @media (max-width: 480px) {
+        padding: @espacamento-xl @espacamento-lg;
+        box-shadow: @shadow-sm;
+    }
+}
+
+.form-page .form-card {
+    max-width: 100%;
+    margin: 0;
+}
+
+.auth-panel .form-card {
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    max-width: 400px;
+}
+
+// Shell — rotas públicas
+.container-auth {
+    max-width: none;
+    padding: @espacamento-xl;
+    min-height: calc(100vh - 100px);
+
+    @media (max-width: 768px) {
+        padding: @espacamento-md;
+    }
+}
+
+.main-header.minimal {
+    box-shadow: none;
+    border-bottom-color: fade(@cinza-medio, 60%);
+}
+
+.main-footer.minimal {
+    justify-content: center;
+    padding: @espacamento-md;
+    border-top: none;
+    background: transparent;
+}
+
+.mobile-nav-trigger {
+    display: none;
+    margin-left: auto;
+
+    @media (max-width: 1024px) {
+        display: flex;
+    }
+}

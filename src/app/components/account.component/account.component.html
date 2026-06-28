@@ -1,0 +1,83 @@
+<div class="page">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon fontIcon="account_circle" class="title-icon"></mat-icon>
+        Conta
+      </h1>
+      <p class="page-subtitle">Dados do usuário autenticado e alteração de senha</p>
+    </div>
+  </div>
+
+  @if (loading) {
+  <p>Carregando conta...</p>
+  } @else if (currentUser) {
+  <div class="filter-card">
+    <div class="filter-header">
+      <mat-icon fontIcon="person" class="filter-icon"></mat-icon>
+      <h3>Perfil</h3>
+    </div>
+    <dl class="account-details">
+      <div>
+        <dt>Nome</dt>
+        <dd>{{ currentUser.name }}</dd>
+      </div>
+      <div>
+        <dt>Usuário</dt>
+        <dd>{{ currentUser.username }}</dd>
+      </div>
+      <div>
+        <dt>Email</dt>
+        <dd>{{ currentUser.email }}</dd>
+      </div>
+      <div>
+        <dt>Funções</dt>
+        <dd>{{ currentUser.roles.join(', ') || 'Nenhuma' }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="filter-card">
+    <div class="filter-header">
+      <mat-icon fontIcon="password" class="filter-icon"></mat-icon>
+      <h3>Alterar senha</h3>
+    </div>
+
+    <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="account-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Senha atual</mat-label>
+        <input matInput [type]="hideCurrentPassword ? 'password' : 'text'" formControlName="currentPassword" />
+        <button mat-icon-button matSuffix type="button" (click)="toggleVisibility('current')">
+          <mat-icon [fontIcon]="hideCurrentPassword ? 'visibility' : 'visibility_off'"></mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nova senha</mat-label>
+        <input matInput [type]="hideNewPassword ? 'password' : 'text'" formControlName="newPassword" />
+        <button mat-icon-button matSuffix type="button" (click)="toggleVisibility('new')">
+          <mat-icon [fontIcon]="hideNewPassword ? 'visibility' : 'visibility_off'"></mat-icon>
+        </button>
+      </mat-form-field>
+
+      @if (successMessage) {
+      <p class="form-success">{{ successMessage }}</p>
+      }
+      @if (errorMessage) {
+      <p class="form-error">{{ errorMessage }}</p>
+      }
+
+      <div class="form-actions">
+        <button class="btn" matButton type="submit" [disabled]="saving || passwordForm.invalid">
+          <mat-icon fontIcon="save"></mat-icon>
+          <span>Salvar nova senha</span>
+        </button>
+        <a class="btn btn-outline" matButton routerLink="/">
+          <mat-icon fontIcon="arrow_back"></mat-icon>
+          <span>Voltar</span>
+        </a>
+      </div>
+    </form>
+  </div>
+  }
+</div>

@@ -1,0 +1,188 @@
+<div class="page">
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon fontIcon="smart_display" class="title-icon"></mat-icon>
+        Estatísticas do YouTube
+      </h1>
+      <p class="page-subtitle">Métricas em tempo real dos canais e vídeos monitorados pelo Engage</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" matButton (click)="refresh()" [disabled]="loading">
+        @if (loading) {
+        <mat-spinner diameter="18"></mat-spinner>
+        } @else {
+        <mat-icon fontIcon="refresh"></mat-icon>
+        }
+        <span>Atualizar</span>
+      </button>
+    </div>
+  </div>
+
+  @if (error) {
+  <div class="error">
+    <mat-icon fontIcon="error_outline"></mat-icon>
+    <span>{{ error }}</span>
+  </div>
+  }
+
+  @if (statistics) {
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon admin">
+        <mat-icon fontIcon="subscriptions"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ statistics.channels.length }}</h3>
+        <p class="stat-label">Canais monitorados</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon fontIcon="visibility"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ totalChannelViews() | number }}</h3>
+        <p class="stat-label">Visualizações dos canais</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon manager">
+        <mat-icon fontIcon="play_circle"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ statistics.videos.length }}</h3>
+        <p class="stat-label">Vídeos sincronizados</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon user">
+        <mat-icon fontIcon="thumb_up"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ totalLikes() | number }}</h3>
+        <p class="stat-label">Curtidas nos vídeos</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="services-section">
+    <div class="section-heading">
+      <h3>Canais</h3>
+      <span class="section-hint">Dados via YouTube Data API</span>
+    </div>
+    <div class="services-grid">
+      @for (channel of statistics.channels; track trackChannel($index, channel)) {
+      <article class="service-card up">
+        <header class="service-header">
+          <div class="service-identity">
+            <div class="service-icon">
+              @if (channel.thumbnailUrl) {
+              <img [src]="channel.thumbnailUrl" [alt]="channel.title" class="channel-thumb" />
+              } @else {
+              <mat-icon fontIcon="smart_display"></mat-icon>
+              }
+            </div>
+            <div>
+              <h4>{{ channel.title }}</h4>
+              <p>{{ channel.youtubeId }}</p>
+            </div>
+          </div>
+        </header>
+        <dl class="service-meta">
+          <div>
+            <dt>Inscritos</dt>
+            <dd>{{ formatSubscribers(channel) }}</dd>
+          </div>
+          <div>
+            <dt>Visualizações</dt>
+            <dd>{{ channel.viewCount | number }}</dd>
+          </div>
+          <div>
+            <dt>Vídeos</dt>
+            <dd>{{ channel.videoCount | number }}</dd>
+          </div>
+        </dl>
+      </article>
+      }
+      @if (statistics.channels.length === 0) {
+      <div class="empty-state">
+        <mat-icon fontIcon="smart_display" class="empty-icon"></mat-icon>
+        <h3>Nenhum canal cadastrado</h3>
+        <p>Cadastre e conecte um canal com API key para visualizar estatísticas.</p>
+        <button class="btn" matButton [routerLink]="['/', 'engage', 'channels', 'new']">
+          <mat-icon fontIcon="add"></mat-icon>
+          Criar Novo Canal
+        </button>
+      </div>
+      }
+    </div>
+  </section>
+
+  <div class="table-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+          <h3>Vídeos</h3>
+          <span class="table-subtitle">{{ statistics.videos.length }} vídeo(s)</span>
+        </div>
+        <div class="table-actions">
+          <span class="section-hint">
+            Atualizado em {{ statistics.fetchedAt | date:'dd/MM/yyyy HH:mm:ss' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="responsive-table">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="column-name">Vídeo</th>
+              <th>Visualizações</th>
+              <th>Curtidas</th>
+              <th>Comentários</th>
+              <th>Publicado em</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (video of statistics.videos; track trackVideo($index, video)) {
+            <tr>
+              <td class="column-name">
+                <div class="user-info">
+                  @if (video.thumbnailUrl) {
+                  <img [src]="video.thumbnailUrl" [alt]="video.title" class="video-thumb" />
+                  }
+                  <div class="user-details">
+                    <strong>{{ video.title }}</strong>
+                    <span class="user-date">{{ video.youtubeId }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>{{ video.viewCount | number }}</td>
+              <td>{{ video.likeCount | number }}</td>
+              <td>{{ video.commentCount | number }}</td>
+              <td>
+                @if (video.publishedAt) {
+                {{ video.publishedAt | date:'dd/MM/yyyy' }}
+                } @else {
+                —
+                }
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+
+        @if (statistics.videos.length === 0) {
+        <div class="empty-state">
+          <mat-icon fontIcon="video_library" class="empty-icon"></mat-icon>
+          <h3>Nenhum vídeo sincronizado</h3>
+          <p>Os vídeos aparecerão aqui após a sincronização do Engage.</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>

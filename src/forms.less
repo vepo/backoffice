@@ -1,58 +1,43 @@
 // ============================================
-// COMPONENTES DE FORMULÁRIOS - PASSPORT APP
+// COMPONENTES DE FORMULÁRIOS - BACKOFFICE
 // Estilos para formulários e controles
 // ============================================
 
 // IMPORTAR VARIÁVEIS DO ARQUIVO PRINCIPAL
 // @import 'styles.less'; // Descomente se necessário
 
-// FORMULÁRIO PRINCIPAL
-.main.centered {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: @espacamento-xxl;
-    background-color: @branco;
-    border-radius: @border-radius;
-    box-shadow: @shadow-md;
-    border: 1px solid @cinza-medio;
-
-    @media (max-width: 768px) {
-        max-width: 768px;
-        padding: @espacamento-xl;
-        max-width: 90%;
-        margin: @espacamento-lg auto;
-    }
-
-    @media (max-width: 480px) {
-        max-width: 480px;
-        padding: @espacamento-lg;
-        box-shadow: none;
-        border: none;
-        background-color: transparent;
-    }
-}
+// FORMULÁRIO PRINCIPAL — ver layout.less (.form-card)
+// Mantido para compatibilidade com .main.centered
 
 // CABEÇALHO DO FORMULÁRIO
 .form-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: @espacamento-xl;
     width: 100%;
 
-    h2 {
+    .title-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: @border-radius;
+        background: @azul-claro;
         color: @azul-primario;
-        font-size: 28px;
+        font-size: 24px;
+        margin-bottom: @espacamento-md;
+    }
+
+    h2 {
+        color: @preto;
+        font-size: 24px;
         font-weight: 700;
         margin-bottom: @espacamento-sm;
         line-height: 1.2;
+        letter-spacing: -0.02em;
 
         @media (max-width: 768px) {
-            font-size: 24px;
+            font-size: 22px;
         }
     }
 
@@ -61,7 +46,12 @@
         font-size: @fonte-tamanho-base;
         font-weight: 400;
         margin: 0;
+        line-height: 1.5;
     }
+}
+
+.auth-panel .form-header {
+    text-align: center;
 }
 
 // FORMULÁRIO
@@ -562,30 +552,41 @@ input {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: @espacamento-xl;
-    padding-bottom: @espacamento-lg;
-    border-bottom: 1px solid @cinza-medio;
+    margin-bottom: @espacamento-lg;
+    padding: @espacamento-lg @espacamento-xl;
+    background: @branco;
+    border-radius: @border-radius-lg;
+    border: 1px solid @cinza-medio;
+    box-shadow: @shadow-sm;
 
     @media (max-width: 768px) {
         flex-direction: column;
         gap: @espacamento-md;
+        padding: @espacamento-lg;
     }
 
     .header-content {
         .page-title {
             display: flex;
             align-items: center;
-            gap: @espacamento-sm;
+            gap: @espacamento-md;
             color: @preto;
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             margin-bottom: @espacamento-xs;
+            letter-spacing: -0.02em;
 
             .title-icon {
-                font-size: 24px;
-                width: 24px;
-                height: 24px;
-                color: @azul-secundario;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                border-radius: @border-radius;
+                background: @azul-claro;
+                color: @azul-primario;
+                font-size: 22px;
+                flex-shrink: 0;
             }
         }
 
@@ -594,25 +595,33 @@ input {
             font-size: @fonte-tamanho-base;
             margin: 0;
             font-weight: 400;
+            padding-left: calc(44px + @espacamento-md);
+
+            @media (max-width: 768px) {
+                padding-left: 0;
+            }
         }
     }
 
     .header-actions {
         .btn {
+            width: auto;
+            margin-top: 0;
             padding: @espacamento-sm @espacamento-lg;
-            font-weight: 500;
+            font-weight: 600;
             font-size: @fonte-tamanho-base;
             background-color: @azul-secundario;
             color: @branco;
             border: 1px solid @azul-secundario;
+            border-radius: @border-radius;
 
-            &:hover {
+            &:hover:not(:disabled) {
                 background-color: @azul-hover;
                 border-color: @azul-hover;
             }
 
             mat-icon {
-                margin-right: @espacamento-sm;
+                margin-right: 0;
                 font-size: 18px;
                 width: 18px;
                 height: 18px;
@@ -638,43 +647,63 @@ input {
 
     .stat-card {
         background: @branco;
-        border-radius: @border-radius;
+        border-radius: @border-radius-lg;
         padding: @espacamento-lg;
         display: flex;
         align-items: center;
         gap: @espacamento-lg;
         box-shadow: @shadow-sm;
         border: 1px solid @cinza-medio;
-        transition: transform 0.2s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
 
         &:hover {
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: @shadow-md;
         }
 
         .stat-icon {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: @border-radius;
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: @cinza-claro;
             border: 1px solid @cinza-medio;
+            flex-shrink: 0;
 
             &.admin {
                 color: @azul-primario;
+                background: @azul-claro;
+                border-color: fade(@azul-secundario, 25%);
             }
 
             &.manager {
                 color: #059669;
+                background: #DCFCE7;
+                border-color: #BBF7D0;
             }
 
             &.user {
                 color: #7C3AED;
+                background: #EDE9FE;
+                border-color: #DDD6FE;
             }
 
             &.total {
                 color: @cinza-escuro;
+            }
+
+            &.active {
+                color: #059669;
+                background: #DCFCE7;
+                border-color: #BBF7D0;
+            }
+
+            &.inactive {
+                color: #DC2626;
+                background: #FEE2E2;
+                border-color: #FECACA;
             }
 
             mat-icon {
@@ -709,8 +738,8 @@ input {
 .filter-card {
     margin-bottom: @espacamento-xl;
     background: @branco;
-    border-radius: @border-radius;
-    padding: @espacamento-lg;
+    border-radius: @border-radius-lg;
+    padding: @espacamento-xl;
     border: 1px solid @cinza-medio;
     box-shadow: @shadow-sm;
 
@@ -875,8 +904,8 @@ input {
 .table-card {
     margin-bottom: @espacamento-xl;
     background: @branco;
-    border-radius: @border-radius;
-    padding: @espacamento-lg;
+    border-radius: @border-radius-lg;
+    padding: @espacamento-xl;
     border: 1px solid @cinza-medio;
     box-shadow: @shadow-sm;
 
@@ -1594,4 +1623,136 @@ input {
             }
         }
     }
+}
+
+// ============================================
+// FORMULÁRIOS DE EDIÇÃO
+// ============================================
+
+form.edit {
+    .profiles-section,
+    .roles-section {
+        margin: @espacamento-lg 0;
+        padding: @espacamento-lg;
+        background: @cinza-claro;
+        border-radius: @border-radius-lg;
+        border: 1px solid @cinza-medio;
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: @preto;
+            margin-bottom: @espacamento-xs;
+        }
+
+        .section-subtitle {
+            color: @cinza-escuro;
+            font-size: @fonte-tamanho-pequeno;
+            margin-bottom: @espacamento-md;
+        }
+    }
+}
+
+.info-card {
+    margin: @espacamento-lg 0;
+    padding: @espacamento-lg;
+    background: @azul-claro;
+    border-radius: @border-radius-lg;
+    border: 1px solid fade(@azul-secundario, 25%);
+
+    .info-header {
+        display: flex;
+        align-items: center;
+        gap: @espacamento-sm;
+        margin-bottom: @espacamento-md;
+
+        mat-icon {
+            color: @azul-secundario;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: @azul-primario;
+            margin: 0;
+        }
+    }
+
+    .info-content {
+        p {
+            color: @preto;
+            font-size: @fonte-tamanho-pequeno;
+            line-height: 1.5;
+            margin-bottom: @espacamento-sm;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .warning-text {
+            display: flex;
+            align-items: flex-start;
+            gap: @espacamento-sm;
+            color: #92400E;
+            background: #FFFBEB;
+            padding: @espacamento-sm @espacamento-md;
+            border-radius: @border-radius;
+            border: 1px solid #FDE68A;
+
+            .warning-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+            }
+        }
+    }
+}
+
+.report-block,
+.report-inline {
+    margin: 0;
+    padding: @espacamento-md;
+    background: @cinza-claro;
+    border-radius: @border-radius;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: @fonte-tamanho-pequeno;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+}
+
+.report-inline {
+    max-height: 160px;
+}
+
+.notification-link {
+    display: flex;
+    flex-direction: column;
+    gap: @espacamento-xs;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover strong {
+        color: @azul-primario;
+    }
+
+    .notification-description {
+        color: @cinza-escuro;
+        font-size: @fonte-tamanho-pequeno;
+    }
+}
+
+.form-page .btn-group .btn,
+.table-actions .btn,
+.empty-state .btn,
+.quick-actions .btn {
+    width: auto;
+    margin-top: 0;
+}
+
+// Quick Actions
+.quick-actions {
+    border-radius: @border-radius-lg;
 }

@@ -188,13 +188,8 @@ export class UsersViewComponent implements OnInit {
         this.updateSearch();
     }
 
-    exportToCSV(): void {
-        // Implementation would go here
-        console.log('Export to CSV');
-    }
-
     resetPassword(user: User): void {
-        this.authService.recovery(user.email).subscribe(resp => console.log(resp));
+        this.authService.recovery(user.email).subscribe();
     }
 
     confirmDisable(entry: User): void {
@@ -244,34 +239,4 @@ export class UsersViewComponent implements OnInit {
                 }
             });
     }
-
-    previousPage(): void {
-        // Implementation would go here
-        console.log('Previous page');
-    }
-
-    nextPage(): void {
-        // Implementation would go here
-        console.log('Next page');
-    }
-
-    bulkAssignRoles(): void {
-        // Implementation would go here
-        console.log('Bulk assign roles');
-    }
-
-    exportReport(): void {
-        // Implementation would go here
-        console.log('Export report');
-    }
-
-    importUsers(): void {
-        // Implementation would go here
-        console.log('Import users');
-    }
-
-    // Add these properties for pagination
-    totalUsers: number = 0;
-    currentPage: number = 1;
-    totalPages: number = 1;
 }

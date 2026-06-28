@@ -1,57 +1,154 @@
-<header class="main-header">
-  <div>
-    <nav>
-      <a id="start-link" routerLink="/">Início</a>
-    </nav>
+<header class="main-header" [class.minimal]="isPublicAuthRoute()">
+  <div class="header-brand">
+    <a class="brand-link" routerLink="/">
+      <div class="brand-mark">
+        <mat-icon fontIcon="dashboard"></mat-icon>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Backoffice</span>
+        @if (!isPublicAuthRoute()) {
+        <span class="brand-tagline">Painel administrativo</span>
+        }
+      </div>
+    </a>
   </div>
+
+  @if (isAuthenticated() && !isPublicAuthRoute()) {
+  <nav class="main-nav" aria-label="Navegação principal">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon fontIcon="dashboard"></mat-icon>
+      <span>Início</span>
+    </a>
+    <a *role="'passport.admin'" routerLink="/users" routerLinkActive="active">
+      <mat-icon fontIcon="group"></mat-icon>
+      <span>Usuários</span>
+    </a>
+    <a *role="'passport.admin'" routerLink="/profiles" routerLinkActive="active">
+      <mat-icon fontIcon="account_box"></mat-icon>
+      <span>Perfis</span>
+    </a>
+    <a *role="'passport.admin'" routerLink="/roles" routerLinkActive="active">
+      <mat-icon fontIcon="how_to_reg"></mat-icon>
+      <span>Funções</span>
+    </a>
+    <a *role="'domains.admin'" routerLink="/domains" routerLinkActive="active">
+      <mat-icon fontIcon="public"></mat-icon>
+      <span>Domínios</span>
+    </a>
+    <a *role="'engage.admin'" routerLink="/engage/channels" routerLinkActive="active">
+      <mat-icon fontIcon="subscriptions"></mat-icon>
+      <span>Canais</span>
+    </a>
+    <a *role="'engage.admin'" routerLink="/engage/videos" routerLinkActive="active">
+      <mat-icon fontIcon="video_library"></mat-icon>
+      <span>Vídeos</span>
+    </a>
+    <a *role="'engage.admin'" routerLink="/engage/statistics" routerLinkActive="active">
+      <mat-icon fontIcon="insights"></mat-icon>
+      <span>Estatísticas</span>
+    </a>
+  </nav>
+
+  <button matButton class="mobile-nav-trigger menu-trigger" [matMenuTriggerFor]="mobileNav">
+    <mat-icon fontIcon="menu"></mat-icon>
+    <span>Menu</span>
+  </button>
+  <mat-menu #mobileNav="matMenu" class="menu-panel">
+    <button mat-menu-item routerLink="/">
+      <mat-icon fontIcon="dashboard"></mat-icon>
+      <span>Início</span>
+    </button>
+    <button mat-menu-item *role="'passport.admin'" routerLink="/users">
+      <mat-icon fontIcon="group"></mat-icon>
+      <span>Usuários</span>
+    </button>
+    <button mat-menu-item *role="'passport.admin'" routerLink="/profiles">
+      <mat-icon fontIcon="account_box"></mat-icon>
+      <span>Perfis</span>
+    </button>
+    <button mat-menu-item *role="'passport.admin'" routerLink="/roles">
+      <mat-icon fontIcon="how_to_reg"></mat-icon>
+      <span>Funções</span>
+    </button>
+    <button mat-menu-item *role="'domains.admin'" routerLink="/domains">
+      <mat-icon fontIcon="public"></mat-icon>
+      <span>Domínios</span>
+    </button>
+    <button mat-menu-item *role="'engage.admin'" routerLink="/engage/channels">
+      <mat-icon fontIcon="subscriptions"></mat-icon>
+      <span>Canais</span>
+    </button>
+    <button mat-menu-item *role="'engage.admin'" routerLink="/engage/videos">
+      <mat-icon fontIcon="video_library"></mat-icon>
+      <span>Vídeos</span>
+    </button>
+    <button mat-menu-item *role="'engage.admin'" routerLink="/engage/statistics">
+      <mat-icon fontIcon="insights"></mat-icon>
+      <span>Estatísticas</span>
+    </button>
+  </mat-menu>
+  }
+
   <div class="grow-space"></div>
-  @if (isAuthenticated()) {
+
+  @if (isAuthenticated() && !isPublicAuthRoute()) {
+  <div class="header-notifications">
+    <a class="notification-bell" routerLink="/notifications" aria-label="Notificações"
+      matTooltip="Notificações">
+      <mat-icon fontIcon="notifications"></mat-icon>
+      @if (unreadNotificationCount > 0) {
+      <span class="notification-badge">{{ unreadNotificationCount > 99 ? '99+' : unreadNotificationCount }}</span>
+      }
+    </a>
+  </div>
   <div class="user-menu">
-    <button matButton [matMenuTriggerFor]="menu">
-      <mat-icon fontIcon="menu"></mat-icon><span>Menu</span>
+    <button matButton [matMenuTriggerFor]="menu" class="menu-trigger">
+      <mat-icon fontIcon="account_circle"></mat-icon>
+      <span>Conta</span>
+      <mat-icon fontIcon="expand_more" class="chevron"></mat-icon>
     </button>
     <mat-menu #menu="matMenu" class="menu-panel">
-      <button mat-menu-item [routerLink]="'/account/settings'">
-        <mat-icon fontIcon="person"></mat-icon><span>Conta</span>
+      <button mat-menu-item routerLink="/account">
+        <mat-icon fontIcon="manage_accounts"></mat-icon>
+        <span>Conta</span>
       </button>
-      <div *role="'passport.admin'" class="divider"></div>
-      <button mat-menu-item *role="'passport.admin'" [routerLink]="'/users'">
-        <mat-icon fontIcon="group"></mat-icon><span>Usuários</span>
-      </button>
-      <button mat-menu-item *role="'passport.admin'" [routerLink]="'/profiles'">
-        <mat-icon fontIcon="account_box"></mat-icon><span>Perfis</span>
-      </button>
-      <button mat-menu-item *role="'passport.admin'" [routerLink]="'/roles'">
-        <mat-icon fontIcon="how_to_reg"></mat-icon><span>Funções</span>
-      </button>
-      <div class="divider"  *role="'domains.admin'"></div>
-      <button mat-menu-item *role="'domains.admin'" [routerLink]="'/domains'">
-        <mat-icon fontIcon="south_america"></mat-icon><span>Domínios</span>
-      </button>
-      <div class="divider"></div>
       <button mat-menu-item (click)="logout()">
-        <mat-icon fontIcon="logout"></mat-icon><span>Sair</span>
+        <mat-icon fontIcon="logout"></mat-icon>
+        <span>Sair</span>
       </button>
     </mat-menu>    
   </div>
-  } @else {
+  } @else if (!isAuthenticated()) {
   <div class="user-menu">
-    <button matButton [routerLink]="'/login'">
-      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="login"></mat-icon> <span>Acessar</span>
+    <button matButton class="login-btn" [routerLink]="'/login'">
+      <mat-icon fontIcon="login"></mat-icon>
+      <span>Acessar</span>
     </button>
   </div>
   }
 </header>
-<main class="container">
+<main [class]="isPublicAuthRoute() ? 'container container-auth' : 'container'">
   <router-outlet />
 </main>
+@if (isPublicAuthRoute()) {
+<footer class="main-footer minimal">
+  <span>© 2026 Backoffice</span>
+</footer>
+} @else {
 <footer class="main-footer">
-  <div>
-    © 2025 Backoffice. Todos os direitos reservados.
+  <div class="footer-brand">
+    <mat-icon fontIcon="dashboard"></mat-icon>
+    <span>© 2026 Backoffice</span>
   </div>
-  <div><a href="/openapi" target="_blank">Documentação</a></div>
+  <div class="footer-links">
+    <a routerLink="/">Início</a>
+    <span class="separator">·</span>
+    <a href="https://github.com/vepo/backoffice" target="_blank" rel="noopener">Documentação</a>
+  </div>
   <div class="grow-space"></div>
-  <div>
-    <span>Desenvolvido por</span>&nbsp;<a href="https://vepo.dev" target="_blank">Victor Osório</a>
+  <div class="footer-credit">
+    <span>Desenvolvido por</span>
+    <a href="https://vepo.dev" target="_blank" rel="noopener">Victor Osório</a>
   </div>
 </footer>
+}

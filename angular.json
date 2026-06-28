@@ -30,6 +30,7 @@
               }
             ],
             "styles": [
+              "src/fonts.scss",
               "src/custom-theme.scss",
               "src/styles.less"
             ]
@@ -92,6 +93,7 @@
               }
             ],
             "styles": [
+              "src/fonts.scss",
               "src/styles.less"
             ]
           }

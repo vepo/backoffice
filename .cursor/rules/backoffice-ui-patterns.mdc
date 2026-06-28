@@ -1,0 +1,43 @@
+---
+description: Backoffice UI patterns — read and maintain docs/ui before template changes
+globs: src/app/**/*.html,src/app/**/*.ts,src/**/*.less
+alwaysApply: false
+---
+
+# Backoffice UI patterns
+
+Canonical UI specs: [`docs/ui/README.md`](../../docs/ui/README.md).
+
+## Before any UI change
+
+1. **Read** the pattern doc(s) for blocks you touch (`page-header.md`, `buttons.md`, etc.).
+2. **Copy** from the reference screen listed in that doc (e.g. `domains-view` for list pages).
+3. **Question** the change against cross-cutting rules in `docs/ui/README.md`.
+
+Do not invent new button placements or classes without updating the relevant doc first.
+
+## After any UI change
+
+Update `docs/ui/` when you:
+
+- Add a new reusable pattern or variant
+- Add a new screen to the screen map in `README.md`
+- Change global Less affecting buttons, headers, or tables
+
+Keep [`ARCHITECTURE.md`](../../ARCHITECTURE.md) §7 in sync if component layout conventions change.
+
+## Non-negotiables
+
+| Area | Rule |
+|------|------|
+| List page header | One primary `btn` only — **no** `btn-outline` navigation in `header-actions` |
+| Module navigation | [`app.html`](../../src/app/app.html) menu — not page headers |
+| Create labels | Header: `Novo …` / `Nova …`; empty state: `Criar Novo …`; form submit: `Criar …` |
+| Filters | Clear = `btn btn-outline btn-small` |
+| Forms | Cancel = `btn-outline`; submit = `btn` in `btn-group` |
+| Destructive | Confirm dialog before API call |
+
+## Reference stack
+
+- Styles: `src/forms.less`, `src/styles.less`, `src/dialogs.less`
+- Labels: [`docs/domain-specification.md`](../../docs/domain-specification.md)

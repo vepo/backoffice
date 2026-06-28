@@ -1,0 +1,45 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon fontIcon="warning" class="title-icon"></mat-icon>
+  Excluir Canal
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="confirmation-message">
+    <mat-icon fontIcon="error_outline" class="message-icon"></mat-icon>
+    <p><strong>Atenção:</strong> Esta operação não pode ser desfeita!</p>
+  </div>
+
+  <div class="user-info">
+    <h3>Detalhes do Canal</h3>
+    <div class="info-grid">
+      <div class="info-row">
+        <span class="info-label">ID</span>
+        <span class="info-value">#{{ data.id }}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">YouTube ID</span>
+        <span class="info-value">{{ data.youtubeId }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-note">
+    <mat-icon fontIcon="warning" class="warning-icon"></mat-icon>
+    <p>
+      <strong>Impacto desta ação:</strong><br>
+      • O canal será removido permanentemente<br>
+      • Vídeos e comentários sincronizados deste canal deixarão de ser monitorados
+    </p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button class="btn btn-outline" mat-dialog-close>
+    <mat-icon fontIcon="close"></mat-icon>
+    <span>Cancelar</span>
+  </button>
+  <button class="btn btn-danger" [mat-dialog-close]="true">
+    <mat-icon fontIcon="delete_forever"></mat-icon>
+    <span>Excluir Permanentemente</span>
+  </button>
+</mat-dialog-actions>

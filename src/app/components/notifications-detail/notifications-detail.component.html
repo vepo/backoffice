@@ -1,0 +1,128 @@
+@if (notification) {
+<div class="page">
+  <div class="page-header">
+    <div class="header-content">
+      <a class="back-link inline-back" routerLink="/notifications">
+        <mat-icon fontIcon="arrow_back"></mat-icon>
+        <span>Voltar para Notificações</span>
+      </a>
+      <h1 class="page-title">
+        <mat-icon fontIcon="notifications" class="title-icon"></mat-icon>
+        {{ notification.title }}
+      </h1>
+      <p class="page-subtitle">{{ notification.description }}</p>
+    </div>
+    <div class="header-actions">
+      @if (notification.read) {
+      <button class="btn" matButton (click)="markUnread()">
+        <mat-icon fontIcon="mark_email_unread"></mat-icon>
+        <span>Marcar como não lida</span>
+      </button>
+      } @else {
+      <button class="btn" matButton (click)="markRead()">
+        <mat-icon fontIcon="drafts"></mat-icon>
+        <span>Marcar como lida</span>
+      </button>
+      }
+    </div>
+  </div>
+
+  @if (actionError) {
+  <div class="error">
+    <mat-icon fontIcon="error_outline"></mat-icon>
+    <span>{{ actionError }}</span>
+  </div>
+  }
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total">
+        <mat-icon fontIcon="source"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ sourceLabel() }}</h3>
+        <p class="stat-label">Tipo de evento</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon active">
+        <mat-icon fontIcon="schedule"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{ formatDate(notification.createdAt) }}</h3>
+        <p class="stat-label">Recebida em</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon inactive">
+        <mat-icon fontIcon="visibility"></mat-icon>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">@if (notification.read) { Lida } @else { Não lida }</h3>
+        <p class="stat-label">Status de leitura</p>
+      </div>
+    </div>
+  </div>
+
+  @if (notification.report) {
+  <div class="table-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="summarize" class="table-icon"></mat-icon>
+          <h3>Relatório da execução</h3>
+        </div>
+      </div>
+      <pre class="report-block">{{ formatReport(notification.report) }}</pre>
+    </div>
+  </div>
+  }
+
+  <div class="table-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
+          <h3>Itens da notificação</h3>
+          <span class="table-subtitle">{{ notification.items.length }} chamada(s) registrada(s)</span>
+        </div>
+      </div>
+
+      <div class="responsive-table">
+        @if (notification.items.length > 0) {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="column-id">#</th>
+              <th class="column-title">Operação</th>
+              <th class="column-description">Descrição</th>
+              <th class="column-report">Relatório</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of notification.items; track item.id) {
+            <tr [class.row-even]="$even" [class.row-odd]="$odd">
+              <td class="column-id">
+                <span class="id-badge">{{ item.sequence + 1 }}</span>
+              </td>
+              <td class="column-title">{{ item.title }}</td>
+              <td class="column-description">{{ item.description }}</td>
+              <td class="column-report">
+                <pre class="report-inline">{{ formatReport(item.report) }}</pre>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        } @else {
+        <div class="empty-state">
+          <mat-icon fontIcon="info" class="empty-icon"></mat-icon>
+          <h3>Sem itens detalhados</h3>
+          <p>Esta notificação não possui chamadas individuais registradas.</p>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+}
