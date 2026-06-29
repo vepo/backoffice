@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 const CHANNELS_URL = '/engage/api/channels';
 const VIDEOS_URL = '/engage/api/videos';
 const STATISTICS_URL = '/engage/api/statistics';
+const COMMENTS_WORD_CLOUD_URL = '/engage/api/comments/word-cloud';
 
 export interface Channel {
   id: number;
@@ -148,5 +149,9 @@ export class EngageService {
 
   findCommentWordCloudByChannel(channelId: number): Observable<WordCloudEntry[]> {
     return this.http.get<WordCloudEntry[]>(`${CHANNELS_URL}/${channelId}/comments/word-cloud`);
+  }
+
+  findCommentWordCloud(): Observable<WordCloudEntry[]> {
+    return this.http.get<WordCloudEntry[]>(COMMENTS_WORD_CLOUD_URL);
   }
 }

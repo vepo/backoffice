@@ -84,4 +84,9 @@ describe('EngageService', () => {
     service.findCommentWordCloudByChannel(1).subscribe();
     httpMock.expectOne('/engage/api/channels/1/comments/word-cloud').flush([{ word: 'canal', count: 2 }]);
   });
+
+  it('shouldFindCommentWordCloud', () => {
+    service.findCommentWordCloud().subscribe();
+    httpMock.expectOne('/engage/api/comments/word-cloud').flush([{ word: 'video', count: 4 }]);
+  });
 });

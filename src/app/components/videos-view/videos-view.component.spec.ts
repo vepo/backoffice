@@ -10,13 +10,14 @@ describe('VideosViewComponent', () => {
   let engageService: jasmine.SpyObj<EngageService>;
 
   beforeEach(async () => {
-    engageService = jasmine.createSpyObj('EngageService', ['findVideosPage']);
+    engageService = jasmine.createSpyObj('EngageService', ['findVideosPage', 'findCommentWordCloud']);
     engageService.findVideosPage.and.returnValue(of({
       items: [{ id: 1, youtubeId: 'vid1', title: 'My Video', commentCount: 3 }],
       total: 1,
       page: 0,
       pageSize: 20
     }));
+    engageService.findCommentWordCloud.and.returnValue(of([{ word: 'hello', count: 2 }]));
 
     await TestBed.configureTestingModule({
       imports: [VideosViewComponent],
@@ -37,8 +38,10 @@ describe('VideosViewComponent', () => {
 
   it('shouldLoadVideosFromEngageService', () => {
     expect(engageService.findVideosPage).toHaveBeenCalledWith(0, 20, '');
+    expect(engageService.findCommentWordCloud).toHaveBeenCalled();
     expect(component.videos.length).toBe(1);
     expect(component.videos[0].commentCount).toBe(3);
+    expect(component.wordCloud.length).toBe(1);
   });
 
   it('shouldReloadWhenFilterChangesOnFirstPage', () => {

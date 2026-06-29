@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { EngageService, Video } from '../../services/engage.service';
+import { EngageService, Video, WordCloudEntry } from '../../services/engage.service';
 
 @Component({
   selector: 'app-videos-view',
@@ -24,14 +24,28 @@ export class VideosViewComponent implements OnInit {
   page = 0;
   titleFilter = '';
   loading = false;
+  wordCloud: WordCloudEntry[] = [];
 
   ngOnInit(): void {
+    this.loadWordCloud();
+
     this.activatedRoute.queryParamMap.subscribe(params => {
       this.page = Number(params.get('page') ?? '0');
       if (Number.isNaN(this.page) || this.page < 0) {
         this.page = 0;
       }
       this.loadVideos();
+    });
+  }
+
+  loadWordCloud(): void {
+    this.engageService.findCommentWordCloud().subscribe({
+      next: wordCloud => {
+        this.wordCloud = wordCloud;
+      },
+      error: () => {
+        this.wordCloud = [];
+      }
     });
   }
 
@@ -107,5 +121,21 @@ export class VideosViewComponent implements OnInit {
       queryParams: { page: page === 0 ? null : page },
       queryParamsHandling: 'merge'
     });
+  }
+
+  wordFontSize(entry: WordCloudEntry): number {
+    if (this.wordCloud.length === 0) {
+      return 16;
+    }
+
+    const counts = this.wordCloud.map(item => item.count);
+    const min = Math.min(...counts);
+    const max = Math.max(...counts);
+    if (min === max) {
+      return 28;
+    }
+
+    const ratio = (entry.count - min) / (max - min);
+    return Math.round(14 + ratio * 26);
   }
 }

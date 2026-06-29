@@ -101,7 +101,7 @@
               <td>{{ comment.authorName || '—' }}</td>
               <td class="column-name">
                 <div class="user-details">
-                  <span>{{ comment.text || '—' }}</span>
+                  <span class="comment-html" [innerHTML]="comment.text || '—'"></span>
                 </div>
               </td>
               <td>{{ comment.likeCount ?? 0 }}</td>

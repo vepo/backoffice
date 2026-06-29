@@ -41,7 +41,7 @@ Styles live in [`src/forms.less`](../../src/forms.less), [`src/styles.less`](../
 | Profiles list | `/profiles` | Same as domains |
 | Engage channels | `/channels` | Same as domains + notification follow column + reports row action |
 | Engage channel reports | `/channels/:id/reports` | page-layout, back-link, page-header (refresh), filter-card, table-card, empty-state |
-| Engage videos | `/videos` | page-layout, page-header (no create action), stats-grid, filter-card, table-card, empty-state |
+| Engage videos | `/videos` | page-layout, page-header (no create action), stats-grid, filter-card, word-cloud card, table-card, empty-state |
 | Engage statistics | `/statistics` | page-layout, page-header (refresh only), stats-grid, table-card, empty-state |
 | Engage comments | `/channels/.../comments`, `/videos/.../comments` | page-layout, back-link, stats-grid, filter-card, table-card, empty-state |
 | Notifications | `/notifications`, `/notifications/:id` | page-layout, page-header (refresh or read action), filter-card, table-card, empty-state, shell bell |

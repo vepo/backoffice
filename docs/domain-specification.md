@@ -102,7 +102,7 @@ Backoffice is an **Angular** SPA that administers platform data by calling backe
 | **Video** | Vídeo | `VideosViewComponent`, `/videos` |
 | **Comment count** | Comentários | Column on videos list; `Video.commentCount` from Engage |
 | **Comment** | Comentário | `CommentsViewComponent`, `/videos/:id/comments`, `/channels/:id/comments` |
-| **Comment word cloud** | Nuvem de Palavras | `CommentsViewComponent` word cloud card; Engage `GET .../comments/word-cloud` |
+| **Comment word cloud** | Nuvem de Palavras | `CommentsViewComponent`, `VideosViewComponent` word cloud card; Engage `GET .../comments/word-cloud` |
 | **Add channel** | Novo Canal | `ChannelsViewComponent` header; empty state: **Criar Novo Canal**; `/channels/new` |
 | **Follow channel** | Receber notificações deste canal | Bell toggle on `ChannelsViewComponent`; also on `ChannelsEditComponent` |
 | **Channel reports** | Relatórios do canal | `ChannelReportsViewComponent`, `/channels/:id/reports` |
