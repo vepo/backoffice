@@ -57,7 +57,7 @@ Proxy config: [`src/proxy.conf.json`](src/proxy.conf.json). Run with `ng serve -
 | `/engage/channels/:channelId/reports` | ChannelReportsViewComponent | channel, reports | `engage.admin` |
 | `/engage/channels/:channelId` | ChannelsEditComponent | channel | `engage.admin` |
 | `/engage/channels/:channelId/comments` | CommentsViewComponent | comments | `engage.admin` |
-| `/engage/videos` | VideosViewComponent | videos | `engage.admin` |
+| `/engage/videos` | VideosViewComponent | — (loads `GET /engage/api/videos?page&size&q`) | `engage.admin` |
 | `/engage/videos/:videoId/comments` | CommentsViewComponent | comments | `engage.admin` |
 | `/engage/statistics` | EngageStatisticsViewComponent | statistics | `engage.admin` |
 

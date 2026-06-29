@@ -30,8 +30,7 @@ import {
     engageChannelReportsResolver,
     engageChannelResolver,
     engageChannelsResolver,
-    engageVideoCommentsResolver,
-    engageVideosResolver
+    engageVideoCommentsResolver
 } from './resolvers/engage-channels.resolver';
 import { NotificationsDetailComponent } from './components/notifications-detail/notifications-detail.component';
 import { NotificationsViewComponent } from './components/notifications-view/notifications-view.component';
@@ -205,9 +204,6 @@ export const routes: Routes = [
     {
         path: 'engage/videos',
         component: VideosViewComponent,
-        resolve: {
-            videos: engageVideosResolver
-        },
         canActivate: [authGuard, roleGuard],
         data: { roles: ['engage.admin'] },
     },

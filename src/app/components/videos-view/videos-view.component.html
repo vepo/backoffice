@@ -5,7 +5,7 @@
         <mat-icon fontIcon="video_library" class="title-icon"></mat-icon>
         Vídeos Sincronizados
       </h1>
-      <p class="page-subtitle">Vídeos importados dos canais conectados no Engage</p>
+      <p class="page-subtitle">Vídeos importados dos canais conectados no Engage, ordenados do mais recente</p>
     </div>
   </div>
 
@@ -15,7 +15,7 @@
         <mat-icon fontIcon="play_circle"></mat-icon>
       </div>
       <div class="stat-content">
-        <h3 class="stat-value">{{ videos.length }}</h3>
+        <h3 class="stat-value">{{ total }}</h3>
         <p class="stat-label">Vídeos sincronizados</p>
       </div>
     </div>
@@ -47,7 +47,7 @@
         <div class="table-title">
           <mat-icon fontIcon="table_chart" class="table-icon"></mat-icon>
           <h3>Lista de Vídeos</h3>
-          <span class="table-subtitle">{{ filteredVideos.length }} vídeo(s)</span>
+          <span class="table-subtitle">{{ total }} vídeo(s)</span>
         </div>
       </div>
 
@@ -58,11 +58,12 @@
               <th class="column-name">Vídeo</th>
               <th>YouTube ID</th>
               <th>Publicado em</th>
+              <th>Comentários</th>
               <th class="column-actions">Ações</th>
             </tr>
           </thead>
           <tbody>
-            @for (video of filteredVideos; track video.id) {
+            @for (video of videos; track video.id) {
             <tr>
               <td class="column-name">
                 <div class="user-info">
@@ -82,6 +83,7 @@
                 —
                 }
               </td>
+              <td>{{ video.commentCount }}</td>
               <td class="column-actions">
                 <div class="action-buttons">
                   <button class="btn-icon" matButton [routerLink]="['/', 'engage', 'videos', video.id, 'comments']"
@@ -95,7 +97,7 @@
           </tbody>
         </table>
 
-        @if (filteredVideos.length === 0) {
+        @if (!loading && videos.length === 0) {
         <div class="empty-state">
           <mat-icon fontIcon="video_library" class="empty-icon"></mat-icon>
           <h3>Nenhum vídeo sincronizado</h3>
@@ -104,6 +106,25 @@
             <mat-icon fontIcon="subscriptions"></mat-icon>
             Gerenciar Canais
           </button>
+        </div>
+        }
+
+        @if (total > 0) {
+        <div class="table-footer">
+          <div class="table-info">
+            Mostrando {{ rangeStart() }}–{{ rangeEnd() }} de {{ total }} vídeo(s)
+          </div>
+          <div class="pagination">
+            <button type="button" class="btn-icon" (click)="previousPage()" [disabled]="!canGoPrevious()"
+              aria-label="Página anterior">
+              <mat-icon fontIcon="chevron_left"></mat-icon>
+            </button>
+            <span class="page-info">Página {{ currentPageLabel() }} de {{ totalPages() }}</span>
+            <button type="button" class="btn-icon" (click)="nextPage()" [disabled]="!canGoNext()"
+              aria-label="Próxima página">
+              <mat-icon fontIcon="chevron_right"></mat-icon>
+            </button>
+          </div>
         </div>
         }
       </div>

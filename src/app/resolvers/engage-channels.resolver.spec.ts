@@ -7,10 +7,9 @@ import {
   engageChannelReportsResolver,
   engageChannelResolver,
   engageChannelsResolver,
-  engageVideoCommentsResolver,
-  engageVideosResolver
+  engageVideoCommentsResolver
 } from './engage-channels.resolver';
-import { Channel, Comment, EngageService, Video } from '../services/engage.service';
+import { Channel, Comment, EngageService } from '../services/engage.service';
 import { NotificationService, NotificationSummary } from '../services/notification.service';
 import { sampleNotificationSummary } from '../testing/notification-fixtures';
 import { resolveRouteData } from '../testing/resolver-helpers';
@@ -52,14 +51,6 @@ describe('engage-channels resolvers', () => {
       const result = engageChannelResolver({ paramMap: convertToParamMap({}) } as never, state);
       expect(result instanceof RedirectCommand).toBeTrue();
     });
-  });
-
-  it('shouldResolveVideos', async () => {
-    const promise = TestBed.runInInjectionContext(() =>
-      resolveRouteData<Video[]>(engageVideosResolver({} as never, state))
-    );
-    httpMock.expectOne('/engage/api/videos').flush([]);
-    await promise;
   });
 
   it('shouldResolveVideoComments', async () => {

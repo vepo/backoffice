@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { RedirectCommand, ResolveFn, Router } from '@angular/router';
-import { Channel, Comment, EngageService, Video } from '../services/engage.service';
+import { Channel, Comment, EngageService } from '../services/engage.service';
 import { NotificationService, NotificationSummary } from '../services/notification.service';
 
 export const engageChannelsResolver: ResolveFn<Channel[]> = () => {
@@ -13,10 +13,6 @@ export const engageChannelResolver: ResolveFn<Channel> = (route) => {
     return new RedirectCommand(inject(Router).parseUrl('/engage/channels'));
   }
   return inject(EngageService).findChannelById(Number(channelId));
-};
-
-export const engageVideosResolver: ResolveFn<Video[]> = () => {
-  return inject(EngageService).findAllVideos();
 };
 
 export const engageVideoCommentsResolver: ResolveFn<Comment[]> = (route) => {

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -36,6 +36,14 @@ export interface Video {
   description?: string;
   thumbnail?: string;
   publishedAt?: string;
+  commentCount: number;
+}
+
+export interface VideoPage {
+  items: Video[];
+  total: number;
+  page: number;
+  pageSize: number;
 }
 
 export interface Comment {
@@ -108,8 +116,17 @@ export class EngageService {
     return this.http.delete<void>(`${CHANNELS_URL}/${id}`);
   }
 
-  findAllVideos(): Observable<Video[]> {
-    return this.http.get<Video[]>(VIDEOS_URL);
+  findVideosPage(page: number, pageSize: number, query?: string): Observable<VideoPage> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', pageSize);
+
+    const trimmedQuery = query?.trim();
+    if (trimmedQuery) {
+      params = params.set('q', trimmedQuery);
+    }
+
+    return this.http.get<VideoPage>(VIDEOS_URL, { params });
   }
 
   findCommentsByVideo(videoId: number): Observable<Comment[]> {

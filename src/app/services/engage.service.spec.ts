@@ -18,7 +18,8 @@ describe('EngageService', () => {
   afterEach(() => httpMock.verify());
 
   const channel = { id: 1, youtubeId: 'UC1234567890123456789012', connected: true, apiKeyConfigured: true };
-  const video = { id: 1, youtubeId: 'vid1', title: 'Video' };
+  const video = { id: 1, youtubeId: 'vid1', title: 'Video', commentCount: 0 };
+  const videoPage = { items: [video], total: 1, page: 0, pageSize: 20 };
   const comment = { id: 1, youtubeCommentId: 'c1', videoId: 1 };
 
   it('shouldLoadPlatformStatistics', () => {
@@ -53,9 +54,15 @@ describe('EngageService', () => {
     httpMock.expectOne('/engage/api/channels/1').flush(null);
   });
 
-  it('shouldFindAllVideos', () => {
-    service.findAllVideos().subscribe();
-    httpMock.expectOne('/engage/api/videos').flush([video]);
+  it('shouldFindVideosPage', () => {
+    service.findVideosPage(0, 20, 'query').subscribe();
+    const req = httpMock.expectOne(r =>
+      r.url === '/engage/api/videos'
+      && r.params.get('page') === '0'
+      && r.params.get('size') === '20'
+      && r.params.get('q') === 'query');
+    expect(req.request.method).toBe('GET');
+    req.flush(videoPage);
   });
 
   it('shouldFindCommentsByVideo', () => {

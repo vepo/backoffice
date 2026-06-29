@@ -100,6 +100,7 @@ Backoffice is an **Angular** SPA that administers platform data by calling backe
 | **Connected channel** | Canal conectado | Checkbox + API key in `ChannelsEditComponent` |
 | **YouTube API key** | Chave da API YouTube | Password field in channel form; write-only |
 | **Video** | Vídeo | `VideosViewComponent`, `/engage/videos` |
+| **Comment count** | Comentários | Column on videos list; `Video.commentCount` from Engage |
 | **Comment** | Comentário | `CommentsViewComponent`, `/engage/videos/:id/comments`, `/engage/channels/:id/comments` |
 | **Add channel** | Novo Canal | `ChannelsViewComponent` header; empty state: **Criar Novo Canal**; `/engage/channels/new` |
 | **Follow channel** | Receber notificações deste canal | Bell toggle on `ChannelsViewComponent`; also on `ChannelsEditComponent` |
