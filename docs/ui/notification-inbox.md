@@ -16,6 +16,7 @@ Patterns: page-layout, page-header (refresh only), stats-grid, filter-card (read
 |---------|------|
 | Header | Title **Notificações**; single primary **Atualizar** button |
 | Filter | Radio: **Todas** / **Não lidas** → `GET /passport/api/notifications?unread=true` |
+| Filter action | **Marcar todas como lidas** (`btn-outline btn-small`) → `PATCH /passport/api/notifications/read-all`; disabled when no unread in list |
 | Row link | Title + description link to detail route |
 | Row actions | Open, mark read (`drafts`), mark unread (`mark_email_unread`) |
 | Empty state | Context message for filter (no unread vs no follows) |

@@ -20,6 +20,7 @@ export class NotificationsViewComponent implements OnInit {
   notifications: NotificationSummary[] = [];
   readFilter: ReadFilter = 'all';
   loading = false;
+  markingAll = false;
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ notifications }) => {
@@ -66,6 +67,26 @@ export class NotificationsViewComponent implements OnInit {
       this.updateLocal(notification.id, updated);
       if (this.readFilter === 'unread') {
         this.notifications = this.notifications.filter(n => n.id !== notification.id);
+      }
+    });
+  }
+
+  markAllRead(): void {
+    if (this.getUnreadCount() === 0 || this.markingAll) {
+      return;
+    }
+    this.markingAll = true;
+    this.notificationService.markAllRead().subscribe({
+      next: () => {
+        if (this.readFilter === 'unread') {
+          this.notifications = [];
+        } else {
+          this.notifications = this.notifications.map(notification => ({ ...notification, read: true }));
+        }
+        this.markingAll = false;
+      },
+      error: () => {
+        this.markingAll = false;
       }
     });
   }

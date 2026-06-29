@@ -59,6 +59,11 @@ export interface Comment {
   syncAt?: string;
 }
 
+export interface WordCloudEntry {
+  word: string;
+  count: number;
+}
+
 export interface ChannelStatistics {
   id: number;
   youtubeId: string;
@@ -133,7 +138,15 @@ export class EngageService {
     return this.http.get<Comment[]>(`${VIDEOS_URL}/${videoId}/comments`);
   }
 
+  findCommentWordCloudByVideo(videoId: number): Observable<WordCloudEntry[]> {
+    return this.http.get<WordCloudEntry[]>(`${VIDEOS_URL}/${videoId}/comments/word-cloud`);
+  }
+
   findCommentsByChannel(channelId: number): Observable<Comment[]> {
     return this.http.get<Comment[]>(`${CHANNELS_URL}/${channelId}/comments`);
+  }
+
+  findCommentWordCloudByChannel(channelId: number): Observable<WordCloudEntry[]> {
+    return this.http.get<WordCloudEntry[]>(`${CHANNELS_URL}/${channelId}/comments/word-cloud`);
   }
 }

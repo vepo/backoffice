@@ -14,6 +14,7 @@ export function createNotificationServiceStub(): jasmine.SpyObj<NotificationServ
     'findById',
     'markRead',
     'markUnread',
+    'markAllRead',
     'getFollowStatus',
     'followChannel',
     'unfollowChannel',
@@ -27,6 +28,7 @@ export function createNotificationServiceStub(): jasmine.SpyObj<NotificationServ
   spy.findById.and.returnValue(of(sampleNotificationDetail()));
   spy.markRead.and.returnValue(of(sampleNotificationSummary({ read: true })));
   spy.markUnread.and.returnValue(of(sampleNotificationSummary({ read: false })));
+  spy.markAllRead.and.returnValue(of({ markedCount: 0 }));
   spy.getFollowStatus.and.returnValue(of({ following: false }));
   spy.followChannel.and.returnValue(of(undefined));
   spy.unfollowChannel.and.returnValue(of(undefined));

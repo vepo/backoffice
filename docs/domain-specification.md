@@ -102,6 +102,7 @@ Backoffice is an **Angular** SPA that administers platform data by calling backe
 | **Video** | Vídeo | `VideosViewComponent`, `/engage/videos` |
 | **Comment count** | Comentários | Column on videos list; `Video.commentCount` from Engage |
 | **Comment** | Comentário | `CommentsViewComponent`, `/engage/videos/:id/comments`, `/engage/channels/:id/comments` |
+| **Comment word cloud** | Nuvem de Palavras | `CommentsViewComponent` word cloud card; Engage `GET .../comments/word-cloud` |
 | **Add channel** | Novo Canal | `ChannelsViewComponent` header; empty state: **Criar Novo Canal**; `/engage/channels/new` |
 | **Follow channel** | Receber notificações deste canal | Bell toggle on `ChannelsViewComponent`; also on `ChannelsEditComponent` |
 | **Channel reports** | Relatórios do canal | `ChannelReportsViewComponent`, `/engage/channels/:id/reports` |
@@ -113,6 +114,7 @@ Backoffice is an **Angular** SPA that administers platform data by calling backe
 | **Notification** | Notificação | `NotificationService`, `/notifications` |
 | **Notification inbox** | Notificações | `NotificationsViewComponent`, shell bell icon |
 | **Mark as read** | Marcar como lida | Detail GET (auto) or PATCH `/read`; list row action |
+| **Mark all as read** | Marcar todas como lidas | Filter action on inbox; PATCH `/read-all` |
 | **Mark as unread** | Marcar como não lida | PATCH `/unread`; list/detail actions |
 | **Follow channel** | Seguir canal / Receber notificações deste canal | `NotificationService.followChannel()` |
 

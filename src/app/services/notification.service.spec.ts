@@ -64,6 +64,18 @@ describe('NotificationService', () => {
     req.flush(sampleNotificationSummary({ read: false }));
   });
 
+  it('shouldMarkAllNotificationsAsRead', (done) => {
+    let emitted = false;
+    service.unreadCountChanged$.subscribe(() => { emitted = true; });
+
+    service.markAllRead().subscribe(response => expect(response.markedCount).toBe(2));
+    const req = httpMock.expectOne('/passport/api/notifications/read-all');
+    expect(req.request.method).toBe('PATCH');
+    req.flush({ markedCount: 2 });
+    expect(emitted).toBeTrue();
+    done();
+  });
+
   it('shouldGetUnreadCount', () => {
     service.getUnreadCount().subscribe(r => expect(r.count).toBe(3));
     httpMock.expectOne('/passport/api/notifications/unread-count').flush({ count: 3 });

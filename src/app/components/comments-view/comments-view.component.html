@@ -45,6 +45,35 @@
     </div>
   </div>
 
+  <div class="table-card word-cloud-card">
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <mat-icon fontIcon="cloud" class="table-icon"></mat-icon>
+          <h3>Nuvem de Palavras</h3>
+          <span class="table-subtitle">Termos mais frequentes nos comentários sincronizados</span>
+        </div>
+      </div>
+
+      @if (wordCloud.length > 0) {
+      <div class="word-cloud" aria-label="Nuvem de palavras dos comentários">
+        @for (entry of wordCloud; track entry.word) {
+        <span class="word-cloud-item" [style.font-size.px]="wordFontSize(entry)"
+          [attr.title]="entry.count + ' ocorrência(s)'">
+          {{ entry.word }}
+        </span>
+        }
+      </div>
+      } @else {
+      <div class="empty-state compact-empty-state">
+        <mat-icon fontIcon="cloud_off" class="empty-icon"></mat-icon>
+        <h3>Sem termos para exibir</h3>
+        <p>A nuvem aparece quando houver comentários com texto suficiente após a sincronização.</p>
+      </div>
+      }
+    </div>
+  </div>
+
   <div class="table-card">
     <div class="table-container">
       <div class="table-header">

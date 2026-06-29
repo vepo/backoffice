@@ -63,6 +63,13 @@
           </label>
         </div>
       </div>
+      <div class="filter-actions">
+        <button class="btn btn-outline btn-small" matButton (click)="markAllRead()"
+          [disabled]="markingAll || getUnreadCount() === 0">
+          <mat-icon fontIcon="done_all"></mat-icon>
+          Marcar todas como lidas
+        </button>
+      </div>
     </div>
   </div>
 

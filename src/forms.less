@@ -1334,6 +1334,36 @@ input {
     }
 }
 
+.word-cloud-card {
+    margin-bottom: @espacamento-lg;
+
+    .word-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: @espacamento-md @espacamento-lg;
+        min-height: 180px;
+        padding: @espacamento-xl @espacamento-lg;
+    }
+
+    .word-cloud-item {
+        color: @azul-primario;
+        font-weight: 600;
+        line-height: 1.2;
+        transition: color 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+            color: @azul-secundario;
+            transform: translateY(-1px);
+        }
+    }
+
+    .compact-empty-state {
+        padding: @espacamento-xl @espacamento-lg;
+    }
+}
+
 // Quick Actions
 .quick-actions {
     background: @branco;

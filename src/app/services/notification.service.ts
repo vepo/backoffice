@@ -39,6 +39,10 @@ export interface UnreadCountResponse {
   count: number;
 }
 
+export interface MarkAllReadResponse {
+  markedCount: number;
+}
+
 export interface ChannelFollowStatus {
   following: boolean;
 }
@@ -93,6 +97,12 @@ export class NotificationService {
 
   markUnread(notificationId: number): Observable<NotificationSummary> {
     return this.http.patch<NotificationSummary>(`${this.apiUrl}/notifications/${notificationId}/unread`, {}).pipe(
+      tap(() => this.notifyUnreadCountChanged())
+    );
+  }
+
+  markAllRead(): Observable<MarkAllReadResponse> {
+    return this.http.patch<MarkAllReadResponse>(`${this.apiUrl}/notifications/read-all`, {}).pipe(
       tap(() => this.notifyUnreadCountChanged())
     );
   }

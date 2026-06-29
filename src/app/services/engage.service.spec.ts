@@ -70,8 +70,18 @@ describe('EngageService', () => {
     httpMock.expectOne('/engage/api/videos/1/comments').flush([comment]);
   });
 
+  it('shouldFindCommentWordCloudByVideo', () => {
+    service.findCommentWordCloudByVideo(1).subscribe();
+    httpMock.expectOne('/engage/api/videos/1/comments/word-cloud').flush([{ word: 'engage', count: 3 }]);
+  });
+
   it('shouldFindCommentsByChannel', () => {
     service.findCommentsByChannel(1).subscribe();
     httpMock.expectOne('/engage/api/channels/1/comments').flush([comment]);
+  });
+
+  it('shouldFindCommentWordCloudByChannel', () => {
+    service.findCommentWordCloudByChannel(1).subscribe();
+    httpMock.expectOne('/engage/api/channels/1/comments/word-cloud').flush([{ word: 'canal', count: 2 }]);
   });
 });

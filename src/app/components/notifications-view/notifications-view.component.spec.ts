@@ -15,6 +15,7 @@ describe('NotificationsViewComponent', () => {
     notificationService = createNotificationServiceStub();
     notificationService.markRead.and.returnValue(of(sampleNotificationSummary({ read: true })));
     notificationService.markUnread.and.returnValue(of(sampleNotificationSummary({ read: false })));
+    notificationService.markAllRead.and.returnValue(of({ markedCount: 1 }));
 
     await TestBed.configureTestingModule({
       imports: [NotificationsViewComponent],
@@ -44,6 +45,16 @@ describe('NotificationsViewComponent', () => {
   it('shouldFilterUnreadNotifications', () => {
     component.setReadFilter('unread');
     expect(notificationService.list).toHaveBeenCalledWith(true);
+  });
+
+  it('shouldMarkAllNotificationsAsRead', () => {
+    component.notifications = [
+      sampleNotificationSummary({ read: false }),
+      sampleNotificationSummary({ id: 2, read: false })
+    ];
+    component.markAllRead();
+    expect(notificationService.markAllRead).toHaveBeenCalled();
+    expect(component.notifications.every(notification => notification.read)).toBeTrue();
   });
 
   it('shouldLabelVideoSyncSource', () => {

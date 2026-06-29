@@ -26,10 +26,12 @@ import { ChannelReportsViewComponent } from './components/channel-reports-view/c
 import { VideosViewComponent } from './components/videos-view/videos-view.component';
 import { CommentsViewComponent } from './components/comments-view/comments-view.component';
 import {
+    engageChannelCommentWordCloudResolver,
     engageChannelCommentsResolver,
     engageChannelReportsResolver,
     engageChannelResolver,
     engageChannelsResolver,
+    engageVideoCommentWordCloudResolver,
     engageVideoCommentsResolver
 } from './resolvers/engage-channels.resolver';
 import { NotificationsDetailComponent } from './components/notifications-detail/notifications-detail.component';
@@ -177,7 +179,8 @@ export const routes: Routes = [
         path: 'engage/channels/:channelId/comments',
         component: CommentsViewComponent,
         resolve: {
-            comments: engageChannelCommentsResolver
+            comments: engageChannelCommentsResolver,
+            wordCloud: engageChannelCommentWordCloudResolver
         },
         canActivate: [authGuard, roleGuard],
         data: { roles: ['engage.admin'] },
@@ -211,7 +214,8 @@ export const routes: Routes = [
         path: 'engage/videos/:videoId/comments',
         component: CommentsViewComponent,
         resolve: {
-            comments: engageVideoCommentsResolver
+            comments: engageVideoCommentsResolver,
+            wordCloud: engageVideoCommentWordCloudResolver
         },
         canActivate: [authGuard, roleGuard],
         data: { roles: ['engage.admin'] },

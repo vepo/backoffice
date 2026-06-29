@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Comment } from '../../services/engage.service';
+import { Comment, WordCloudEntry } from '../../services/engage.service';
 
 type CommentsContext = 'video' | 'channel';
 
@@ -18,13 +18,15 @@ export class CommentsViewComponent implements OnInit {
 
   comments: Comment[] = [];
   filteredComments: Comment[] = [];
+  wordCloud: WordCloudEntry[] = [];
   textFilter = '';
   context: CommentsContext = 'video';
   contextId = 0;
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ comments }) => {
-      this.comments = comments;
+    this.activatedRoute.data.subscribe(({ comments, wordCloud }) => {
+      this.comments = comments ?? [];
+      this.wordCloud = wordCloud ?? [];
       this.applyFilters();
     });
 
@@ -51,6 +53,22 @@ export class CommentsViewComponent implements OnInit {
   clearFilters(): void {
     this.textFilter = '';
     this.applyFilters();
+  }
+
+  wordFontSize(entry: WordCloudEntry): number {
+    if (this.wordCloud.length === 0) {
+      return 16;
+    }
+
+    const counts = this.wordCloud.map(item => item.count);
+    const min = Math.min(...counts);
+    const max = Math.max(...counts);
+    if (min === max) {
+      return 28;
+    }
+
+    const ratio = (entry.count - min) / (max - min);
+    return Math.round(14 + ratio * 26);
   }
 
   backLink(): string[] {
