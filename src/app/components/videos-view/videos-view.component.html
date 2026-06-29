@@ -86,7 +86,7 @@
               <td>{{ video.commentCount }}</td>
               <td class="column-actions">
                 <div class="action-buttons">
-                  <button class="btn-icon" matButton [routerLink]="['/', 'engage', 'videos', video.id, 'comments']"
+                  <button class="btn-icon" matButton [routerLink]="['/', 'videos', video.id, 'comments']"
                     matTooltip="Ver comentários">
                     <mat-icon fontIcon="comment"></mat-icon>
                   </button>
@@ -102,7 +102,7 @@
           <mat-icon fontIcon="video_library" class="empty-icon"></mat-icon>
           <h3>Nenhum vídeo sincronizado</h3>
           <p>Conecte um canal com API key válida e aguarde a sincronização do Engage.</p>
-          <button class="btn" matButton [routerLink]="['/', 'engage', 'channels']">
+          <button class="btn" matButton [routerLink]="['/', 'channels']">
             <mat-icon fontIcon="subscriptions"></mat-icon>
             Gerenciar Canais
           </button>

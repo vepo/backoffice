@@ -44,7 +44,7 @@ Title block with optional single primary action.
 
 ```html
 <!-- ❌ Secondary navigation in header (use app menu instead) -->
-<button class="btn btn-outline" matButton routerLink="/engage/videos">Vídeos</button>
+<button class="btn btn-outline" matButton routerLink="/videos">Vídeos</button>
 
 <!-- ❌ Multiple outline buttons competing with primary -->
 <div class="header-actions">

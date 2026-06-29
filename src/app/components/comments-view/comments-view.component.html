@@ -106,7 +106,7 @@
               </td>
               <td>{{ comment.likeCount ?? 0 }}</td>
               <td>
-                <a [routerLink]="['/', 'engage', 'videos', comment.videoId, 'comments']">#{{ comment.videoId }}</a>
+                <a [routerLink]="['/', 'videos', comment.videoId, 'comments']">#{{ comment.videoId }}</a>
               </td>
               <td>
                 @if (comment.publishedAt) {

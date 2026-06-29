@@ -41,11 +41,11 @@ Patterns: page-layout, back-link, page-header (mark read/unread), stats-grid, ta
 
 ## Channel follow toggle
 
-On **Canais** list (`/engage/channels`), column **Notificações** — bell icon toggles follow/unfollow. Same option on **Editar Canal** form.
+On **Canais** list (`/channels`), column **Notificações** — bell icon toggles follow/unfollow. Same option on **Editar Canal** form.
 
 ## Channel reports
 
-Route `/engage/channels/:channelId/reports` — list all sync run reports for the channel (from Passport). Open row → `/notifications/:id` for full detail.
+Route `/channels/:channelId/reports` — list all sync run reports for the channel (from Passport). Open row → `/notifications/:id` for full detail.
 
 Grid action: **summarize** icon in row actions.
 

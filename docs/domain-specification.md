@@ -95,17 +95,17 @@ Backoffice is an **Angular** SPA that administers platform data by calling backe
 
 | Term | Label (pt-BR) | Code / notes |
 |------|---------------|--------------|
-| **YouTube statistics** | Estatísticas do YouTube | `EngageStatisticsViewComponent`, `/engage/statistics` |
-| **Channel** | Canal | Engage `Channel`; `ChannelsViewComponent`, `/engage/channels` |
+| **YouTube statistics** | Estatísticas do YouTube | `EngageStatisticsViewComponent`, `/statistics` |
+| **Channel** | Canal | Engage `Channel`; `ChannelsViewComponent`, `/channels` |
 | **Connected channel** | Canal conectado | Checkbox + API key in `ChannelsEditComponent` |
 | **YouTube API key** | Chave da API YouTube | Password field in channel form; write-only |
-| **Video** | Vídeo | `VideosViewComponent`, `/engage/videos` |
+| **Video** | Vídeo | `VideosViewComponent`, `/videos` |
 | **Comment count** | Comentários | Column on videos list; `Video.commentCount` from Engage |
-| **Comment** | Comentário | `CommentsViewComponent`, `/engage/videos/:id/comments`, `/engage/channels/:id/comments` |
+| **Comment** | Comentário | `CommentsViewComponent`, `/videos/:id/comments`, `/channels/:id/comments` |
 | **Comment word cloud** | Nuvem de Palavras | `CommentsViewComponent` word cloud card; Engage `GET .../comments/word-cloud` |
-| **Add channel** | Novo Canal | `ChannelsViewComponent` header; empty state: **Criar Novo Canal**; `/engage/channels/new` |
+| **Add channel** | Novo Canal | `ChannelsViewComponent` header; empty state: **Criar Novo Canal**; `/channels/new` |
 | **Follow channel** | Receber notificações deste canal | Bell toggle on `ChannelsViewComponent`; also on `ChannelsEditComponent` |
-| **Channel reports** | Relatórios do canal | `ChannelReportsViewComponent`, `/engage/channels/:id/reports` |
+| **Channel reports** | Relatórios do canal | `ChannelReportsViewComponent`, `/channels/:id/reports` |
 
 ### Notifications (Passport)
 

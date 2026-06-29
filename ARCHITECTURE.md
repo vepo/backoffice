@@ -52,14 +52,14 @@ Proxy config: [`src/proxy.conf.json`](src/proxy.conf.json). Run with `ng serve -
 | `/domains` | DomainsViewComponent | domains | `domains.admin` |
 | `/domains/new` | DomainsEditComponent | — | `domains.admin` |
 | `/domains/:domainId` | DomainsEditComponent | domain | `domains.admin` |
-| `/engage/channels` | ChannelsViewComponent | channels | `engage.admin` |
-| `/engage/channels/new` | ChannelsEditComponent | — | `engage.admin` |
-| `/engage/channels/:channelId/reports` | ChannelReportsViewComponent | channel, reports | `engage.admin` |
-| `/engage/channels/:channelId` | ChannelsEditComponent | channel | `engage.admin` |
-| `/engage/channels/:channelId/comments` | CommentsViewComponent | comments | `engage.admin` |
-| `/engage/videos` | VideosViewComponent | — (loads `GET /engage/api/videos?page&size&q`) | `engage.admin` |
-| `/engage/videos/:videoId/comments` | CommentsViewComponent | comments | `engage.admin` |
-| `/engage/statistics` | EngageStatisticsViewComponent | statistics | `engage.admin` |
+| `/channels` | ChannelsViewComponent | channels | `engage.admin` |
+| `/channels/new` | ChannelsEditComponent | — | `engage.admin` |
+| `/channels/:channelId/reports` | ChannelReportsViewComponent | channel, reports | `engage.admin` |
+| `/channels/:channelId` | ChannelsEditComponent | channel | `engage.admin` |
+| `/channels/:channelId/comments` | CommentsViewComponent | comments | `engage.admin` |
+| `/videos` | VideosViewComponent | — (loads `GET /engage/api/videos?page&size&q`) | `engage.admin` |
+| `/videos/:videoId/comments` | CommentsViewComponent | comments | `engage.admin` |
+| `/statistics` | EngageStatisticsViewComponent | statistics | `engage.admin` |
 
 Routes defined in [`src/app/app.routes.ts`](src/app/app.routes.ts).
 
@@ -176,6 +176,7 @@ Open [http://localhost:4200](http://localhost:4200). Login as `cto@passport.vepo
 
 ## 13. Common pitfalls
 
+- **Angular routes vs API prefixes** — Client routes use domain terms (`/channels`, `/domains`); never microservice names (`/engage/...`, `/passport/...`, `/visita/...`). Production NGINX proxies those prefixes to backends; only `/engage/api/**` etc. belong in HTTP service URLs.
 - **Proxy required** — API calls use `/passport/api` and `/visita/api` prefixes; bare `localhost:8080` calls fail from the browser without proxy.
 - **Role names** — must match Passport JWT groups exactly (`passport.admin`, `domains.admin`).
 - **Domain form fields** — hostname and **Caminhos ignorados** (ignored path regex patterns, one per line); token managed from list view.

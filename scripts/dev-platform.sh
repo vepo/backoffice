@@ -182,7 +182,7 @@ Platform is ready for local testing:
   Backoffice  ${BACKOFFICE_URL}  (login: cto@passport.vepo.dev / qwas1234)
   Passport    http://localhost:8080
   Visita      http://localhost:8081
-  Engage      http://localhost:8082  (/engage/statistics in Backoffice)
+  Engage      http://localhost:8082  (/statistics in Backoffice)
 
 Logs: ${LOG_DIR}
 Press Ctrl+C to stop services.

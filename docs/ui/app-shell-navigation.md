@@ -18,8 +18,8 @@ Global header menu and role-based visibility.
 
 | Label | Route |
 |-------|-------|
-| Canais | `/engage/channels` |
-| Vídeos | `/engage/videos` |
-| Estatísticas | `/engage/statistics` |
+| Canais | `/channels` |
+| Vídeos | `/videos` |
+| Estatísticas | `/statistics` |
 
 When adding a new Engage screen, register the route in `app.routes.ts` and add a menu entry here if it is a top-level module view.

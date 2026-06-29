@@ -73,8 +73,8 @@ export class CommentsViewComponent implements OnInit {
 
   backLink(): string[] {
     return this.context === 'channel'
-      ? ['/', 'engage', 'channels']
-      : ['/', 'engage', 'videos'];
+      ? ['/', 'channels']
+      : ['/', 'videos'];
   }
 
   backLabel(): string {

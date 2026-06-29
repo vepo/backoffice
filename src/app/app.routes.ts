@@ -161,7 +161,7 @@ export const routes: Routes = [
         data: { roles: ['domains.admin'] },
     },
     {
-        path: 'engage/channels',
+        path: 'channels',
         component: ChannelsViewComponent,
         resolve: {
             channels: engageChannelsResolver
@@ -170,13 +170,13 @@ export const routes: Routes = [
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/channels/new',
+        path: 'channels/new',
         component: ChannelsEditComponent,
         canActivate: [authGuard, roleGuard],
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/channels/:channelId/comments',
+        path: 'channels/:channelId/comments',
         component: CommentsViewComponent,
         resolve: {
             comments: engageChannelCommentsResolver,
@@ -186,7 +186,7 @@ export const routes: Routes = [
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/channels/:channelId/reports',
+        path: 'channels/:channelId/reports',
         component: ChannelReportsViewComponent,
         resolve: {
             channel: engageChannelResolver,
@@ -196,7 +196,7 @@ export const routes: Routes = [
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/channels/:channelId',
+        path: 'channels/:channelId',
         component: ChannelsEditComponent,
         resolve: {
             channel: engageChannelResolver
@@ -205,13 +205,13 @@ export const routes: Routes = [
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/videos',
+        path: 'videos',
         component: VideosViewComponent,
         canActivate: [authGuard, roleGuard],
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/videos/:videoId/comments',
+        path: 'videos/:videoId/comments',
         component: CommentsViewComponent,
         resolve: {
             comments: engageVideoCommentsResolver,
@@ -221,7 +221,7 @@ export const routes: Routes = [
         data: { roles: ['engage.admin'] },
     },
     {
-        path: 'engage/statistics',
+        path: 'statistics',
         component: EngageStatisticsViewComponent,
         resolve: {
             statistics: engageStatisticsResolver

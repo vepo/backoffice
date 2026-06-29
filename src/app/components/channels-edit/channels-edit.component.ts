@@ -67,7 +67,7 @@ export class ChannelsEditComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/engage/channels']);
+    this.router.navigate(['/channels']);
   }
 
   save(): void {
@@ -94,7 +94,7 @@ export class ChannelsEditComponent implements OnInit {
       }
 
       this.engageService.updateChannel(this.channelId, payload).subscribe({
-        next: () => this.router.navigate(['/engage/channels']),
+        next: () => this.router.navigate(['/channels']),
         error: error => {
           this.saveError = error.error?.message ?? 'Não foi possível atualizar o canal.';
         }
@@ -107,7 +107,7 @@ export class ChannelsEditComponent implements OnInit {
       youtubeApiKey: youtubeApiKey?.trim() || null,
       connected: connected ?? false
     }).subscribe({
-      next: () => this.router.navigate(['/engage/channels']),
+      next: () => this.router.navigate(['/channels']),
       error: error => {
         this.saveError = typeof error.error === 'string'
           ? error.error
