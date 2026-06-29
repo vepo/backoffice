@@ -1022,17 +1022,20 @@ input {
                 tbody {
                     tr {
                         transition: background-color 0.2s ease;
+                        background-color: @branco;
 
-                        &:hover {
-                            background-color: fade(@azul-claro, 20%);
+                        &:nth-child(even),
+                        &.row-even {
+                            background-color: fade(@cinza-medio, 45%);
                         }
 
-                        &.row-even {
-                            background-color: @cinza-claro;
+                        &:hover {
+                            background-color: fade(@azul-claro, 25%);
+                        }
 
-                            &:hover {
-                                background-color: fade(@azul-claro, 30%);
-                            }
+                        &:nth-child(even):hover,
+                        &.row-even:hover {
+                            background-color: fade(@azul-claro, 40%);
                         }
 
                         td {

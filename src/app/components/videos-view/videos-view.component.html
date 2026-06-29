@@ -93,7 +93,7 @@
           </thead>
           <tbody>
             @for (video of videos; track video.id) {
-            <tr>
+            <tr [class.row-even]="$even" [class.row-odd]="$odd">
               <td class="column-name">
                 <div class="user-info">
                   @if (video.thumbnail) {
